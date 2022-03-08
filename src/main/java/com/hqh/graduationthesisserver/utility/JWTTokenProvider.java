@@ -53,6 +53,7 @@ public class JWTTokenProvider {
      * get permission from userPrincipal to give function generateJwtToken()
      *
      * -> return a permissions or list
+     *  ROLE_
      */
     private String[] getClaimsFromUser(UserPrincipal user) {
         return user.getAuthorities()
