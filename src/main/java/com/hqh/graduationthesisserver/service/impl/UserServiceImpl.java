@@ -3,6 +3,7 @@ package com.hqh.graduationthesisserver.service.impl;
 import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.repository.UserRepository;
+import com.hqh.graduationthesisserver.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
 
 @Service
 @Transactional
-@Qualifier("UserService")
-public class UserServiceImpl implements UserDetailsService {
+@Qualifier("userDetailsService")
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
