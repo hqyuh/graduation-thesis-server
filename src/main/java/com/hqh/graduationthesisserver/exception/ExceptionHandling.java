@@ -30,7 +30,7 @@ import static org.springframework.http.HttpStatus.*;
 
 // exception api
 @RestControllerAdvice
-public class ExceptionHandling {
+public class ExceptionHandling implements ErrorController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -126,6 +126,12 @@ public class ExceptionHandling {
 //    public ResponseEntity<HttpResponse> methodNotSupportedException(NoHandlerFoundException exception) {
 //        return createHttpResponse(BAD_REQUEST, "This page was not found");
 //    }
+
+    @RequestMapping(ERROR_PATH)
+    public ResponseEntity<HttpResponse> notFound404(){
+        return createHttpResponse(NOT_FOUND, NO_MAPPING_FOR_URL);
+    }
+
 
 
 }
