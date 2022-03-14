@@ -26,6 +26,7 @@ import java.util.List;
 import static com.hqh.graduationthesisserver.constant.Authority.USER_AUTHORITIES;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
 import static com.hqh.graduationthesisserver.enumeration.Role.ROLE_USER;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service
 @Transactional
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throws UserNotFoundException, EmailExistException, UsernameExistException {
 
 
-        validateNewUsernameAndEmail(StringUtils.EMPTY, username, email);
+        validateNewUsernameAndEmail(EMPTY, username, email);
 
         User user = new User();
 
