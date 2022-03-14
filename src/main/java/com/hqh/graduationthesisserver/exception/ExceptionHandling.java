@@ -5,7 +5,7 @@ import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.exception.domain.EmailExistException;
 import com.hqh.graduationthesisserver.exception.domain.EmailNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.UsernameExistException;
-import com.hqh.graduationthesisserver.exception.domain.UsernameNotFoundException;
+import com.hqh.graduationthesisserver.exception.domain.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -87,7 +87,7 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(UsernameNotFoundException.class)
+    @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> userNotFoundException(EmailNotFoundException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
