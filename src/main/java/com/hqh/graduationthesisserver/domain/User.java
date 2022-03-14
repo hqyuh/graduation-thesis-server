@@ -49,7 +49,7 @@ public class User implements Serializable {
     @Column(name = "join_date")
     private Date joinDate;
 
-    private String[] roles;
+    private String roles;
     private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
