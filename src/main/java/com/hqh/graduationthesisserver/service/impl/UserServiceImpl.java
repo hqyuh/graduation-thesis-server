@@ -49,19 +49,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * if successful it will return the userPrincipal to Spring Security
      * */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findUserByEmail(email);
 
         if(user == null) {
-            LOGGER.error(NO_USER_FOUND_BY_USERNAME + username);
-            throw new UsernameNotFoundException(NO_USER_FOUND_BY_USERNAME + username);
+            LOGGER.error(NO_USER_FOUND_BY_EMAIL + email);
+            throw new UsernameNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
         } else {
             //
-            user.setLastLoginDateDisplay(user.getLastLoginDateDisplay());
+            user.setLastLoginDateDisplay(user.getLastLogin());
             user.setLastLogin(new Date());
             userRepository.save(user);
             UserPrincipal userPrincipal = new UserPrincipal(user);
-            LOGGER.info(FOUND_USER_BY_USERNAME + username);
+            LOGGER.info(FOUND_USER_BY_EMAIL + email);
 
             return userPrincipal;
         }
@@ -113,6 +113,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     private String getTemporaryProfileImageUrl() {
+        // http://localhost:8081
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                                           .path(DEFAULT_USER_IMAGE_PATH)
                                           .toUriString();
