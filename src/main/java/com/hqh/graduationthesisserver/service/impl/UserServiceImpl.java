@@ -6,6 +6,7 @@ import com.hqh.graduationthesisserver.exception.domain.EmailExistException;
 import com.hqh.graduationthesisserver.exception.domain.UserNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.UsernameExistException;
 import com.hqh.graduationthesisserver.repository.UserRepository;
+import com.hqh.graduationthesisserver.service.LoginAttemptService;
 import com.hqh.graduationthesisserver.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -36,12 +37,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final LoginAttemptService loginAttemptService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           BCryptPasswordEncoder bCryptPasswordEncoder) {
+                           BCryptPasswordEncoder bCryptPasswordEncoder,
+                           LoginAttemptService loginAttemptService) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.loginAttemptService = loginAttemptService;
     }
 
     /**
@@ -57,6 +61,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new UsernameNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
         } else {
             //
+            validateLoginAttempt(user);
             user.setLastLoginDateDisplay(user.getLastLogin());
             user.setLastLogin(new Date());
             userRepository.save(user);
@@ -64,6 +69,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             LOGGER.info(FOUND_USER_BY_EMAIL + email);
 
             return userPrincipal;
+        }
+    }
+
+    /***
+     * isNotLocked() -> function that checks if there is a lock
+     * If the account is not locked, check the number of logins
+     *
+     * @param user
+     */
+    private void validateLoginAttempt(User user) {
+        if(user.isNotLocked()) {
+            user.setNotLocked(!loginAttemptService.hasExceededMaxAttempts(user.getEmail()));
+        } else {
+            loginAttemptService.evictUserFromLoginAttemptCache(user.getEmail());
         }
     }
 
@@ -86,7 +105,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                          String email,
                          String password)
             throws UserNotFoundException, EmailExistException, UsernameExistException {
-
 
         validateNewUsernameAndEmail(EMPTY, username, email);
 
