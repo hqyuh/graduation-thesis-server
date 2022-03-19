@@ -3,11 +3,14 @@ package com.hqh.graduationthesisserver.service.impl;
 import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.exception.domain.EmailExistException;
+import com.hqh.graduationthesisserver.exception.domain.EmailNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.UserNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.UsernameExistException;
 import com.hqh.graduationthesisserver.repository.UserRepository;
+import com.hqh.graduationthesisserver.service.EmailService;
 import com.hqh.graduationthesisserver.service.LoginAttemptService;
 import com.hqh.graduationthesisserver.service.UserService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +23,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.Authority.USER_AUTHORITIES;
+import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
 import static com.hqh.graduationthesisserver.enumeration.Role.ROLE_USER;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -38,14 +43,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final LoginAttemptService loginAttemptService;
+    private final EmailService emailService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder bCryptPasswordEncoder,
-                           LoginAttemptService loginAttemptService) {
+                           LoginAttemptService loginAttemptService,
+                           EmailService emailService) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
+        this.emailService = emailService;
     }
 
     /**
@@ -193,5 +201,30 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
+    }
+
+    /***
+     * create Random password with 8 character
+     *
+     * @return password
+     */
+    private String generatePassword() {
+        return RandomStringUtils.randomAlphanumeric(8);
+    }
+
+    @Override
+    public void resetPassword(String email) throws EmailNotFoundException, MessagingException {
+        User user = userRepository.findUserByEmail(email);
+
+        if(user == null) {
+            throw new EmailNotFoundException(NO_USER_FOUND_BY_USERNAME + email);
+        }
+        String password = generatePassword();
+        user.setPassword(encodePassword(password));
+        LOGGER.info(RESET_PASSWORD + password);
+        userRepository.save(user);
+        String name = user.getLastName() + " " + user.getFirstName();
+        emailService.setNewPasswordEmail(name, password, email);
+        LOGGER.info(EMAIL_SENT + email);
     }
 }

@@ -17,7 +17,7 @@ public class SecurityConstant {
             "/user/login",
             "/user/register",
             "/user/image/**",
-            "/user/resetpassword/**",
+            "**"
     };
 
 }

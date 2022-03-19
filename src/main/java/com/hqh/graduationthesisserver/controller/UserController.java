@@ -1,25 +1,29 @@
 package com.hqh.graduationthesisserver.controller;
 
+import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
 import com.hqh.graduationthesisserver.exception.domain.EmailExistException;
+import com.hqh.graduationthesisserver.exception.domain.EmailNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.UserNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.UsernameExistException;
 import com.hqh.graduationthesisserver.service.UserService;
 import com.hqh.graduationthesisserver.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
+
 
 import static com.hqh.graduationthesisserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.OK;
+import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
 
 @RestController
 @RequestMapping(path = {"/", "/user"})
@@ -73,6 +77,19 @@ public class UserController extends ExceptionHandling {
     private void authenticate(String email, String password) {
         authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(email, password));
+    }
+
+    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message){
+        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus,
+                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
+        return new ResponseEntity<>(body, httpStatus);
+    }
+
+    @GetMapping("/resetPassword/{email}")
+    public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email)
+            throws EmailNotFoundException, MessagingException {
+        userService.resetPassword(email);
+        return response(OK, EMAIL_SENT + email);
     }
 
 
