@@ -18,8 +18,10 @@ public class EmailConstant {
     public static final String SMTP_STARTTLS_REQUIRED = "mail.smtp.starttls.required";
 
     public static final String EMAIL_SENT = "An email with a new password was sent to: ";
-    public static final String HELLO = "Hello ";
-    public static final String YOUR_NEW_ACCOUNT_PASSWORD_IS = ", \n\n Your new account password is: ";
-    public static final String QUIZIZZ_SUPPORT_GROUP = "\n Quizizz support group. \n \n \n With regards!";
+    public static final String HELLO = "<b>Hello </b>";
+    public static final String YOUR_NEW_ACCOUNT_PASSWORD_IS = ", <br><br><b>Your new account password is:</b> ";
+    public static final String QUIZIZZ_SUPPORT_GROUP = "<br> Quizizz support group. <br><br> <b>With regards!</b>";
+    public static final String IMAGE_EMAIL = "<br><br> <img src='cid:image'/>";
+    public static final String NAME_IMAGE_EMAIL = "thanks.png";
 
 }

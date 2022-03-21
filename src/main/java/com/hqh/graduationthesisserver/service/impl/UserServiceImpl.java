@@ -7,7 +7,7 @@ import com.hqh.graduationthesisserver.exception.domain.EmailNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.UserNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.UsernameExistException;
 import com.hqh.graduationthesisserver.repository.UserRepository;
-import com.hqh.graduationthesisserver.service.EmailService;
+import com.hqh.graduationthesisserver.service.EmailService2;
 import com.hqh.graduationthesisserver.service.LoginAttemptService;
 import com.hqh.graduationthesisserver.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,17 +43,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final LoginAttemptService loginAttemptService;
-    private final EmailService emailService;
+    private final EmailService2 emailService2;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder bCryptPasswordEncoder,
                            LoginAttemptService loginAttemptService,
-                           EmailService emailService) {
+                           EmailService2 emailService2) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
-        this.emailService = emailService;
+        this.emailService2 = emailService2;
     }
 
     /**
@@ -224,7 +224,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         LOGGER.info(RESET_PASSWORD + password);
         userRepository.save(user);
         String name = user.getLastName() + " " + user.getFirstName();
-        emailService.setNewPasswordEmail(name, password, email);
+        emailService2.sendNewPasswordEmail(name, password, email);
         LOGGER.info(EMAIL_SENT + email);
     }
 }
