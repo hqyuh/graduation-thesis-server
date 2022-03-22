@@ -1,12 +1,11 @@
 package com.hqh.graduationthesisserver.service;
 
 import com.hqh.graduationthesisserver.domain.User;
-import com.hqh.graduationthesisserver.exception.domain.EmailExistException;
-import com.hqh.graduationthesisserver.exception.domain.EmailNotFoundException;
-import com.hqh.graduationthesisserver.exception.domain.UserNotFoundException;
-import com.hqh.graduationthesisserver.exception.domain.UsernameExistException;
+import com.hqh.graduationthesisserver.exception.domain.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -22,4 +21,18 @@ public interface UserService {
 
     void resetPassword(String email) throws EmailNotFoundException, MessagingException;
 
+    User addNewUser(String firstName, String lastName, String username, String email, String role,
+                    boolean isNonLocked, boolean isActive, MultipartFile profileImage)
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+
+    User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername,
+                    String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage)
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+
+    void deleteUser(Long id);
+
+    User updateProfileImage(String username, MultipartFile profileImage)
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+
+    User findUserById(Long id);
 }
