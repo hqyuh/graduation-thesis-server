@@ -41,13 +41,14 @@ public class EmailService2 {
     @Async
     public void sendNewPasswordEmail(String name,
                                      String password,
-                                     String email) throws MessagingException {
+                                     String email,
+                                     String emailSubject) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         helper.setFrom(FROM_EMAIL);
         helper.setTo(email);
-        helper.setSubject(EMAIL_SUBJECT_RESET);
+        helper.setSubject(emailSubject);
         helper.setSentDate(new Date());
         helper.setText(HELLO + name + YOUR_NEW_ACCOUNT_PASSWORD_IS
                 + password + IMAGE_EMAIL + QUIZIZZ_SUPPORT_GROUP, true);

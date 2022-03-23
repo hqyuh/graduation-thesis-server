@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.Authority.USER_AUTHORITIES;
-import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
+import static com.hqh.graduationthesisserver.constant.EmailConstant.*;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
 import static com.hqh.graduationthesisserver.enumeration.Role.ROLE_USER;
@@ -231,17 +231,33 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.setPassword(encodePassword(password));
         LOGGER.info(RESET_PASSWORD + password);
         userRepository.save(user);
-        String name = user.getLastName() + " " + user.getFirstName();
-        emailService2.sendNewPasswordEmail(name, password, email);
+        String name = user.getFirstName();
+        emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_RESET);
         LOGGER.info(EMAIL_SENT + email);
     }
-
-
 
     private Role getRoleEnumName(String role) {
         return Role.valueOf(role.toUpperCase());
     }
 
+    /***
+     *
+     * @param firstName
+     * @param lastName
+     * @param username
+     * @param email
+     * @param role
+     * @param isNonLocked
+     * @param isActive
+     * @param multipartFile
+     * @return new user
+     * @throws UserNotFoundException
+     * @throws EmailExistException
+     * @throws UsernameExistException
+     * @throws IOException
+     * @throws NotAnImageFileException
+     * @throws MessagingException
+     */
     @Override
     public User addNewUser(String firstName,
                            String lastName,
@@ -251,8 +267,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                            boolean isNonLocked,
                            boolean isActive,
                            MultipartFile multipartFile)
-            throws UserNotFoundException, EmailExistException, UsernameExistException,
-                   IOException, NotAnImageFileException {
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException,
+            NotAnImageFileException, MessagingException {
         validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         String password = generatePassword();
@@ -269,11 +285,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.setAuthorities(getRoleEnumName(role).getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         saveProfileImage(user, multipartFile);
+        String name = user.getFirstName();
+        emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_NEW_USER);
         userRepository.save(user);
 
         return user;
     }
 
+    /***
+     *
+     * @param user
+     * @param profileImage
+     * @throws IOException
+     * @throws NotAnImageFileException
+     */
     private void saveProfileImage(User user, MultipartFile profileImage)
             throws IOException, NotAnImageFileException {
 
@@ -302,6 +327,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 .toUriString();
     }
 
+    /***
+     *
+     * @param currentUsername
+     * @param newFirstName
+     * @param newLastName
+     * @param newUsername
+     * @param newEmail
+     * @param role
+     * @param isNonLocked
+     * @param isActive
+     * @param profileImage
+     * @return
+     * @throws UserNotFoundException
+     * @throws EmailExistException
+     * @throws UsernameExistException
+     * @throws IOException
+     * @throws NotAnImageFileException
+     */
     @Override
     public User updateUser(String currentUsername,
                            String newFirstName,

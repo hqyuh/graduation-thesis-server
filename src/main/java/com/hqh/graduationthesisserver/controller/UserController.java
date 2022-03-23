@@ -111,7 +111,8 @@ public class UserController extends ExceptionHandling {
                                            @RequestParam("isActive") String isActive,
                                            @RequestParam("isNonLocked") String isNonLocked,
                                            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage)
-            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException,
+            NotAnImageFileException, MessagingException {
 
         User newUser = userService.addNewUser(firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
@@ -129,7 +130,8 @@ public class UserController extends ExceptionHandling {
                                            @RequestParam("isActive") String isActive,
                                            @RequestParam("isNonLocked") String isNonLocked,
                                            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage)
-            throws UserNotFoundException, EmailExistException, IOException, UsernameExistException, NotAnImageFileException {
+            throws UserNotFoundException, EmailExistException, IOException, UsernameExistException,
+            NotAnImageFileException {
         User updateUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
 

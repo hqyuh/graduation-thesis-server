@@ -9,6 +9,7 @@ public class EmailConstant {
     public static final String CC_EMAIL = "";
     public static final String EMAIL_SUBJECT_ACTIVE = "Quizizz - Active account";
     public static final String EMAIL_SUBJECT_RESET = "Quizizz - Reset password";
+    public static final String EMAIL_SUBJECT_NEW_USER = "Quizizz - New password";
     public static final String GMAIL_SMTP_SERVER = "smtp.gmail.com";
     public static final String SMTP_HOST = "mail.smtp.host";
     public static final String SMTP_AUTH = "mail.smtp.auth";
