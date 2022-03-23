@@ -1,6 +1,7 @@
 package com.hqh.graduationthesisserver.controller;
 
 import com.hqh.graduationthesisserver.domain.HttpResponse;
+import com.hqh.graduationthesisserver.domain.Password;
 import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.DomainConstant.USER_DELETED_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
+import static com.hqh.graduationthesisserver.constant.PasswordConstant.CHANGE_PASSWORD_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.OK;
 import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
@@ -187,6 +189,17 @@ public class UserController extends ExceptionHandling {
             }
         }
         return byteArrayOutputStream.toByteArray();
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<HttpResponse> changePassword(@RequestBody Password password)
+            throws PasswordException {
+        userService.changePassword(
+                password.getEmail(),
+                password.getOldPassword(),
+                password.getNewPassword()
+        );
+        return response(OK, CHANGE_PASSWORD_SUCCESSFULLY);
     }
 
 }

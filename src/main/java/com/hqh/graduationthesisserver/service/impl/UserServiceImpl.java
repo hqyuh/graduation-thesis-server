@@ -33,6 +33,7 @@ import java.util.List;
 import static com.hqh.graduationthesisserver.constant.Authority.USER_AUTHORITIES;
 import static com.hqh.graduationthesisserver.constant.EmailConstant.*;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
+import static com.hqh.graduationthesisserver.constant.PasswordConstant.CURRENT_PASSWORD_IS_INCORRECT;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
 import static com.hqh.graduationthesisserver.enumeration.Role.ROLE_USER;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -391,4 +392,46 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public User findUserById(Long id) {
         return userRepository.findUserById(id);
     }
+
+    /***
+     *
+     * @param user
+     * @param newPassword
+     */
+    public void setNewPassword(User user,
+                               String newPassword) {
+        user.setPassword(encodePassword(newPassword));
+    }
+
+    /***
+     * check if the old password is correct
+     *
+     * @param user
+     * @param oldPassword
+     * @return <code>true</code> if the password is correct
+     *         <code>false</code> otherwise.
+     */
+    public boolean checkIfValidOldPassword(User user,
+                                           String oldPassword) {
+        return bCryptPasswordEncoder.matches(oldPassword, user.getPassword());
+    }
+
+    /***
+     *
+     * @param email
+     * @param oldPassword
+     * @param newPassword
+     * @throws PasswordException
+     */
+    public void changePassword(String email,
+                               String oldPassword,
+                               String newPassword) throws PasswordException {
+        User user = userRepository.findUserByEmail(email);
+
+        if(!checkIfValidOldPassword(user, oldPassword)) {
+            throw new PasswordException(CURRENT_PASSWORD_IS_INCORRECT);
+        }
+        setNewPassword(user, newPassword);
+    }
+
 }

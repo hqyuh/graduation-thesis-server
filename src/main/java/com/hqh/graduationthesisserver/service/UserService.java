@@ -35,4 +35,7 @@ public interface UserService {
             throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
     User findUserById(Long id);
+
+    void changePassword(String email, String oldPassword, String newPassword) throws PasswordException;
+
 }

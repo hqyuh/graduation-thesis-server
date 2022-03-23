@@ -2,10 +2,7 @@ package com.hqh.graduationthesisserver.exception;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.hqh.graduationthesisserver.domain.HttpResponse;
-import com.hqh.graduationthesisserver.exception.domain.EmailExistException;
-import com.hqh.graduationthesisserver.exception.domain.EmailNotFoundException;
-import com.hqh.graduationthesisserver.exception.domain.UsernameExistException;
-import com.hqh.graduationthesisserver.exception.domain.UserNotFoundException;
+import com.hqh.graduationthesisserver.exception.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -132,6 +129,9 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(NOT_FOUND, NO_MAPPING_FOR_URL);
     }
 
-
+    @ExceptionHandler(PasswordException.class)
+    public ResponseEntity<HttpResponse> passwordException(PasswordException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
 
 }
