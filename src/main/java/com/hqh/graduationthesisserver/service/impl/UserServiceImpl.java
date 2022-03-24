@@ -394,16 +394,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     /***
-     *
-     * @param user
-     * @param newPassword
-     */
-    public void setNewPassword(User user,
-                               String newPassword) {
-        user.setPassword(encodePassword(newPassword));
-    }
-
-    /***
      * check if the old password is correct
      *
      * @param user
@@ -431,7 +421,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(!checkIfValidOldPassword(user, oldPassword)) {
             throw new PasswordException(CURRENT_PASSWORD_IS_INCORRECT);
         }
-        setNewPassword(user, newPassword);
+        user.setPassword(encodePassword(newPassword));
     }
 
 }
