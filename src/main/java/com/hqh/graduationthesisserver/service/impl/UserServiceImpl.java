@@ -26,6 +26,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +39,7 @@ import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.PasswordConstant.CURRENT_PASSWORD_IS_INCORRECT;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
 import static com.hqh.graduationthesisserver.enumeration.Role.ROLE_USER;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.util.StringUtils.*;
@@ -310,13 +314,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 throw new NotAnImageFileException(profileImage.getOriginalFilename() + PLEASE_UPLOAD_AN_IMAGE);
             }
 
-            String fileName = cleanPath(profileImage.getOriginalFilename());
-            user.setProfileImageUrl(setProfileImageUrl(user.getUsername()));
-            User savedUser = userRepository.save(user);
+            Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
+            if(!Files.exists(userFolder)) {
+                Files.createDirectories(userFolder);
+                LOGGER.info(DIRECTORY_CREATED + userFolder);
+            }
 
-            String uploadDir = USER_IMAGE_PATH + savedUser.getUsername();
-            FileUpLoadUtil.clearDir(uploadDir);
-            FileUpLoadUtil.saveFile(uploadDir, fileName, profileImage);
+            Files.deleteIfExists(Paths.get(userFolder + user.getUsername() + DOT + JPG_EXTENSION));
+
+            Files.copy(profileImage.getInputStream(), userFolder.resolve(user.getUsername() + DOT + JPG_EXTENSION), REPLACE_EXISTING);
+            user.setProfileImageUrl(setProfileImageUrl(user.getUsername()));
+            userRepository.save(user);
+            LOGGER.info(FILE_SAVED_IN_FILE_SYSTEM + profileImage.getOriginalFilename());
         }
 
     }
