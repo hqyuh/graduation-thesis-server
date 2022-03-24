@@ -161,7 +161,7 @@ public class UserController extends ExceptionHandling {
         return response(OK, USER_DELETED_SUCCESSFULLY);
     }
 
-    @PostMapping("/updateProfileImage")
+    @PostMapping("/update-profile-image")
     public ResponseEntity<User> updateProfileImage(@RequestParam("username") String username,
                                                    @RequestParam(value = "profileImage") MultipartFile profileImage)
             throws UserNotFoundException, EmailExistException, IOException,
