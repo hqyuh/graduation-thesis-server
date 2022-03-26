@@ -1,1 +1,1 @@
-# graduation-thesis-server
+# Graduation-Thesis-Server
