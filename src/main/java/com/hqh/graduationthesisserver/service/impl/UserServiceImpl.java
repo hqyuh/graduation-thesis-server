@@ -8,7 +8,6 @@ import com.hqh.graduationthesisserver.repository.UserRepository;
 import com.hqh.graduationthesisserver.service.EmailService2;
 import com.hqh.graduationthesisserver.service.LoginAttemptService;
 import com.hqh.graduationthesisserver.service.UserService;
-import com.hqh.graduationthesisserver.utils.FileUpLoadUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -42,7 +41,6 @@ import static com.hqh.graduationthesisserver.enumeration.Role.ROLE_USER;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.MediaType.*;
-import static org.springframework.util.StringUtils.*;
 
 @Service
 @Transactional
@@ -433,4 +431,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.setPassword(encodePassword(newPassword));
     }
 
+    @Override
+    public void accountLock(Long id, boolean isNotLocked) {
+        userRepository.accountLock(id, isNotLocked);
+    }
 }

@@ -38,4 +38,6 @@ public interface UserService {
 
     void changePassword(String email, String oldPassword, String newPassword) throws PasswordException;
 
+    void accountLock(Long id, boolean isNotLocked);
+
 }

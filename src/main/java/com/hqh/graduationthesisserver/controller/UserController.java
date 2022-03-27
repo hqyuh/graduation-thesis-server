@@ -32,6 +32,7 @@ import static com.hqh.graduationthesisserver.constant.DomainConstant.USER_DELETE
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.PasswordConstant.CHANGE_PASSWORD_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
+import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
 import static org.springframework.http.HttpStatus.OK;
 import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
@@ -200,6 +201,15 @@ public class UserController extends ExceptionHandling {
                 password.getNewPassword()
         );
         return response(OK, CHANGE_PASSWORD_SUCCESSFULLY);
+    }
+
+    @GetMapping("/{id}/locked/{status}")
+    public ResponseEntity<?> accountLock(@PathVariable("id") Long id,
+                                         @PathVariable("status") String status) {
+        userService.accountLock(id, Boolean.parseBoolean(status));
+        String message = Boolean.parseBoolean(status) ? ACCOUNT_UNLOCK_SUCCESSFUL : ACCOUNT_LOCK_SUCCESSFUL;
+
+        return response(OK, message);
     }
 
 }
