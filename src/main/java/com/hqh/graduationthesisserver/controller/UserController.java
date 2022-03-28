@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -106,6 +107,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
                                            @RequestParam("lastName") String lastName,
                                            @RequestParam("username") String username,
@@ -142,6 +144,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @GetMapping("/find/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         User user = userService.findUserById(id);
 
@@ -149,6 +152,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getUsers();
 
@@ -156,6 +160,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
 
@@ -204,6 +209,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @GetMapping("/{id}/locked/{status}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> accountLock(@PathVariable("id") Long id,
                                          @PathVariable("status") String status) {
         userService.accountLock(id, Boolean.parseBoolean(status));
