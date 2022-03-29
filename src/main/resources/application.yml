@@ -19,7 +19,6 @@ spring:
         show-sql: true
     mail:
         host: smtp.gmail.com
-        username: hoquang.huyy@gmail.com
         password: cjegddncawaugpne
         port: 587
         properties:
@@ -28,3 +27,7 @@ spring:
                     auth: true
                     starttls:
                         enable: true
+        username: hoquang.huyy@gmail.com
+    sql:
+        init:
+            mode: always
