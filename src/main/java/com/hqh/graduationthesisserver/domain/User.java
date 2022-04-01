@@ -1,5 +1,6 @@
 package com.hqh.graduationthesisserver.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,19 +24,19 @@ public class User implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "first_name", length = 20)
+    @Column(name = "first_name", length = 20, nullable = false)
     private String firstName;
 
     @Column(name = "last_name", length = 20)
     private String lastName;
 
-    @Column(name = "username", length = 50)
+    @Column(name = "username", length = 50, nullable = false)
     private String username;
 
-    @Column(name = "password", length = 64)
+    @Column(name = "password", length = 64, nullable = false)
     private String password;
 
-    @Column(name = "email", length = 50)
+    @Column(name = "email", length = 50, nullable = false)
     private String email;
 
     @Column(name = "profile_image_url")
@@ -56,6 +57,7 @@ public class User implements Serializable {
     private boolean isNotLocked;
 
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private List<TestQuizz> quizzes;
 
     public User(Long id) {

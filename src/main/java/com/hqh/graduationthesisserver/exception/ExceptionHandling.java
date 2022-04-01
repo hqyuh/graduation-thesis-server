@@ -2,7 +2,8 @@ package com.hqh.graduationthesisserver.exception;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.hqh.graduationthesisserver.domain.HttpResponse;
-import com.hqh.graduationthesisserver.exception.domain.*;
+import com.hqh.graduationthesisserver.exception.domain.quizz.*;
+import com.hqh.graduationthesisserver.exception.domain.user.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -13,13 +14,18 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.hqh.graduationthesisserver.constant.DomainConstant.*;
@@ -131,6 +137,16 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(PasswordException.class)
     public ResponseEntity<HttpResponse> passwordException(PasswordException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(TestQuizzNotFoundException.class)
+    public ResponseEntity<HttpResponse> quizzNotFoundException(TestQuizzNotFoundException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(TestQuizzExistException.class)
+    public ResponseEntity<HttpResponse> quizzExistException(TestQuizzExistException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 

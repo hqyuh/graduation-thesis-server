@@ -1,7 +1,7 @@
 package com.hqh.graduationthesisserver.service;
 
 import com.hqh.graduationthesisserver.domain.User;
-import com.hqh.graduationthesisserver.exception.domain.*;
+import com.hqh.graduationthesisserver.exception.domain.user.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;

@@ -1,4 +1,4 @@
-package com.hqh.graduationthesisserver.exception.domain;
+package com.hqh.graduationthesisserver.exception.domain.user;
 
 public class UsernameExistException extends Exception {
     public UsernameExistException(String message) {

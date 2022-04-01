@@ -10,8 +10,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
 
-import java.time.Instant;
+import java.sql.Timestamp;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,8 +77,8 @@ class TestQuizzRepositoryTest {
 
     @Test
     public void testGetQuizzByCode() {
-        TestQuizz testQuizz = quizzRepository
-                .findTestQuizzByActivationCode("568008");
+        Optional<TestQuizz> testQuizz = quizzRepository
+                .findTestQuizzByActivationCode("446614");
 
         System.out.println(testQuizz);
 
@@ -82,12 +87,11 @@ class TestQuizzRepositoryTest {
 
     @Test
     public void testUpdateQuizz() {
-        TestQuizz testQuizz = quizzRepository.findById(9L)
+        TestQuizz testQuizz = quizzRepository.findById(17L)
                                              .get();
-        testQuizz.setActivationCode("568008");
+        testQuizz.setActivationCode("446614");
         testQuizz.setDateCreated(Instant.now());
-        testQuizz.setTestName("typescript");
-        testQuizz.setExamTime(600);
+        testQuizz.setExamTime(1000);
 
         quizzRepository.save(testQuizz);
     }
@@ -96,6 +100,34 @@ class TestQuizzRepositoryTest {
     public void testDeleteQuizz() {
         Long testID = 6L;
         quizzRepository.deleteById(testID);
+    }
+
+    @Test
+    public void testGetQuizzByTestName() {
+        TestQuizz testQuizz = quizzRepository
+                .findTestQuizzByTestName("java");
+        System.out.println(testQuizz);
+
+        assertThat(testQuizz).isNotNull();
+    }
+
+    @Test
+    public void testConvertTime() {
+        String date = "10/05/2022";
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter DATE_FORMAT =
+                new DateTimeFormatterBuilder().appendPattern("dd/MM/yyyy[[HH][:mm][:ss][.SSS]]")
+                                              .parseDefaulting(ChronoField.HOUR_OF_DAY, now.getHour())
+                                              .parseDefaulting(ChronoField.MINUTE_OF_HOUR, now.getMinute())
+                                              .parseDefaulting(ChronoField.SECOND_OF_MINUTE, now.getSecond())
+                                              .parseDefaulting(ChronoField.NANO_OF_SECOND, now.getNano())
+                                              .toFormatter()
+                                              .withZone(ZoneId.of("Asia/Ho_Chi_Minh"));
+        LocalDateTime localDateTime = LocalDateTime.from(DATE_FORMAT.parse(date));
+        Timestamp ts = Timestamp.valueOf(localDateTime);
+
+        System.out.println(ts);
+
     }
 
 }

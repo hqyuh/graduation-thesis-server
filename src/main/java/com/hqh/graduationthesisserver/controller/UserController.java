@@ -5,7 +5,7 @@ import com.hqh.graduationthesisserver.domain.Password;
 import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
-import com.hqh.graduationthesisserver.exception.domain.*;
+import com.hqh.graduationthesisserver.exception.domain.user.*;
 import com.hqh.graduationthesisserver.service.UserService;
 import com.hqh.graduationthesisserver.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,7 @@ import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.PasswordConstant.CHANGE_PASSWORD_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
@@ -66,7 +67,7 @@ public class UserController extends ExceptionHandling {
                 user.getEmail(),
                 user.getPassword()
         );
-        return new ResponseEntity<>(newUser, OK);
+        return new ResponseEntity<>(newUser, CREATED);
     }
 
     @PostMapping("/login")
@@ -122,7 +123,7 @@ public class UserController extends ExceptionHandling {
         User newUser = userService.addNewUser(firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
 
-        return new ResponseEntity<>(newUser, OK);
+        return new ResponseEntity<>(newUser, CREATED);
     }
 
     @PostMapping("/update")

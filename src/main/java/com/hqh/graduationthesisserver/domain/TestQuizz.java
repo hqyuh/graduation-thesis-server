@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,14 +35,14 @@ public class TestQuizz {
     @Column(name = "date_created")
     private Instant dateCreated;
 
-    @Column(name = "exam_time")
+    @Column(name = "exam_time", nullable = false)
     private Integer examTime;
 
     @Column(name = "is_start")
-    private Instant isStart;
+    private Timestamp isStart;
 
     @Column(name = "is_end")
-    private Instant isEnd;
+    private Timestamp isEnd;
 
     @Column(name = "activation_code", nullable = false, length = 7)
     private String activationCode;

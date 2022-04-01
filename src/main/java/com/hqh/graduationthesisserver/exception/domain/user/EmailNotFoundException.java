@@ -1,4 +1,4 @@
-package com.hqh.graduationthesisserver.exception.domain;
+package com.hqh.graduationthesisserver.exception.domain.user;
 
 public class EmailNotFoundException extends Exception {
     public EmailNotFoundException(String message) {

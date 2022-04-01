@@ -3,7 +3,7 @@ package com.hqh.graduationthesisserver.service.impl;
 import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.enumeration.Role;
-import com.hqh.graduationthesisserver.exception.domain.*;
+import com.hqh.graduationthesisserver.exception.domain.user.*;
 import com.hqh.graduationthesisserver.repository.UserRepository;
 import com.hqh.graduationthesisserver.service.EmailService2;
 import com.hqh.graduationthesisserver.service.LoginAttemptService;
