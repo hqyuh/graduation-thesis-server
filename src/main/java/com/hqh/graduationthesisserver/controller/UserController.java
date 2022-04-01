@@ -187,9 +187,9 @@ public class UserController extends ExceptionHandling {
         return Files.readAllBytes(Paths.get(USER_FOLDER + username + FORWARD_SLASH + fileName));
     }
 
-    @GetMapping(path = "/image/profile/{username}", produces = IMAGE_JPEG_VALUE)
+    @GetMapping(path = "/image/profile/{username}", produces = { IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE })
     public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
-        URL url = new URL(TEMP_PROFILE_IMAGE_BASE_URL + username);
+        URL url = new URL(TEMP_PROFILE_IMAGE_BASE_URL + username + DOT + PNG_EXTENSION);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try(InputStream inputStream = url.openStream()){
             int bytesRead;
