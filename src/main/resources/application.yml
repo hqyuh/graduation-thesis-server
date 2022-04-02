@@ -31,3 +31,18 @@ spring:
     sql:
         init:
             mode: always
+logging:
+    file:
+        name: gts.log
+    level:
+        com:
+            hqh: debug
+        root: warn
+    logback:
+        rollingpolicy:
+            clean-history-on-start: true
+            file-name-pattern: '%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15}
+                - %msg%n'
+            max-file-size: 100KB
+            max-history: 14
+            total-size-cap: 1MB
