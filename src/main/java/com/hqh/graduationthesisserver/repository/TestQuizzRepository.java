@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.websocket.server.PathParam;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,5 +17,9 @@ public interface TestQuizzRepository extends JpaRepository<TestQuizz, Long> {
 
     @Query("SELECT u FROM TestQuizz u WHERE u.testName = :name")
     TestQuizz findTestQuizzByTestName(@PathParam("name") String name);
+
+    List<TestQuizz> findTestQuizzByTopicId(Long id);
+
+    TestQuizz findTestQuizzById(Long id);
 
 }

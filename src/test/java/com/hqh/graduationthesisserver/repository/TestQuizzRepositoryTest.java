@@ -1,6 +1,7 @@
 package com.hqh.graduationthesisserver.repository;
 
 import com.hqh.graduationthesisserver.domain.TestQuizz;
+import com.hqh.graduationthesisserver.domain.Topic;
 import com.hqh.graduationthesisserver.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,6 +129,12 @@ class TestQuizzRepositoryTest {
 
         System.out.println(ts);
 
+    }
+
+    @Test
+    public void testGetAllQuizzByTopicId() {
+        List<TestQuizz> listQuizz = quizzRepository.findTestQuizzByTopicId(1L);
+        listQuizz.forEach(System.out::println);
     }
 
 }

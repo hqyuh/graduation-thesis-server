@@ -26,13 +26,13 @@ import static java.time.temporal.ChronoField.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service
-public class TestQuizzImpl implements TestQuizzService {
+public class TestQuizzServiceImpl implements TestQuizzService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final TestQuizzRepository quizzRepository;
 
     @Autowired
-    public TestQuizzImpl(TestQuizzRepository quizzRepository) {
+    public TestQuizzServiceImpl(TestQuizzRepository quizzRepository) {
         this.quizzRepository = quizzRepository;
     }
 

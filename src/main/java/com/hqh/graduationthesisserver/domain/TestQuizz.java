@@ -59,6 +59,11 @@ public class TestQuizz {
     @OneToMany(mappedBy = "testQuizz")
     private List<Question> questions;
 
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    @JsonIgnore
+    private Topic topic;
+
     public void addUser(User user) {
         this.users.add(user);
     }
