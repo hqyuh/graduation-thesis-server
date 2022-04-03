@@ -11,5 +11,6 @@ public class TestQuizzConstant {
     public static final String DELETED_QUIZZ_TEST_SUCCESSFULLY = "Deleted quizz test successfully";
     public static final String UPDATE_QUICK_TEST_SUCCESS = "Update quick test success";
     public static final String NO_QUIZZ_TEST_FOUND_WITH_CODE = "No quizz test found with code: ";
+    public static final String ADD_QUICK_TEST_SUCCESS = "Add quick test success";
 
 }

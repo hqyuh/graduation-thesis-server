@@ -1,5 +1,6 @@
 package com.hqh.graduationthesisserver.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Topic {
     private String topicName;
 
     @OneToMany(mappedBy = "topic")
+    @JsonIgnore
     private List<TestQuizz> testQuizz;
 
     public Topic(String topicName) {

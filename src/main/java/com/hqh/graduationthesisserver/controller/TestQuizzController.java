@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.hqh.graduationthesisserver.constant.TestQuizzConstant.DELETED_QUIZZ_TEST_SUCCESSFULLY;
-import static com.hqh.graduationthesisserver.constant.TestQuizzConstant.UPDATE_QUICK_TEST_SUCCESS;
+import static com.hqh.graduationthesisserver.constant.TestQuizzConstant.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -39,7 +38,7 @@ public class TestQuizzController extends ExceptionHandling {
                                                         @RequestParam(name = "topicId", required = false) String topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException {
         TestQuizz newQuizz = testQuizzService.createQuizz(testName, examTime, isStart, isEnd, Long.parseLong(topicId));
-        return response(OK, "Add quick test success");
+        return response(OK, ADD_QUICK_TEST_SUCCESS);
     }
 
     @PatchMapping("/update")

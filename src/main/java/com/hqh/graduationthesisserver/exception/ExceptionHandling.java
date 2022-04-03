@@ -3,6 +3,8 @@ package com.hqh.graduationthesisserver.exception;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.exception.domain.quizz.*;
+import com.hqh.graduationthesisserver.exception.domain.topic.TopicExistException;
+import com.hqh.graduationthesisserver.exception.domain.topic.TopicNotFoundException;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,6 +162,16 @@ public class ExceptionHandling implements ErrorController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @ExceptionHandler(TopicNotFoundException.class)
+    public ResponseEntity<HttpResponse> topicNotFoundException(TopicNotFoundException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(TopicExistException.class)
+    public ResponseEntity<HttpResponse> topicExistException(TopicExistException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
 }
