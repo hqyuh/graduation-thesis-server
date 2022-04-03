@@ -27,4 +27,6 @@ public interface TestQuizzService {
 
     List<TestQuizz> findAllTestQuizzByTopicId(Long id);
 
+    TestQuizz findTestQuizzById(Long id);
+
 }

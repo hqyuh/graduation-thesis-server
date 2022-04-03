@@ -177,4 +177,9 @@ public class TestQuizzServiceImpl implements TestQuizzService {
     public List<TestQuizz> findAllTestQuizzByTopicId(Long id) {
         return quizzRepository.findTestQuizzByTopicId(id);
     }
+
+    @Override
+    public TestQuizz findTestQuizzById(Long id) {
+        return quizzRepository.findTestQuizzById(id);
+    }
 }
