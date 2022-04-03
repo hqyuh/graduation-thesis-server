@@ -105,6 +105,7 @@ public class QuestionServiceImpl implements QuestionService {
             Question savedQuestion = questionRepository.save(question);
 
             String uploadDir = QUESTION_IMAGE_PATH + savedQuestion.getId();
+            FileUpLoadUtil.clearDir(uploadDir);
             FileUpLoadUtil.saveFile(uploadDir, fileName, questionImage);
 
         }
