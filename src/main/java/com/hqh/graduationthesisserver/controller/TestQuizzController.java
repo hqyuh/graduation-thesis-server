@@ -35,9 +35,10 @@ public class TestQuizzController extends ExceptionHandling {
     public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestParam("testName") String testName,
                                                         @RequestParam("examTime") Integer examTime,
                                                         @RequestParam("isStart") String isStart,
-                                                        @RequestParam("isEnd") String isEnd)
+                                                        @RequestParam("isEnd") String isEnd,
+                                                        @RequestParam("topicId") String topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException {
-        TestQuizz newQuizz = testQuizzService.createQuizz(testName, examTime, isStart, isEnd);
+        TestQuizz newQuizz = testQuizzService.createQuizz(testName, examTime, isStart, isEnd, Long.parseLong(topicId));
         return response(OK, "Add quick test success");
     }
 
@@ -47,9 +48,10 @@ public class TestQuizzController extends ExceptionHandling {
                                                         @RequestParam("testName") String testName,
                                                         @RequestParam("examTime") Integer examTime,
                                                         @RequestParam("isStart") String isStart,
-                                                        @RequestParam("isEnd") String isEnd)
+                                                        @RequestParam("isEnd") String isEnd,
+                                                        @RequestParam("topicId") String topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException {
-        TestQuizz updateQuizz = testQuizzService.updateQuizz(currentTestName, testName, examTime, isStart, isEnd);
+        TestQuizz updateQuizz = testQuizzService.updateQuizz(currentTestName, testName, examTime, isStart, isEnd, Long.parseLong(topicId));
         return response(OK, UPDATE_QUICK_TEST_SUCCESS);
     }
 

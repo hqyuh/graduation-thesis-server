@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface TestQuizzService {
 
-    TestQuizz createQuizz(String testName, Integer examTime, String isStart, String isEnd)
+    TestQuizz createQuizz(String testName, Integer examTime, String isStart, String isEnd, Long topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException;
 
     TestQuizz updateQuizz(String currentTestName, String newTestName, Integer examTime,
-                          String isStart, String isEnd)
+                          String isStart, String isEnd, Long topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException;
 
     TestQuizz findTestQuizzByTestName(String testName);

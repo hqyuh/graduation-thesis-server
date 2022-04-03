@@ -1,9 +1,13 @@
 package com.hqh.graduationthesisserver.service.impl;
 
 import com.hqh.graduationthesisserver.domain.TestQuizz;
+import com.hqh.graduationthesisserver.domain.Topic;
+import com.hqh.graduationthesisserver.dto.TestQuizzDto;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzExistException;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzNotFoundException;
+import com.hqh.graduationthesisserver.mapper.TestQuizzMapper;
 import com.hqh.graduationthesisserver.repository.TestQuizzRepository;
+import com.hqh.graduationthesisserver.repository.TopicRepository;
 import com.hqh.graduationthesisserver.service.TestQuizzService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,10 +34,16 @@ public class TestQuizzServiceImpl implements TestQuizzService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final TestQuizzRepository quizzRepository;
+    private final TopicRepository topicRepository;
+    private final TestQuizzMapper testQuizzMapper;
 
     @Autowired
-    public TestQuizzServiceImpl(TestQuizzRepository quizzRepository) {
+    public TestQuizzServiceImpl(TestQuizzRepository quizzRepository,
+                                TopicRepository topicRepository,
+                                TestQuizzMapper testQuizzMapper) {
         this.quizzRepository = quizzRepository;
+        this.topicRepository = topicRepository;
+        this.testQuizzMapper = testQuizzMapper;
     }
 
     private TestQuizz validateNewQuizzExists (String currentQuizz,
@@ -99,11 +109,14 @@ public class TestQuizzServiceImpl implements TestQuizzService {
     public TestQuizz createQuizz(String testName,
                                  Integer examTime,
                                  String isStart,
-                                 String isEnd)
+                                 String isEnd,
+                                 Long topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException {
 
         validateNewQuizzExists(EMPTY, testName);
-        TestQuizz quizz = new TestQuizz();
+        TestQuizzDto testQuizzDto = new TestQuizzDto();
+        Topic topic = topicRepository.findTopicById(topicId);
+        TestQuizz quizz = testQuizzMapper.map(testQuizzDto, topic);
         quizz.setTestName(testName);
         String code = generateActivationCode();
         quizz.setActivationCode(code);
@@ -122,14 +135,17 @@ public class TestQuizzServiceImpl implements TestQuizzService {
                                  String newTestName,
                                  Integer examTime,
                                  String isStart,
-                                 String isEnd)
+                                 String isEnd,
+                                 Long topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException {
+        Topic topic = topicRepository.findTopicById(topicId);
         TestQuizz currentQuizz = validateNewQuizzExists(currentTestName, newTestName);
         currentQuizz.setTestName(newTestName);
         currentQuizz.setExamTime(examTime);
         currentQuizz.setActivationCode(currentQuizz.getActivationCode());
         currentQuizz.setIsStart(convertTime(isStart));
         currentQuizz.setIsEnd(convertTime(isEnd));
+        currentQuizz.setTopic(topic);
         quizzRepository.save(currentQuizz);
 
         return currentQuizz;
