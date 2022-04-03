@@ -172,4 +172,9 @@ public class TestQuizzServiceImpl implements TestQuizzService {
                 .findTestQuizzByActivationCode(code)
                 .orElseThrow(() -> new TestQuizzNotFoundException(NO_QUIZZ_TEST_FOUND_WITH_CODE + code)));
     }
+
+    @Override
+    public List<TestQuizz> findAllTestQuizzByTopicId(Long id) {
+        return quizzRepository.findTestQuizzByTopicId(id);
+    }
 }

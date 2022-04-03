@@ -25,4 +25,6 @@ public interface TestQuizzService {
 
     Optional<TestQuizz> findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException;
 
+    List<TestQuizz> findAllTestQuizzByTopicId(Long id);
+
 }

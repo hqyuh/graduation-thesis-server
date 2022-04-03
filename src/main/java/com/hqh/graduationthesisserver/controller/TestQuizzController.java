@@ -78,6 +78,13 @@ public class TestQuizzController extends ExceptionHandling {
         return new ResponseEntity<>(quizz, OK);
     }
 
+    @GetMapping("/list-topic/{id}")
+    public ResponseEntity<List<TestQuizz>> getAllQuizzByTopicId(@PathVariable("id") Long id) {
+        List<TestQuizz> quizzes = testQuizzService.findAllTestQuizzByTopicId(id);
+
+        return new ResponseEntity<>(quizzes, OK);
+    }
+
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message){
         HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus,
                 httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
