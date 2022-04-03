@@ -26,4 +26,7 @@ public class Topic {
     @OneToMany(mappedBy = "topic")
     private List<TestQuizz> testQuizz;
 
+    public Topic(String topicName) {
+        this.topicName = topicName;
+    }
 }
