@@ -6,11 +6,15 @@ import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
+import com.hqh.graduationthesisserver.service.HelperService;
 import com.hqh.graduationthesisserver.service.UserService;
 import com.hqh.graduationthesisserver.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +39,7 @@ import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.PasswordConstant.CHANGE_PASSWORD_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
@@ -48,14 +53,17 @@ public class UserController extends ExceptionHandling {
     private final UserService userService;
     private final JWTTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final HelperService csvService;
 
     @Autowired
     public UserController(UserService userService,
                           JWTTokenProvider jwtTokenProvider,
-                          AuthenticationManager authenticationManager) {
+                          AuthenticationManager authenticationManager,
+                          HelperService csvService) {
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
+        this.csvService = csvService;
     }
 
     @PostMapping("/register")
@@ -220,6 +228,17 @@ public class UserController extends ExceptionHandling {
         String message = Boolean.parseBoolean(status) ? ACCOUNT_UNLOCK_SUCCESSFUL : ACCOUNT_LOCK_SUCCESSFUL;
 
         return response(OK, message);
+    }
+
+    @GetMapping("/export/csv")
+    public ResponseEntity<Resource> exportCSV() {
+        String fileName = "users" + DOT + CSV_EXTENSION;
+        InputStreamResource file = new InputStreamResource(csvService.loadCSV());
+        return ResponseEntity
+                .ok()
+                .header(CONTENT_DISPOSITION, ATTACHMENT_FILENAME + fileName)
+                .contentType(MediaType.parseMediaType(APPLICATION_CSV))
+                .body(file);
     }
 
 }

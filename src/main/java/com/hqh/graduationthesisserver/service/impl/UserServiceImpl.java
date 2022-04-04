@@ -4,7 +4,9 @@ import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.enumeration.Role;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
+import com.hqh.graduationthesisserver.helper.user.CSVHelper;
 import com.hqh.graduationthesisserver.repository.UserRepository;
+import com.hqh.graduationthesisserver.service.HelperService;
 import com.hqh.graduationthesisserver.service.EmailService2;
 import com.hqh.graduationthesisserver.service.LoginAttemptService;
 import com.hqh.graduationthesisserver.service.UserService;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,7 +48,7 @@ import static org.springframework.http.MediaType.*;
 @Service
 @Transactional
 @Qualifier("userDetailsService")
-public class UserServiceImpl implements UserDetailsService, UserService {
+public class UserServiceImpl implements UserDetailsService, UserService, HelperService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
@@ -434,5 +437,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public void accountLock(Long id, boolean isNotLocked) {
         userRepository.accountLock(id, isNotLocked);
+    }
+
+    @Override
+    public ByteArrayInputStream loadCSV() {
+        List<User> users = userRepository.findAll();
+
+        return CSVHelper.userToCsv(users);
     }
 }

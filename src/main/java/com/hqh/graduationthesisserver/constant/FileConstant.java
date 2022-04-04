@@ -24,4 +24,12 @@ public class FileConstant {
     public static final String COULD_NOT_DIST_DIRECTORY = "Could not dist directory: ";
     public static final String PLEASE_UPLOAD_AN_IMAGE = "is not an image file. Please upload an image";
 
+    // file
+    public static final String ATTACHMENT_FILENAME = "attachment; filename=";
+    // csv
+    public static final String FAIL_TO_IMPORT_DATA_TO_CSV_FILE = "Fail to import data to CSV file: ";
+    public static final String[] USER_HEADER = {"ID", "First name", "Last name", "Username", "Email", "Join date", "Role"};
+    public static final String APPLICATION_CSV = "application/csv";
+    public static final String CSV_EXTENSION = "csv";
+
 }
