@@ -6,7 +6,7 @@ import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
-import com.hqh.graduationthesisserver.service.HelperService;
+import com.hqh.graduationthesisserver.service.UserHelperService;
 import com.hqh.graduationthesisserver.service.UserService;
 import com.hqh.graduationthesisserver.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,17 +53,17 @@ public class UserController extends ExceptionHandling {
     private final UserService userService;
     private final JWTTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
-    private final HelperService csvService;
+    private final UserHelperService helperService;
 
     @Autowired
     public UserController(UserService userService,
                           JWTTokenProvider jwtTokenProvider,
                           AuthenticationManager authenticationManager,
-                          HelperService csvService) {
+                          UserHelperService helperService) {
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
-        this.csvService = csvService;
+        this.helperService = helperService;
     }
 
     @PostMapping("/register")
@@ -233,7 +233,7 @@ public class UserController extends ExceptionHandling {
     @GetMapping("/export/csv")
     public ResponseEntity<Resource> exportCSV() {
         String fileName = "users" + DOT + CSV_EXTENSION;
-        InputStreamResource file = new InputStreamResource(csvService.loadCSV());
+        InputStreamResource file = new InputStreamResource(helperService.loadCSV());
         return ResponseEntity
                 .ok()
                 .header(CONTENT_DISPOSITION, ATTACHMENT_FILENAME + fileName)

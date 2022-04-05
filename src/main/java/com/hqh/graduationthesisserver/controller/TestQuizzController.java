@@ -5,16 +5,22 @@ import com.hqh.graduationthesisserver.domain.TestQuizz;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzExistException;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzNotFoundException;
+import com.hqh.graduationthesisserver.service.TestQuizzHelperService;
 import com.hqh.graduationthesisserver.service.TestQuizzService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 import java.util.Optional;
 
+import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.TestQuizzConstant.*;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -23,10 +29,13 @@ import static org.springframework.http.HttpStatus.OK;
 public class TestQuizzController extends ExceptionHandling {
 
     private final TestQuizzService testQuizzService;
+    private final TestQuizzHelperService helperService;
 
     @Autowired
-    public TestQuizzController(TestQuizzService testQuizzService) {
+    public TestQuizzController(TestQuizzService testQuizzService,
+                               TestQuizzHelperService helperService) {
         this.testQuizzService = testQuizzService;
+        this.helperService = helperService;
     }
 
     @PostMapping("/add")
@@ -89,6 +98,16 @@ public class TestQuizzController extends ExceptionHandling {
         TestQuizz quizz = testQuizzService.findTestQuizzById(id);
 
         return new ResponseEntity<>(quizz, OK);
+    }
+
+    @GetMapping("/export/excel/{id}")
+    public ResponseEntity<InputStreamResource> getFile(@PathVariable("id") Long id) {
+        String fileName = "quizzes" + DOT + XLSX_EXTENSION;
+        InputStreamResource file = new InputStreamResource(helperService.loadExcel(id));
+        return ResponseEntity.ok()
+                             .header(HttpHeaders.CONTENT_DISPOSITION, ATTACHMENT_FILENAME + fileName)
+                             .contentType(MediaType.parseMediaType(APPLICATION_EXCEL))
+                             .body(file);
     }
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message){

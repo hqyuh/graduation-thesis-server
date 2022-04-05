@@ -5,9 +5,11 @@ import com.hqh.graduationthesisserver.domain.Topic;
 import com.hqh.graduationthesisserver.dto.TestQuizzDto;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzExistException;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzNotFoundException;
+import com.hqh.graduationthesisserver.helper.quizz.ExcelHelper;
 import com.hqh.graduationthesisserver.mapper.TestQuizzMapper;
 import com.hqh.graduationthesisserver.repository.TestQuizzRepository;
 import com.hqh.graduationthesisserver.repository.TopicRepository;
+import com.hqh.graduationthesisserver.service.TestQuizzHelperService;
 import com.hqh.graduationthesisserver.service.TestQuizzService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -30,7 +33,7 @@ import static java.time.temporal.ChronoField.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service
-public class TestQuizzServiceImpl implements TestQuizzService {
+public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final TestQuizzRepository quizzRepository;
@@ -181,5 +184,12 @@ public class TestQuizzServiceImpl implements TestQuizzService {
     @Override
     public TestQuizz findTestQuizzById(Long id) {
         return quizzRepository.findTestQuizzById(id);
+    }
+
+    @Override
+    public ByteArrayInputStream loadExcel(long id) {
+        TestQuizz quizz = quizzRepository.findTestQuizzById(id);
+
+        return ExcelHelper.quizzesToExcel(quizz);
     }
 }

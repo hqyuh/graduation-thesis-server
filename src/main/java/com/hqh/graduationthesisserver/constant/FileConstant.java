@@ -31,5 +31,10 @@ public class FileConstant {
     public static final String[] USER_HEADER = {"ID", "First name", "Last name", "Username", "Email", "Join date", "Role"};
     public static final String APPLICATION_CSV = "application/csv";
     public static final String CSV_EXTENSION = "csv";
+    // excel
+    public static final String XLSX_EXTENSION = "xlsx";
+    public static final String APPLICATION_EXCEL = "application/vnd.ms-excel";
+    public static final String[] HEADER = {"", "ID", "Question", "A", "B", "C", "D", "Result", "Mark"};
+    public static final String FAIL_TO_IMPORT_DATA_TO_EXCEL_FILE = "Fail to import data to Excel file: ";
 
 }

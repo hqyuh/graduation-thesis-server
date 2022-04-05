@@ -6,7 +6,7 @@ import com.hqh.graduationthesisserver.enumeration.Role;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
 import com.hqh.graduationthesisserver.helper.user.CSVHelper;
 import com.hqh.graduationthesisserver.repository.UserRepository;
-import com.hqh.graduationthesisserver.service.HelperService;
+import com.hqh.graduationthesisserver.service.UserHelperService;
 import com.hqh.graduationthesisserver.service.EmailService2;
 import com.hqh.graduationthesisserver.service.LoginAttemptService;
 import com.hqh.graduationthesisserver.service.UserService;
@@ -48,7 +48,7 @@ import static org.springframework.http.MediaType.*;
 @Service
 @Transactional
 @Qualifier("userDetailsService")
-public class UserServiceImpl implements UserDetailsService, UserService, HelperService {
+public class UserServiceImpl implements UserDetailsService, UserService, UserHelperService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;

@@ -2,8 +2,8 @@ package com.hqh.graduationthesisserver.service;
 
 import java.io.ByteArrayInputStream;
 
-public interface HelperService {
+public interface TestQuizzHelperService {
 
-    ByteArrayInputStream loadCSV();
+    ByteArrayInputStream loadExcel(long id);
 
 }
