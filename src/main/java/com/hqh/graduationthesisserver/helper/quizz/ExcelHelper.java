@@ -2,14 +2,11 @@ package com.hqh.graduationthesisserver.helper.quizz;
 
 import com.hqh.graduationthesisserver.domain.Question;
 import com.hqh.graduationthesisserver.domain.TestQuizz;
-import com.hqh.graduationthesisserver.dto.QuestionDto;
-import com.hqh.graduationthesisserver.service.TestQuizzService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -73,6 +70,12 @@ public class ExcelHelper {
         return TYPE.equals(multipartFile.getContentType());
     }
 
+    /***
+     *
+     * @param inputStream
+     * @param quizzId
+     * @return questions
+     */
     public static List<Question> importFromExcel(InputStream inputStream, TestQuizz quizzId) {
         try {
             Workbook workbook = new XSSFWorkbook(inputStream);
