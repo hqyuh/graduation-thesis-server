@@ -41,5 +41,6 @@ public class FileConstant {
     public static final String UPLOADED_THE_FILE_SUCCESSFULLY = "Uploaded the file successfully ";
     public static final String COULD_NOT_UPLOAD_THE_FILE = "Could not upload the file: ";
     public static final String PLEASE_UPLOAD_AN_EXCEL_FILE = "Please upload an excel file!";
+    public static final String FAIL_TO_STORE_EXCEL_DATA = "Fail to store excel data: ";
 
 }

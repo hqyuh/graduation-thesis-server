@@ -161,7 +161,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
             List<Question> questions = ExcelHelper.importFromExcel(multipartFile.getInputStream(), quizz);
             questionRepository.saveAll(questions);
         } catch (IOException exception) {
-            throw new RuntimeException("Fail to store excel data: " + exception.getMessage());
+            throw new RuntimeException(FAIL_TO_STORE_EXCEL_DATA + exception.getMessage());
         }
     }
 }
