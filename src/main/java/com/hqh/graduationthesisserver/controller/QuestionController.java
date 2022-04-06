@@ -3,6 +3,8 @@ package com.hqh.graduationthesisserver.controller;
 import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.dto.QuestionDto;
 import com.hqh.graduationthesisserver.exception.domain.user.NotAnImageFileException;
+import com.hqh.graduationthesisserver.helper.quizz.ExcelHelper;
+import com.hqh.graduationthesisserver.service.QuestionHelperService;
 import com.hqh.graduationthesisserver.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,19 +15,22 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.QuestionConstant.*;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping(path = { "/question" })
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final QuestionHelperService helperService;
 
     @Autowired
-    public QuestionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService,
+                              QuestionHelperService helperService) {
         this.questionService = questionService;
+        this.helperService = helperService;
     }
 
     @PostMapping("/add")
@@ -79,6 +84,21 @@ public class QuestionController {
 
         return response(OK, QUESTION_DELETED_SUCCESSFULLY);
     }
+
+    @PostMapping("/import/{id}")
+    public ResponseEntity<HttpResponse> importFileExcel(@RequestParam("file") MultipartFile multipartFile,
+                                                        @PathVariable("id") Long id) {
+        if(ExcelHelper.hasExcelFormat(multipartFile)) {
+            try {
+                helperService.saveFile(multipartFile, id);
+                return response(OK, UPLOADED_THE_FILE_SUCCESSFULLY + multipartFile.getOriginalFilename());
+            } catch (Exception exception) {
+                return response(BAD_REQUEST, COULD_NOT_UPLOAD_THE_FILE + multipartFile.getOriginalFilename() + "!");
+            }
+        }
+        return response(BAD_REQUEST, PLEASE_UPLOAD_AN_EXCEL_FILE);
+    }
+
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message){
         HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus,

@@ -36,5 +36,10 @@ public class FileConstant {
     public static final String APPLICATION_EXCEL = "application/vnd.ms-excel";
     public static final String[] HEADER = {"", "ID", "Question", "A", "B", "C", "D", "Result", "Mark"};
     public static final String FAIL_TO_IMPORT_DATA_TO_EXCEL_FILE = "Fail to import data to Excel file: ";
+    public final static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public static final String FAIL_TO_PARSE_EXCEL_FILE = "Fail to parse Excel file: ";
+    public static final String UPLOADED_THE_FILE_SUCCESSFULLY = "Uploaded the file successfully ";
+    public static final String COULD_NOT_UPLOAD_THE_FILE = "Could not upload the file: ";
+    public static final String PLEASE_UPLOAD_AN_EXCEL_FILE = "Please upload an excel file!";
 
 }

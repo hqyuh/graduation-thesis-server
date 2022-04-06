@@ -38,7 +38,7 @@ public class Question {
     @Column(name = "answer_d")
     private String answerD;
 
-    @Column(name = "correct_result", length = 3)
+    @Column(name = "correct_result", length = 25)
     private String correctResult;
 
     @Column(name = "mark", nullable = false)

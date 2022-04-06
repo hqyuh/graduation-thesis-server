@@ -2,24 +2,42 @@ package com.hqh.graduationthesisserver.helper.quizz;
 
 import com.hqh.graduationthesisserver.domain.Question;
 import com.hqh.graduationthesisserver.domain.TestQuizz;
+import com.hqh.graduationthesisserver.dto.QuestionDto;
+import com.hqh.graduationthesisserver.service.TestQuizzService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 
 public class ExcelHelper {
 
+    public static final String SHEET_QUIZZES = "Quizzes";
+
+    /***
+     * export file excel quiz
+     *
+     * @param quizz
+     * @return
+     */
     public static ByteArrayInputStream quizzesToExcel(TestQuizz quizz) {
 
         try(XSSFWorkbook workbook = new XSSFWorkbook();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-            XSSFSheet sheet = workbook.createSheet("Quizzes");
+            XSSFSheet sheet = workbook.createSheet(SHEET_QUIZZES);
             XSSFRow headerRow = sheet.createRow(0);
 
 
@@ -49,6 +67,66 @@ public class ExcelHelper {
             throw new RuntimeException(FAIL_TO_IMPORT_DATA_TO_EXCEL_FILE + exception.getMessage());
         }
 
+    }
+
+    public static boolean hasExcelFormat(MultipartFile multipartFile) {
+        return TYPE.equals(multipartFile.getContentType());
+    }
+
+    public static List<Question> importFromExcel(InputStream inputStream, TestQuizz quizzId) {
+        try {
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            Sheet sheet = workbook.getSheet(SHEET_QUIZZES);
+            Iterator<Row> rows = sheet.iterator();
+
+            List<Question> questions = new ArrayList<>();
+            int rowNumber = 0;
+
+            while (rows.hasNext()) {
+                Row currentRow = rows.next();
+                if(rowNumber == 0) {
+                    rowNumber++;
+                }
+                Iterator<Cell> cellsInRow = currentRow.iterator();
+                Question question = new Question();
+                int cellIdx = 0;
+                while (cellsInRow.hasNext()) {
+                    Cell currentCell = cellsInRow.next();
+                    switch (cellIdx) {
+                        case 0:
+                            question.setTopicQuestion(currentCell.getStringCellValue());
+                            break;
+                        case 1:
+                            question.setAnswerA(currentCell.getStringCellValue());
+                            break;
+                        case 2:
+                            question.setAnswerB(currentCell.getStringCellValue());
+                            break;
+                        case 3:
+                            question.setAnswerC(currentCell.getStringCellValue());
+                            break;
+                        case 4:
+                            question.setAnswerD(currentCell.getStringCellValue());
+                            break;
+                        case 5:
+                            question.setCorrectResult(currentCell.getStringCellValue());
+                            break;
+                        case 6:
+                            question.setMark((float) currentCell.getNumericCellValue());
+                        default:
+                            break;
+                    }
+                    question.setTestQuizz(quizzId);
+                    cellIdx++;
+                }
+                questions.add(question);
+            }
+            workbook.close();
+
+            return questions;
+        } catch (Exception exception) {
+            throw new RuntimeException(FAIL_TO_PARSE_EXCEL_FILE + exception.getMessage());
+        }
     }
 
 }

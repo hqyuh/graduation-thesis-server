@@ -4,9 +4,11 @@ import com.hqh.graduationthesisserver.domain.Question;
 import com.hqh.graduationthesisserver.domain.TestQuizz;
 import com.hqh.graduationthesisserver.dto.QuestionDto;
 import com.hqh.graduationthesisserver.exception.domain.user.NotAnImageFileException;
+import com.hqh.graduationthesisserver.helper.quizz.ExcelHelper;
 import com.hqh.graduationthesisserver.mapper.QuestionMapper;
 import com.hqh.graduationthesisserver.repository.QuestionRepository;
 import com.hqh.graduationthesisserver.repository.TestQuizzRepository;
+import com.hqh.graduationthesisserver.service.QuestionHelperService;
 import com.hqh.graduationthesisserver.service.QuestionService;
 import com.hqh.graduationthesisserver.utils.FileUpLoadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ import static org.springframework.util.StringUtils.cleanPath;
 
 
 @Service
-public class QuestionServiceImpl implements QuestionService {
+public class QuestionServiceImpl implements QuestionService, QuestionHelperService {
 
     private final QuestionRepository questionRepository;
     private final TestQuizzRepository quizzRepository;
@@ -150,5 +152,16 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void deleteQuestion(Long id) {
         questionRepository.deleteById(id);
+    }
+
+    @Override
+    public void saveFile(MultipartFile multipartFile, Long id) {
+        TestQuizz quizz = quizzRepository.findTestQuizzById(id);
+        try {
+            List<Question> questions = ExcelHelper.importFromExcel(multipartFile.getInputStream(), quizz);
+            questionRepository.saveAll(questions);
+        } catch (IOException exception) {
+            throw new RuntimeException("Fail to store excel data: " + exception.getMessage());
+        }
     }
 }
