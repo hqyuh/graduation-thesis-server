@@ -91,9 +91,11 @@ public class QuestionController {
         if(ExcelHelper.hasExcelFormat(multipartFile)) {
             try {
                 helperService.saveFile(multipartFile, id);
-                return response(OK, UPLOADED_THE_FILE_SUCCESSFULLY + multipartFile.getOriginalFilename());
+                return response(OK,
+                        UPLOADED_THE_FILE_SUCCESSFULLY + multipartFile.getOriginalFilename());
             } catch (Exception exception) {
-                return response(BAD_REQUEST, COULD_NOT_UPLOAD_THE_FILE + multipartFile.getOriginalFilename() + "!");
+                return response(BAD_REQUEST,
+                        COULD_NOT_UPLOAD_THE_FILE + multipartFile.getOriginalFilename() + EXCLAMATION_MARK);
             }
         }
         return response(BAD_REQUEST, PLEASE_UPLOAD_AN_EXCEL_FILE);

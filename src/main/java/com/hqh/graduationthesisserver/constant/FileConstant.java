@@ -4,6 +4,7 @@ public class FileConstant {
 
     public static final String FORWARD_SLASH = "/";
     public static final String DOT = ".";
+    public static final String EXCLAMATION_MARK = "!";
     public static final String FORWARD_SLASH_A = "\\";
     public static final String SRC = "src";
     public static final String RESOURCES = "resources";
