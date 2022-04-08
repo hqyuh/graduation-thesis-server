@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.hqh.graduationthesisserver.constant.DomainConstant.*;
+import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.ERROR;
 import static org.springframework.http.HttpStatus.*;
 
 // exception api
@@ -40,9 +41,11 @@ public class ExceptionHandling implements ErrorController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     public ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus,
+                                                           String type,
                                                            String message) {
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(),
                 httpStatus,
+                type.toUpperCase(),
                 httpStatus.getReasonPhrase()
                           .toUpperCase(),
                 message.toUpperCase()), httpStatus);
@@ -50,22 +53,22 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<HttpResponse> accountDisabledException() {
-        return createHttpResponse(BAD_REQUEST, ACCOUNT_DISABLED);
+        return createHttpResponse(BAD_REQUEST, ERROR, ACCOUNT_DISABLED);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<HttpResponse> badCredentialsException() {
-        return createHttpResponse(BAD_REQUEST, INCORRECT_CREDENTIALS);
+        return createHttpResponse(BAD_REQUEST, ERROR, INCORRECT_CREDENTIALS);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<HttpResponse> accessDeniedException() {
-        return createHttpResponse(FORBIDDEN, NOT_ENOUGH_PERMISSION);
+        return createHttpResponse(FORBIDDEN, ERROR, NOT_ENOUGH_PERMISSION);
     }
 
     @ExceptionHandler(LockedException.class)
     public ResponseEntity<HttpResponse> lockedException() {
-        return createHttpResponse(UNAUTHORIZED, ACCOUNT_LOCKER);
+        return createHttpResponse(UNAUTHORIZED, ERROR, ACCOUNT_LOCKER);
     }
 
     /***
@@ -74,27 +77,27 @@ public class ExceptionHandling implements ErrorController {
      */
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<HttpResponse> tokenExpiredException(TokenExpiredException exception) {
-        return createHttpResponse(UNAUTHORIZED, exception.getMessage());
+        return createHttpResponse(UNAUTHORIZED, ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(EmailExistException.class)
     public ResponseEntity<HttpResponse> emailExistException(EmailExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(UsernameExistException.class)
     public ResponseEntity<HttpResponse> usernameExistException(UsernameExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(EmailNotFoundException.class)
     public ResponseEntity<HttpResponse> emailNotFoundException(EmailNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> userNotFoundException(EmailNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
     /***
@@ -106,25 +109,25 @@ public class ExceptionHandling implements ErrorController {
         HttpMethod supportedMethod = Objects.requireNonNull(exception.getSupportedHttpMethods())
                                             .iterator()
                                             .next();
-        return createHttpResponse(METHOD_NOT_ALLOWED, String.format(METHOD_IS_NOT_ALLOWED, supportedMethod));
+        return createHttpResponse(METHOD_NOT_ALLOWED, ERROR, String.format(METHOD_IS_NOT_ALLOWED, supportedMethod));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
         LOGGER.error(exception.getMessage());
-        return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
+        return createHttpResponse(INTERNAL_SERVER_ERROR, ERROR, INTERNAL_SERVER_ERROR_MSG);
     }
 
     @ExceptionHandler(NoResultException.class)
     public ResponseEntity<HttpResponse> notFoundException(NoResultException exception) {
         LOGGER.error(exception.getMessage());
-        return createHttpResponse(NOT_FOUND, exception.getMessage());
+        return createHttpResponse(NOT_FOUND, ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<HttpResponse> iOException(IOException exception) {
         LOGGER.error(exception.getMessage());
-        return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
+        return createHttpResponse(INTERNAL_SERVER_ERROR, ERROR, INTERNAL_SERVER_ERROR_MSG);
     }
 
 //    @ExceptionHandler(NoHandlerFoundException.class)
@@ -134,22 +137,22 @@ public class ExceptionHandling implements ErrorController {
 
     @RequestMapping(ERROR_PATH)
     public ResponseEntity<HttpResponse> notFound404(){
-        return createHttpResponse(NOT_FOUND, NO_MAPPING_FOR_URL);
+        return createHttpResponse(NOT_FOUND, ERROR, NO_MAPPING_FOR_URL);
     }
 
     @ExceptionHandler(PasswordException.class)
     public ResponseEntity<HttpResponse> passwordException(PasswordException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(TestQuizzNotFoundException.class)
     public ResponseEntity<HttpResponse> quizzNotFoundException(TestQuizzNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(TestQuizzExistException.class)
     public ResponseEntity<HttpResponse> quizzExistException(TestQuizzExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -166,12 +169,12 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(TopicNotFoundException.class)
     public ResponseEntity<HttpResponse> topicNotFoundException(TopicNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
     @ExceptionHandler(TopicExistException.class)
     public ResponseEntity<HttpResponse> topicExistException(TopicExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
 }

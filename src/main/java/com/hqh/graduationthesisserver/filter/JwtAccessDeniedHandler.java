@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.ERROR;
 import static com.hqh.graduationthesisserver.constant.SecurityConstant.ACCESS_DENIED_MESSAGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -24,7 +25,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
                        HttpServletResponse response,
                        AccessDeniedException exception) throws IOException, ServletException {
         HttpResponse httpResponse = new
-                HttpResponse(UNAUTHORIZED.value(), UNAUTHORIZED,
+                HttpResponse(UNAUTHORIZED.value(), UNAUTHORIZED, ERROR,
                 UNAUTHORIZED.getReasonPhrase().toUpperCase(), ACCESS_DENIED_MESSAGE);
 
         response.setContentType(APPLICATION_JSON_VALUE);

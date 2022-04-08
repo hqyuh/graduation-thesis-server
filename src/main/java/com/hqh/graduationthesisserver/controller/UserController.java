@@ -1,5 +1,6 @@
 package com.hqh.graduationthesisserver.controller;
 
+import com.hqh.graduationthesisserver.constant.MessageTypeConstant;
 import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.domain.Password;
 import com.hqh.graduationthesisserver.domain.User;
@@ -36,6 +37,7 @@ import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.DomainConstant.USER_DELETED_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
+import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.*;
 import static com.hqh.graduationthesisserver.constant.PasswordConstant.CHANGE_PASSWORD_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
@@ -103,8 +105,8 @@ public class UserController extends ExceptionHandling {
                 .authenticate(new UsernamePasswordAuthenticationToken(email, password));
     }
 
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus,
+    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
+        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
                 httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
         return new ResponseEntity<>(body, httpStatus);
     }
@@ -113,7 +115,7 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email)
             throws EmailNotFoundException, MessagingException {
         userService.resetPassword(email);
-        return response(OK, EMAIL_SENT + email);
+        return response(OK, SUCCESS,EMAIL_SENT + email);
     }
 
     @PostMapping("/add")
@@ -176,7 +178,7 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
 
-        return response(OK, USER_DELETED_SUCCESSFULLY);
+        return response(OK, SUCCESS, USER_DELETED_SUCCESSFULLY);
     }
 
     @PostMapping("/update-profile-image")
@@ -217,7 +219,7 @@ public class UserController extends ExceptionHandling {
                 password.getOldPassword(),
                 password.getNewPassword()
         );
-        return response(OK, CHANGE_PASSWORD_SUCCESSFULLY);
+        return response(OK, SUCCESS, CHANGE_PASSWORD_SUCCESSFULLY);
     }
 
     @GetMapping("/{id}/locked/{status}")
@@ -227,7 +229,7 @@ public class UserController extends ExceptionHandling {
         userService.accountLock(id, Boolean.parseBoolean(status));
         String message = Boolean.parseBoolean(status) ? ACCOUNT_UNLOCK_SUCCESSFUL : ACCOUNT_LOCK_SUCCESSFUL;
 
-        return response(OK, message);
+        return response(OK, SUCCESS, message);
     }
 
     @GetMapping("/export/csv")

@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
+import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.ERROR;
+import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.QuestionConstant.*;
 import static org.springframework.http.HttpStatus.*;
 
@@ -48,7 +50,7 @@ public class QuestionController {
         questionService.createQuestion(topicQuestion, questionImageUrl, answerA, answerB,
                 answerC, answerD, correctResult, Float.parseFloat(mark), Long.parseLong(quizzId));
 
-        return response(CREATED, ADD_SUCCESS_QUESTION);
+        return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
     }
 
     @PatchMapping("/update")
@@ -68,7 +70,7 @@ public class QuestionController {
         questionService.updateQuestion(Long.parseLong(id), topicQuestion, answerA, answerB, answerC, answerD,
                 correctResult, Float.parseFloat(mark), Long.parseLong(quizzId), questionImageUrl);
 
-        return response(OK, QUESTION_UPDATE_SUCCESSFUL);
+        return response(OK, SUCCESS, QUESTION_UPDATE_SUCCESSFUL);
     }
 
     @GetMapping("/list")
@@ -82,7 +84,7 @@ public class QuestionController {
     public ResponseEntity<HttpResponse> deleteQuestion(@PathVariable("id") Long id) {
         questionService.deleteQuestion(id);
 
-        return response(OK, QUESTION_DELETED_SUCCESSFULLY);
+        return response(OK, SUCCESS, QUESTION_DELETED_SUCCESSFULLY);
     }
 
     @PostMapping("/import/{id}")
@@ -91,19 +93,19 @@ public class QuestionController {
         if(ExcelHelper.hasExcelFormat(multipartFile)) {
             try {
                 helperService.saveFile(multipartFile, id);
-                return response(OK,
+                return response(OK, SUCCESS,
                         UPLOADED_THE_FILE_SUCCESSFULLY + multipartFile.getOriginalFilename());
             } catch (Exception exception) {
-                return response(BAD_REQUEST,
+                return response(BAD_REQUEST, ERROR,
                         COULD_NOT_UPLOAD_THE_FILE + multipartFile.getOriginalFilename() + EXCLAMATION_MARK);
             }
         }
-        return response(BAD_REQUEST, PLEASE_UPLOAD_AN_EXCEL_FILE);
+        return response(BAD_REQUEST, ERROR, PLEASE_UPLOAD_AN_EXCEL_FILE);
     }
 
 
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus,
+    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
+        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
                 httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
         return new ResponseEntity<>(body, httpStatus);
     }

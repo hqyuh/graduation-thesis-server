@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
+import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.TestQuizzConstant.*;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -47,7 +48,7 @@ public class TestQuizzController extends ExceptionHandling {
                                                         @RequestParam(name = "topicId", required = false) String topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException {
         TestQuizz newQuizz = testQuizzService.createQuizz(testName, examTime, isStart, isEnd, Long.parseLong(topicId));
-        return response(OK, ADD_QUICK_TEST_SUCCESS);
+        return response(OK, SUCCESS, ADD_QUICK_TEST_SUCCESS);
     }
 
     @PatchMapping("/update")
@@ -60,7 +61,7 @@ public class TestQuizzController extends ExceptionHandling {
                                                         @RequestParam(name = "topicId", required = false) String topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException {
         TestQuizz updateQuizz = testQuizzService.updateQuizz(currentTestName, testName, examTime, isStart, isEnd, Long.parseLong(topicId));
-        return response(OK, UPDATE_QUICK_TEST_SUCCESS);
+        return response(OK, SUCCESS, UPDATE_QUICK_TEST_SUCCESS);
     }
 
     @GetMapping("/list")
@@ -75,7 +76,7 @@ public class TestQuizzController extends ExceptionHandling {
     public ResponseEntity<?> deleteTestQuizz(@PathVariable("id") Long id) {
         testQuizzService.deleteQuizz(id);
 
-        return response(OK, DELETED_QUIZZ_TEST_SUCCESSFULLY);
+        return response(OK, SUCCESS, DELETED_QUIZZ_TEST_SUCCESSFULLY);
     }
 
     @GetMapping("/code/{code}")
@@ -110,8 +111,8 @@ public class TestQuizzController extends ExceptionHandling {
                              .body(file);
     }
 
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus,
+    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
+        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
                 httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
         return new ResponseEntity<>(body, httpStatus);
     }

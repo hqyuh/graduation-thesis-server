@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.TopicConstant.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -31,7 +32,7 @@ public class TopicController {
     public ResponseEntity<HttpResponse> createTopic(@RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
         Topic topic = topicService.createTopic(topicName);
-        return response(CREATED, ADD_TOPIC_SUCCESS);
+        return response(CREATED, SUCCESS, ADD_TOPIC_SUCCESS);
     }
 
     @PatchMapping("/update")
@@ -39,14 +40,14 @@ public class TopicController {
                                                     @RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
         Topic topic = topicService.updateTopic(currentTopicName, topicName);
-        return response(OK, UPDATE_TOPIC_SUCCESS);
+        return response(OK, SUCCESS, UPDATE_TOPIC_SUCCESS);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteTopic(@PathVariable("id") Long id) {
         topicService.deleteTopic(id);
 
-        return response(OK, DELETED_TOPIC_SUCCESSFULLY);
+        return response(OK, SUCCESS, DELETED_TOPIC_SUCCESSFULLY);
     }
 
     @GetMapping("/list")
@@ -56,8 +57,8 @@ public class TopicController {
         return new ResponseEntity<>(topicList, OK);
     }
 
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus,
+    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
+        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
                 httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
         return new ResponseEntity<>(body, httpStatus);
     }
