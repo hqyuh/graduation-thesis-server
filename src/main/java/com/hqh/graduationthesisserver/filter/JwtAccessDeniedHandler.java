@@ -25,7 +25,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
                        HttpServletResponse response,
                        AccessDeniedException exception) throws IOException, ServletException {
         HttpResponse httpResponse = new
-                HttpResponse(UNAUTHORIZED.value(), UNAUTHORIZED, ERROR,
+                HttpResponse(UNAUTHORIZED.value(), UNAUTHORIZED, ERROR.toUpperCase(),
                 UNAUTHORIZED.getReasonPhrase().toUpperCase(), ACCESS_DENIED_MESSAGE);
 
         response.setContentType(APPLICATION_JSON_VALUE);
