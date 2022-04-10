@@ -1,6 +1,5 @@
 package com.hqh.graduationthesisserver.controller;
 
-import com.hqh.graduationthesisserver.constant.MessageTypeConstant;
 import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.domain.Password;
 import com.hqh.graduationthesisserver.domain.User;
@@ -35,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static com.hqh.graduationthesisserver.constant.DomainConstant.SIGN_UP_SUCCESS;
 import static com.hqh.graduationthesisserver.constant.DomainConstant.USER_DELETED_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.*;
@@ -69,7 +69,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody User user)
+    public ResponseEntity<HttpResponse> register(@Valid @RequestBody User user)
             throws UserNotFoundException, EmailExistException, UsernameExistException {
         User newUser = userService.register(
                 user.getFirstName(),
@@ -78,7 +78,7 @@ public class UserController extends ExceptionHandling {
                 user.getEmail(),
                 user.getPassword()
         );
-        return new ResponseEntity<>(newUser, CREATED);
+        return response(OK, SUCCESS, SIGN_UP_SUCCESS);
     }
 
     @PostMapping("/login")
@@ -233,6 +233,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @GetMapping("/export/csv")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Resource> exportCSV() {
         String fileName = "users" + DOT + CSV_EXTENSION;
         InputStreamResource file = new InputStreamResource(helperService.loadCSV());
@@ -241,6 +242,13 @@ public class UserController extends ExceptionHandling {
                 .header(CONTENT_DISPOSITION, ATTACHMENT_FILENAME + fileName)
                 .contentType(MediaType.parseMediaType(APPLICATION_CSV))
                 .body(file);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<User> currentUsername() {
+        return ResponseEntity
+                .status(OK)
+                .body(userService.getCurrentUser());
     }
 
 }

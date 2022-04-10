@@ -1,6 +1,7 @@
 package com.hqh.graduationthesisserver.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +47,7 @@ public class User implements Serializable {
     @Column(name = "password", length = 64, nullable = false)
     @NotBlank(message = "Password is mandatory")
     @Pattern(regexp = PASSWORD_PATTERN, message = "Password invalidate")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "email", length = 50, nullable = false)

@@ -14,5 +14,6 @@ public class DomainConstant {
     public static final String NO_MAPPING_FOR_URL = "There is no mapping for this URL";
     public static final String ERROR_PATH = "/error";
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
+    public static final String SIGN_UP_SUCCESS = "Sign Up Success";
 
 }

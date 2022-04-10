@@ -40,4 +40,6 @@ public interface UserService {
 
     void accountLock(Long id, boolean isNotLocked);
 
+    User getCurrentUser();
+
 }
