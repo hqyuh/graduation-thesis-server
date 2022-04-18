@@ -2,6 +2,7 @@ package com.hqh.graduationthesisserver.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hqh.graduationthesisserver.enumeration.AuthenticationType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -75,6 +76,10 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
     private List<TestQuizz> quizzes;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_type", length = 25)
+    private AuthenticationType authType;
 
     public User(Long id) {
         this.id = id;

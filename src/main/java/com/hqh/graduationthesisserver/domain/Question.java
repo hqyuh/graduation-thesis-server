@@ -44,6 +44,9 @@ public class Question {
     @Column(name = "mark", nullable = false)
     private float mark;
 
+    @Column(name = "milestones", nullable = false)
+    private int milestones;
+
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
             pattern = "dd-MM-yyyy hh:mm:ss", timezone = "Asia/Ho_Chi_Minh"
