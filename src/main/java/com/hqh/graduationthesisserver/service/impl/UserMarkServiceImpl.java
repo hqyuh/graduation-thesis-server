@@ -10,8 +10,11 @@ import com.hqh.graduationthesisserver.repository.UserAnswerRepository;
 import com.hqh.graduationthesisserver.repository.UserMarkRepository;
 import com.hqh.graduationthesisserver.service.UserMarkService;
 import com.hqh.graduationthesisserver.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +28,7 @@ public class UserMarkServiceImpl implements UserMarkService {
     private final UserService userService;
     private final UserAnswerRepository userAnswerRepository;
 
+    @Autowired
     public UserMarkServiceImpl(UserMarkRepository userMarkRepository,
                                TestQuizzRepository quizzRepository,
                                UserMarkMapper userMarkMapper,
@@ -65,4 +69,12 @@ public class UserMarkServiceImpl implements UserMarkService {
                                  .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UserMarkDto> getMarkTop3(Long quizzId) {
+        return userMarkRepository.getMarkTop3(quizzId)
+                                 .stream()
+                                 .limit(3)
+                                 .map(userMarkMapper::mapToDto)
+                                 .collect(Collectors.toList());
+    }
 }

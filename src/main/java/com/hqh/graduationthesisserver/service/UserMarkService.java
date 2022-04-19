@@ -12,4 +12,6 @@ public interface UserMarkService {
 
     List<UserMarkDto> getAllUserByQuizzId(Long quizzId);
 
+    List<UserMarkDto> getMarkTop3(Long quizzId);
+
 }

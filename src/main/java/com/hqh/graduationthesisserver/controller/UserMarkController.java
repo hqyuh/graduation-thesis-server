@@ -40,4 +40,10 @@ public class UserMarkController {
                              .body(userMarkService.getAllUserByQuizzId(id));
     }
 
+    @GetMapping("/quizz/top/{id}")
+    public ResponseEntity<List<UserMarkDto>> getMarkTop3(@PathVariable("id") Long id) {
+        return ResponseEntity.status(OK)
+                             .body(userMarkService.getMarkTop3(id));
+    }
+
 }
