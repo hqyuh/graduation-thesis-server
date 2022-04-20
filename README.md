@@ -1,4 +1,5 @@
-# Quiz App Online
+# Quiz App Online 
+(but only on the server)
 
 Here is my repo project. Feel free to use it if you like it.
 
