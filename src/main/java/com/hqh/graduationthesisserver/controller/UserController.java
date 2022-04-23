@@ -76,6 +76,7 @@ public class UserController extends ExceptionHandling {
                 user.getLastName(),
                 user.getUsername(),
                 user.getEmail(),
+                user.getRoles(),
                 user.getPassword()
         );
         return response(OK, SUCCESS, SIGN_UP_SUCCESS);

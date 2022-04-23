@@ -123,6 +123,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
                          String lastName,
                          String username,
                          String email,
+                         String role,
                          String password)
             throws UserNotFoundException, EmailExistException, UsernameExistException {
 
@@ -138,8 +139,8 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         user.setPassword(encodePassword(password));
         user.setActive(true);
         user.setNotLocked(true);
-        user.setRoles(ROLE_USER.name());
-        user.setAuthorities(USER_AUTHORITIES);
+        user.setRoles(getRoleEnumName(role).name());
+        user.setAuthorities(getRoleEnumName(role).getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         userRepository.save(user);
 
