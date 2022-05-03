@@ -51,6 +51,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
             UserAnswer userAnswer = userAnswerMapper
                     .map(userAnswerTemp, quizzId, questionId, userId);
             userAnswer.setIsSelected(userAnswerTemp.getIsSelected());
+            userAnswer.setShortAnswer(userAnswerTemp.getShortAnswer());
             userAnswerList.add(userAnswer);
 
         }

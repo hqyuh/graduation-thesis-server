@@ -26,10 +26,10 @@ public class Question {
     @Column(name = "question_image_url")
     private String questionImageUrl;
 
-    @Column(name = "answer_a", nullable = false)
+    @Column(name = "answer_a")
     private String answerA;
 
-    @Column(name = "answer_b", nullable = false)
+    @Column(name = "answer_b")
     private String answerB;
 
     @Column(name = "answer_c")

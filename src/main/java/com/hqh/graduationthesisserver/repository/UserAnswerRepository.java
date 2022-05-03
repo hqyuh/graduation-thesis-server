@@ -34,7 +34,7 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
     float totalMarkByQuizzId(@Param("id") Long id);
 
     @Query("SELECT new com.hqh.graduationthesisserver.dto.ReviewAnswerDto " +
-           "(q.topicQuestion, q.answerA, q.answerB, q.answerC, q.answerD, q.correctResult, u.isSelected) " +
+           "(q.topicQuestion, q.answerA, q.answerB, q.answerC, q.answerD, q.correctResult, u.isSelected, u.shortAnswer) " +
            "FROM Question q, UserAnswer u, TestQuizz t " +
            "WHERE t.id = q.testQuizz.id " +
            "AND q.id = u.question.id AND t.id = :quizzId " +

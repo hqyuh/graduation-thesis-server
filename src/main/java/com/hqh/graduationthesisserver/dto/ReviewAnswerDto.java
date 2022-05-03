@@ -18,5 +18,6 @@ public class ReviewAnswerDto implements Serializable {
     private String answerD;
     private String correctResult;
     private String isSelected;
+    private String shortAnswer;
 
 }

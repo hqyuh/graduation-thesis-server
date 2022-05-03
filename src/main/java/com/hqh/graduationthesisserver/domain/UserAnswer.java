@@ -36,4 +36,6 @@ public class UserAnswer {
     @Column(name = "is_selected", length = 5)
     private String isSelected;
 
+    @Column(name = "short_answer")
+    private String shortAnswer;
 }

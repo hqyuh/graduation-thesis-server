@@ -16,5 +16,6 @@ public class UserAnswerDto implements Serializable {
     private Long questionId;
     private Long userId;
     private String isSelected;
+    private String shortAnswer;
 
 }
