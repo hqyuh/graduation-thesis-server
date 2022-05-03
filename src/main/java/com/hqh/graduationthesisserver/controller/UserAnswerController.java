@@ -1,6 +1,7 @@
 package com.hqh.graduationthesisserver.controller;
 
 import com.hqh.graduationthesisserver.domain.HttpResponse;
+import com.hqh.graduationthesisserver.dto.ReviewAnswerDto;
 import com.hqh.graduationthesisserver.dto.UserAnswerDto;
 import com.hqh.graduationthesisserver.service.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,13 @@ public class UserAnswerController {
     public ResponseEntity<HttpResponse> saveAllUserAnswer(@RequestBody List<UserAnswerDto> userAnswerDto) {
         userAnswerService.saveAllUserAnswer(userAnswerDto);
         return response(OK, SUCCESS, SUCCESSFUL_TEST_SUBMISSION);
+    }
+
+    @GetMapping("/review-answer/{id}")
+    public ResponseEntity<List<ReviewAnswerDto>> reviewAnswerUser(@PathVariable("id") Long id) {
+        return ResponseEntity
+                .status(OK)
+                .body(userAnswerService.reviewAnswerUser(id));
     }
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){

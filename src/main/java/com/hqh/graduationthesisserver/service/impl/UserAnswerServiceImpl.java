@@ -1,6 +1,7 @@
 package com.hqh.graduationthesisserver.service.impl;
 
 import com.hqh.graduationthesisserver.domain.*;
+import com.hqh.graduationthesisserver.dto.ReviewAnswerDto;
 import com.hqh.graduationthesisserver.dto.UserAnswerDto;
 import com.hqh.graduationthesisserver.mapper.UserAnswerMapper;
 import com.hqh.graduationthesisserver.repository.QuestionRepository;
@@ -57,4 +58,9 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         userAnswerRepository.saveAll(userAnswerList);
     }
 
+    @Override
+    public List<ReviewAnswerDto> reviewAnswerUser(Long quizzId) {
+        User userId = userService.getCurrentUser();
+        return userAnswerRepository.reviewAnswerUser(quizzId, userId.getId());
+    }
 }
