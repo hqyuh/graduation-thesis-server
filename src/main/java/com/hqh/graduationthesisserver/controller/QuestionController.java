@@ -45,12 +45,10 @@ public class QuestionController {
                                                        @RequestParam("answerD") String answerD,
                                                        @RequestParam("correctResult") String correctResult,
                                                        @RequestParam("mark") String mark,
-                                                       @RequestParam("quizzId") String quizzId,
-                                                       @RequestParam("milestones") String milestones)
+                                                       @RequestParam("quizzId") String quizzId)
             throws IOException, NotAnImageFileException {
         questionService.createQuestion(topicQuestion, questionImageUrl, answerA, answerB,
-                answerC, answerD, correctResult, Float.parseFloat(mark), Long.parseLong(quizzId),
-                Integer.parseInt(milestones));
+                answerC, answerD, correctResult, Float.parseFloat(mark), Long.parseLong(quizzId));
 
         return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
     }

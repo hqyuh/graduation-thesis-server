@@ -66,7 +66,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                String answerD,
                                String correctResult,
                                float mark,
-                               Long quizzId, Integer milestones)
+                               Long quizzId)
             throws IOException, NotAnImageFileException {
 
         QuestionDto questionDto = new QuestionDto();
@@ -80,7 +80,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setDateCreated(Instant.now());
         question.setCorrectResult(correctResult);
         question.setMark(mark);
-        question.setMilestones(milestones);
+        question.setMilestones(1);
         saveQuestionImage(question, questionImageUrl);
 
         questionRepository.save(question);

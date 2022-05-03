@@ -120,6 +120,7 @@ public class ExcelHelper {
                             break;
                     }
                     question.setTestQuizz(quizzId);
+                    question.setMilestones(1);
                     cellIdx++;
                 }
                 questions.add(question);
