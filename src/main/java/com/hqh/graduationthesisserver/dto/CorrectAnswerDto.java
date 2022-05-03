@@ -1,4 +1,4 @@
-package com.hqh.graduationthesisserver.domain;
+package com.hqh.graduationthesisserver.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CorrectAnswer {
+public class CorrectAnswerDto {
 
     private float totalNumberOfCorrectAnswers;
     private float totalNumberOfAnswers;

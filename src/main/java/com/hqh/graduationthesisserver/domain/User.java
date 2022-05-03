@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -55,6 +56,12 @@ public class User implements Serializable {
     @NotBlank(message = "Email is mandatory")
     @Pattern(regexp = EMAIL_PATTERN, message = "Email invalidate")
     private String email;
+
+    @Column(name = "phone_number", length = 12)
+    private String phoneNumber;
+
+    @Column(name = "date_of_birth")
+    private Timestamp dateOfBirth;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;

@@ -1,6 +1,6 @@
 package com.hqh.graduationthesisserver.controller;
 
-import com.hqh.graduationthesisserver.domain.CorrectAnswer;
+import com.hqh.graduationthesisserver.dto.CorrectAnswerDto;
 import com.hqh.graduationthesisserver.service.CorrectAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class CorrectAnswerController {
     }
 
     @GetMapping("/show/{id}")
-    public ResponseEntity<CorrectAnswer> getCorrectAnswer(@PathVariable("id") Long id) {
+    public ResponseEntity<CorrectAnswerDto> getCorrectAnswer(@PathVariable("id") Long id) {
         return ResponseEntity
                 .status(OK)
                 .body(correctAnswerService.getTotalNumberOfCorrectAnswers(id));

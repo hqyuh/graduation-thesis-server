@@ -1,6 +1,6 @@
 package com.hqh.graduationthesisserver.service.impl;
 
-import com.hqh.graduationthesisserver.domain.CorrectAnswer;
+import com.hqh.graduationthesisserver.dto.CorrectAnswerDto;
 import com.hqh.graduationthesisserver.repository.UserAnswerRepository;
 import com.hqh.graduationthesisserver.service.CorrectAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,9 @@ public class CorrectAnswerImpl implements CorrectAnswerService {
     }
 
     @Override
-    public CorrectAnswer getTotalNumberOfCorrectAnswers(Long id) {
+    public CorrectAnswerDto getTotalNumberOfCorrectAnswers(Long id) {
 
-        CorrectAnswer correctAnswer = new CorrectAnswer();
+        CorrectAnswerDto correctAnswer = new CorrectAnswerDto();
         correctAnswer.setTotalNumberOfAnswers(userAnswerRepository.totalNumberOfAnswersByQuizzId(id));
         correctAnswer.setTotalNumberOfCorrectAnswers(userAnswerRepository.totalNumberOfCorrectAnswersByQuizzId(id));
         correctAnswer.setTotalMark(userAnswerRepository.totalMarkByQuizzId(id));

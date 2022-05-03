@@ -1,9 +1,9 @@
 package com.hqh.graduationthesisserver.service;
 
-import com.hqh.graduationthesisserver.domain.CorrectAnswer;
+import com.hqh.graduationthesisserver.dto.CorrectAnswerDto;
 
 public interface CorrectAnswerService {
 
-    CorrectAnswer getTotalNumberOfCorrectAnswers(Long id);
+    CorrectAnswerDto getTotalNumberOfCorrectAnswers(Long id);
 
 }
