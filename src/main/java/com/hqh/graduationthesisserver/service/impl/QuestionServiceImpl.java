@@ -53,7 +53,6 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
      * @param correctResult
      * @param mark
      * @param quizzId
-     * @param milestones
      * @throws IOException
      * @throws NotAnImageFileException
      */

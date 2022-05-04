@@ -38,9 +38,9 @@ public class ExcelHelper {
             XSSFRow headerRow = sheet.createRow(0);
 
 
-            for (int i = 0; i < HEADER.length; i++) {
+            for (int i = 0; i < HEADER_QUIZZ.length; i++) {
                 Cell cell = headerRow.createCell(i);
-                cell.setCellValue(HEADER[i]);
+                cell.setCellValue(HEADER_QUIZZ[i]);
             }
 
             int rowIdx = 1;
@@ -132,5 +132,7 @@ public class ExcelHelper {
             throw new RuntimeException(FAIL_TO_PARSE_EXCEL_FILE + exception.getMessage());
         }
     }
+
+
 
 }

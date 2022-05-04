@@ -35,7 +35,7 @@ public class FileConstant {
     // excel
     public static final String XLSX_EXTENSION = "xlsx";
     public static final String APPLICATION_EXCEL = "application/vnd.ms-excel";
-    public static final String[] HEADER = {"", "ID", "Question", "A", "B", "C", "D", "Result", "Mark"};
+    public static final String[] HEADER_QUIZZ = {"", "ID", "Question", "A", "B", "C", "D", "Result", "Mark"};
     public static final String FAIL_TO_IMPORT_DATA_TO_EXCEL_FILE = "Fail to import data to Excel file: ";
     public final static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     public static final String FAIL_TO_PARSE_EXCEL_FILE = "Fail to parse Excel file: ";

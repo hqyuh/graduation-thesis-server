@@ -1,5 +1,6 @@
 package com.hqh.graduationthesisserver.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,11 @@ public class UserMarkDto {
 
     private Long id;
     private float mark;
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd-MM-yyyy hh:mm:ss",
+            timezone = "Asia/Ho_Chi_Minh"
+    )
     private Instant completedDate;
     private String quizzName;
     private String username;
