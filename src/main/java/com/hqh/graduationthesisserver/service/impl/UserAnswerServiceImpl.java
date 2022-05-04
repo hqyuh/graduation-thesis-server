@@ -38,13 +38,14 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         this.userService = userService;
     }
 
+    /***
+     *
+     * @param userAnswerDto
+     */
     @Override
     public void saveAllUserAnswer(List<UserAnswerDto> userAnswerDto) {
-
         List<UserAnswer> userAnswerList = new ArrayList<>();
-
         for (UserAnswerDto userAnswerTemp : userAnswerDto) {
-
             TestQuizz quizzId = quizzRepository.findTestQuizzById(userAnswerTemp.getQuizzId());
             Question questionId = questionRepository.findQuestionById(userAnswerTemp.getQuestionId());
             User userId = userService.getCurrentUser();
@@ -55,7 +56,6 @@ public class UserAnswerServiceImpl implements UserAnswerService {
             userAnswerList.add(userAnswer);
 
         }
-
         userAnswerRepository.saveAll(userAnswerList);
     }
 

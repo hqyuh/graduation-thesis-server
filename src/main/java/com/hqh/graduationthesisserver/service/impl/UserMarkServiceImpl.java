@@ -42,6 +42,10 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
         this.userAnswerRepository = userAnswerRepository;
     }
 
+    /***
+     *
+     * @param userMarkDto
+     */
     @Override
     public void saveUserMark(UserMarkDto userMarkDto) {
         TestQuizz quizzId = quizzRepository.findTestQuizzById(userMarkDto.getQuizzId());
@@ -70,6 +74,12 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
                                  .collect(Collectors.toList());
     }
 
+    /***
+     * get the top 3 users with the highest score according to quiz id
+     *
+     * @param quizzId
+     * @return list
+     */
     @Override
     public List<UserMarkDto> getMarkTop3(Long quizzId) {
         return userMarkRepository.getMarkTop3(quizzId)
@@ -79,6 +89,12 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
                                  .collect(Collectors.toList());
     }
 
+    /***
+     * export mark by quiz id
+     *
+     * @param id
+     * @return
+     */
     @Override
     public ByteArrayInputStream loadUserMarkExcel(long id) {
         List<UserMark> userMark = userMarkRepository.findByTestQuizzId(id);

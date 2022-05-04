@@ -49,6 +49,14 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         this.testQuizzMapper = testQuizzMapper;
     }
 
+    /***
+     *
+     * @param currentQuizz
+     * @param newQuizz
+     * @return
+     * @throws TestQuizzNotFoundException
+     * @throws TestQuizzExistException
+     */
     private TestQuizz validateNewQuizzExists (String currentQuizz,
                                               String newQuizz)
             throws TestQuizzNotFoundException, TestQuizzExistException {
@@ -73,6 +81,11 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         }
     }
 
+    /***
+     * random 6 characters
+     *
+     * @return
+     */
     private String generateActivationCode() {
         return RandomStringUtils.randomNumeric(6);
     }
@@ -133,6 +146,18 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         return quizz;
     }
 
+    /***
+     *
+     * @param currentTestName
+     * @param newTestName
+     * @param examTime
+     * @param isStart
+     * @param isEnd
+     * @param topicId
+     * @return
+     * @throws TestQuizzExistException
+     * @throws TestQuizzNotFoundException
+     */
     @Override
     public TestQuizz updateQuizz(String currentTestName,
                                  String newTestName,
@@ -154,6 +179,11 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         return currentQuizz;
     }
 
+    /***
+     *
+     * @param testName
+     * @return
+     */
     @Override
     public TestQuizz findTestQuizzByTestName(String testName) {
         return quizzRepository.findTestQuizzByTestName(testName);
@@ -186,6 +216,12 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         return quizzRepository.findTestQuizzById(id);
     }
 
+    /***
+     * export quiz by id
+     *
+     * @param id
+     * @return
+     */
     @Override
     public ByteArrayInputStream loadExcel(long id) {
         TestQuizz quizz = quizzRepository.findTestQuizzById(id);

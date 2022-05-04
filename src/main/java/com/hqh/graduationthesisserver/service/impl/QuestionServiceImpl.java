@@ -123,6 +123,21 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                 .collect(Collectors.toList());
     }
 
+    /***
+     *
+     * @param id
+     * @param topicQuestion
+     * @param answerA
+     * @param answerB
+     * @param answerC
+     * @param answerD
+     * @param correctResult
+     * @param mark
+     * @param quizzId
+     * @param questionImageUrl
+     * @throws IOException
+     * @throws NotAnImageFileException
+     */
     @Override
     public void updateQuestion(Long id,
                                String topicQuestion,
@@ -150,11 +165,18 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         questionRepository.save(question);
     }
 
+    /***
+     * @param id
+     */
     @Override
     public void deleteQuestion(Long id) {
         questionRepository.deleteById(id);
     }
 
+    /***
+     * @param multipartFile
+     * @param id
+     */
     @Override
     public void saveFile(MultipartFile multipartFile, Long id) {
         TestQuizz quizz = quizzRepository.findTestQuizzById(id);

@@ -16,6 +16,12 @@ public class CorrectAnswerImpl implements CorrectAnswerService {
         this.userAnswerRepository = userAnswerRepository;
     }
 
+    /***
+     * get total correct answer and score
+     *
+     * @param id
+     * @return
+     */
     @Override
     public CorrectAnswerDto getTotalNumberOfCorrectAnswers(Long id) {
 
