@@ -4,23 +4,24 @@ import com.hqh.graduationthesisserver.domain.TestQuizz;
 import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserMark;
 import com.hqh.graduationthesisserver.dto.UserMarkDto;
+import com.hqh.graduationthesisserver.helper.quizz.ExcelHelper;
 import com.hqh.graduationthesisserver.mapper.UserMarkMapper;
 import com.hqh.graduationthesisserver.repository.TestQuizzRepository;
 import com.hqh.graduationthesisserver.repository.UserAnswerRepository;
 import com.hqh.graduationthesisserver.repository.UserMarkRepository;
+import com.hqh.graduationthesisserver.service.UserMarkHelperService;
 import com.hqh.graduationthesisserver.service.UserMarkService;
 import com.hqh.graduationthesisserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.io.ByteArrayInputStream;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserMarkServiceImpl implements UserMarkService {
+public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperService {
 
     private final UserMarkRepository userMarkRepository;
     private final TestQuizzRepository quizzRepository;
@@ -76,5 +77,11 @@ public class UserMarkServiceImpl implements UserMarkService {
                                  .limit(3)
                                  .map(userMarkMapper::mapToDto)
                                  .collect(Collectors.toList());
+    }
+
+    @Override
+    public ByteArrayInputStream loadUserMarkExcel(long id) {
+        List<UserMark> userMark = userMarkRepository.findByTestQuizzId(id);
+        return ExcelHelper.userMarkToExcel(userMark);
     }
 }

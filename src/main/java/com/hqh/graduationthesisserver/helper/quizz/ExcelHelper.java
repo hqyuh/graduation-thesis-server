@@ -2,6 +2,7 @@ package com.hqh.graduationthesisserver.helper.quizz;
 
 import com.hqh.graduationthesisserver.domain.Question;
 import com.hqh.graduationthesisserver.domain.TestQuizz;
+import com.hqh.graduationthesisserver.domain.UserMark;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -133,6 +134,41 @@ public class ExcelHelper {
         }
     }
 
+    /***
+     *
+     * @param userMarks
+     * @return
+     */
+    public static ByteArrayInputStream userMarkToExcel(List<UserMark> userMarks) {
+        try(XSSFWorkbook workbook = new XSSFWorkbook();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
+            XSSFSheet sheet = workbook.createSheet("Mark");
+            XSSFRow headerRow = sheet.createRow(0);
+
+            for (int i = 0; i < HEADER_MARK.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(HEADER_MARK[i]);
+            }
+
+            int rowIdx = 1;
+            for (UserMark mark : userMarks) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(1).setCellValue(mark.getId());
+                String fullName = mark.getUser().getFirstName() + " " + mark.getUser().getLastName();
+                row.createCell(2).setCellValue(fullName);
+                row.createCell(3).setCellValue(mark.getUser().getUsername());
+                row.createCell(4).setCellValue(mark.getMark());
+                row.createCell(5).setCellValue(mark.getTestQuizz().getTestName());
+                row.createCell(6).setCellValue(mark.getCompletedDate().toString().substring(0, 10));
+            }
+
+            workbook.write(outputStream);
+
+            return new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (IOException exception) {
+            throw new RuntimeException(FAIL_TO_IMPORT_DATA_TO_EXCEL_FILE + exception.getMessage());
+        }
+    }
 
 }
