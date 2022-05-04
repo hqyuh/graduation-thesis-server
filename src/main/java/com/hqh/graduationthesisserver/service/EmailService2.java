@@ -23,7 +23,6 @@ import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 @Service
 public class EmailService2 {
 
-
     private final JavaMailSender mailSender;
 
     @Autowired
