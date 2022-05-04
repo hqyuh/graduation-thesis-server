@@ -410,7 +410,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
      *
      * @param user
      * @param oldPassword
-     * @return  if the password is correct
+     * @return <code>true</code>  if the password is correct
      *         <code>false</code> otherwise.
      */
     public boolean checkIfValidOldPassword(User user,
