@@ -19,4 +19,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.isNotLocked = ?2 WHERE u.id = ?1")
     void accountLock(Long id, boolean isNotLocked);
 
+    @Query("SELECT u.numberOfUsersInUse FROM UserStatistics u")
+    int userStatistics();
+
+    @Modifying
+    @Query("UPDATE UserStatistics u " +
+           "SET u.numberOfUsersInUse = u.numberOfUsersInUse + 1 " +
+           "WHERE u.id = 1")
+    void updateUserStatistics();
+
 }

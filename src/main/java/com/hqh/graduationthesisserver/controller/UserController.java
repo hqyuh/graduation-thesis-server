@@ -1,9 +1,6 @@
 package com.hqh.graduationthesisserver.controller;
 
-import com.hqh.graduationthesisserver.domain.HttpResponse;
-import com.hqh.graduationthesisserver.domain.Password;
-import com.hqh.graduationthesisserver.domain.User;
-import com.hqh.graduationthesisserver.domain.UserPrincipal;
+import com.hqh.graduationthesisserver.domain.*;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
 import com.hqh.graduationthesisserver.service.UserHelperService;
@@ -250,6 +247,14 @@ public class UserController extends ExceptionHandling {
         return ResponseEntity
                 .status(OK)
                 .body(userService.getCurrentUser());
+    }
+
+    @GetMapping("/statistic")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<UserStatistics> userStatistics() {
+        return ResponseEntity
+                .status(OK)
+                .body(userService.userStatistics());
     }
 
 }

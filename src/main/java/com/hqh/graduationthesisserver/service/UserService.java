@@ -1,6 +1,7 @@
 package com.hqh.graduationthesisserver.service;
 
 import com.hqh.graduationthesisserver.domain.User;
+import com.hqh.graduationthesisserver.domain.UserStatistics;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,5 +42,7 @@ public interface UserService {
     void accountLock(Long id, boolean isNotLocked);
 
     User getCurrentUser();
+
+    UserStatistics userStatistics();
 
 }

@@ -2,6 +2,7 @@ package com.hqh.graduationthesisserver.service.impl;
 
 import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.domain.UserPrincipal;
+import com.hqh.graduationthesisserver.domain.UserStatistics;
 import com.hqh.graduationthesisserver.enumeration.Role;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
 import com.hqh.graduationthesisserver.helper.user.CSVHelper;
@@ -36,12 +37,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.hqh.graduationthesisserver.constant.Authority.USER_AUTHORITIES;
 import static com.hqh.graduationthesisserver.constant.EmailConstant.*;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.PasswordConstant.CURRENT_PASSWORD_IS_INCORRECT;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
-import static com.hqh.graduationthesisserver.enumeration.Role.ROLE_USER;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.MediaType.*;
@@ -142,6 +141,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         user.setRoles(getRoleEnumName(role).name());
         user.setAuthorities(getRoleEnumName(role).getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
+        userRepository.updateUserStatistics();
         userRepository.save(user);
 
         return user;
@@ -295,6 +295,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         saveProfileImage(user, multipartFile);
         String name = user.getFirstName();
         emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_NEW_USER);
+        userRepository.updateUserStatistics();
         userRepository.save(user);
 
         return user;
@@ -452,5 +453,13 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     public User getCurrentUser() {
         String userPrincipal = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findUserByUsername(userPrincipal);
+    }
+
+    @Override
+    public UserStatistics userStatistics() {
+        UserStatistics userStatistics = new UserStatistics();
+        userStatistics.setNumberOfUsersInUse(userRepository.userStatistics());
+
+        return userStatistics;
     }
 }
