@@ -41,6 +41,9 @@ public class Question {
     @Column(name = "correct_result", length = 25)
     private String correctResult;
 
+    @Column(name = "correct_essay")
+    private String correctEssay;
+
     @Column(name = "mark", nullable = false)
     private float mark;
 
