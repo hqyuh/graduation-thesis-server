@@ -21,6 +21,7 @@ public interface UserMarkMapper {
 
     @Mapping(target = "quizzId", expression = "java(userMark.getTestQuizz().getId())")
     @Mapping(target = "username", expression = "java(userMark.getUser().getUsername())")
+    @Mapping(target = "userId", expression = "java(userMark.getUser().getId())")
     @Mapping(target = "quizzName", expression = "java(userMark.getTestQuizz().getTestName())")
     UserMarkDto mapToDto(UserMark userMark);
 

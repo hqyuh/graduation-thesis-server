@@ -60,8 +60,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     }
 
     @Override
-    public List<ReviewAnswerDto> reviewAnswerUser(Long quizzId) {
-        User userId = userService.getCurrentUser();
-        return userAnswerRepository.reviewAnswerUser(quizzId, userId.getId());
+    public List<ReviewAnswerDto> reviewAnswerUser(Long quizzId, Long userId) {
+        return userAnswerRepository.reviewAnswerUser(quizzId, userId);
     }
 }

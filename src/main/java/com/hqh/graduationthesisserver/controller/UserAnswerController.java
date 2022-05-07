@@ -33,11 +33,12 @@ public class UserAnswerController {
         return response(OK, SUCCESS, SUCCESSFUL_TEST_SUBMISSION);
     }
 
-    @GetMapping("/review-answer/{id}")
-    public ResponseEntity<List<ReviewAnswerDto>> reviewAnswerUser(@PathVariable("id") Long id) {
+    @GetMapping("/review-answer/quiz/{quizzId}/user/{userId}")
+    public ResponseEntity<List<ReviewAnswerDto>> reviewAnswerUser(@PathVariable("quizzId") Long quizzId,
+                                                                  @PathVariable("userId") Long userId) {
         return ResponseEntity
                 .status(OK)
-                .body(userAnswerService.reviewAnswerUser(id));
+                .body(userAnswerService.reviewAnswerUser(quizzId, userId));
     }
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){

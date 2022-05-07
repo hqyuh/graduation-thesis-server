@@ -10,6 +10,6 @@ public interface UserAnswerService {
 
     void saveAllUserAnswer(List<UserAnswerDto> userAnswerDto);
 
-    List<ReviewAnswerDto> reviewAnswerUser(Long quizzId);
+    List<ReviewAnswerDto> reviewAnswerUser(Long quizzId, Long userId);
 
 }
