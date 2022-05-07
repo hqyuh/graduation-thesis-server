@@ -30,7 +30,7 @@ public class UserMarkController {
         this.helperService = helperService;
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<UserMarkDto> saveUserMark(@RequestBody UserMarkDto userMarkDto) {
         userMarkService.saveUserMark(userMarkDto);
 
