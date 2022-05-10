@@ -2,6 +2,7 @@ package com.hqh.graduationthesisserver.service.impl;
 
 import com.hqh.graduationthesisserver.domain.TestQuizz;
 import com.hqh.graduationthesisserver.domain.Topic;
+import com.hqh.graduationthesisserver.domain.User;
 import com.hqh.graduationthesisserver.dto.TestQuizzDto;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzExistException;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzNotFoundException;
@@ -11,6 +12,7 @@ import com.hqh.graduationthesisserver.repository.TestQuizzRepository;
 import com.hqh.graduationthesisserver.repository.TopicRepository;
 import com.hqh.graduationthesisserver.service.TestQuizzHelperService;
 import com.hqh.graduationthesisserver.service.TestQuizzService;
+import com.hqh.graduationthesisserver.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -39,14 +41,17 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     private final TestQuizzRepository quizzRepository;
     private final TopicRepository topicRepository;
     private final TestQuizzMapper testQuizzMapper;
+    private final UserService userService;
 
     @Autowired
     public TestQuizzServiceImpl(TestQuizzRepository quizzRepository,
                                 TopicRepository topicRepository,
-                                TestQuizzMapper testQuizzMapper) {
+                                TestQuizzMapper testQuizzMapper,
+                                UserService userService) {
         this.quizzRepository = quizzRepository;
         this.topicRepository = topicRepository;
         this.testQuizzMapper = testQuizzMapper;
+        this.userService = userService;
     }
 
     /***
@@ -133,6 +138,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         TestQuizzDto testQuizzDto = new TestQuizzDto();
         Topic topic = topicRepository.findTopicById(topicId);
         TestQuizz quizz = testQuizzMapper.map(testQuizzDto, topic);
+        User userId = userService.getCurrentUser();
         quizz.setTestName(testName);
         String code = generateActivationCode();
         quizz.setActivationCode(code);
@@ -141,6 +147,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         quizz.setIsStart(convertTime(isStart));
         quizz.setIsEnd(convertTime(isEnd));
         LOGGER.info(CODE + code + IS_FOR_TEST_NAME + testName);
+        quizz.addUser(userId);
         quizzRepository.save(quizz);
 
         return quizz;
