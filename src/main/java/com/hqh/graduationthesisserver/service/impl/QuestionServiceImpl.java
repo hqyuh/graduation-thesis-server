@@ -65,6 +65,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                String answerD,
                                String correctResult,
                                String correctEssay,
+                               String questionType,
                                float mark,
                                Long quizzId)
             throws IOException, NotAnImageFileException {
@@ -80,6 +81,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setDateCreated(Instant.now());
         question.setCorrectResult(correctResult);
         question.setCorrectEssay(correctEssay);
+        question.setQuestionType(questionType.trim());
         question.setMark(mark);
         question.setMilestones(1);
         saveQuestionImage(question, questionImageUrl);
@@ -149,6 +151,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                String answerD,
                                String correctResult,
                                String correctEssay,
+                               String questionType,
                                float mark,
                                Long quizzId,
                                MultipartFile questionImageUrl)
@@ -162,6 +165,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setAnswerD(answerD);
         question.setCorrectResult(correctResult);
         question.setCorrectEssay(correctEssay);
+        question.setQuestionType(questionType);
         question.setMark(mark);
         question.setTestQuizz(quizz);
         saveQuestionImage(question, questionImageUrl);

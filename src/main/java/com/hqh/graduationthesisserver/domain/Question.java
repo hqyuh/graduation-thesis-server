@@ -39,16 +39,22 @@ public class Question {
     private String answerD;
 
     @Column(name = "correct_result", length = 25)
+    @JsonIgnore
     private String correctResult;
 
     @Column(name = "correct_essay")
+    @JsonIgnore
     private String correctEssay;
 
     @Column(name = "mark", nullable = false)
     private float mark;
 
     @Column(name = "milestones", nullable = false)
+    @JsonIgnore
     private int milestones;
+
+    @Column(name = "question_type", length = 9, nullable = false)
+    private String questionType;
 
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,

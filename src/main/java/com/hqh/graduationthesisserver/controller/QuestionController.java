@@ -45,11 +45,13 @@ public class QuestionController {
                                                        @RequestParam("answerD") String answerD,
                                                        @RequestParam("correctResult") String correctResult,
                                                        @RequestParam("correctEssay") String correctEssay,
+                                                       @RequestParam("questionType") String questionType,
                                                        @RequestParam("mark") String mark,
                                                        @RequestParam("quizzId") String quizzId)
             throws IOException, NotAnImageFileException {
         questionService.createQuestion(topicQuestion, questionImageUrl, answerA, answerB,
-                answerC, answerD, correctResult, correctEssay, Float.parseFloat(mark), Long.parseLong(quizzId));
+                answerC, answerD, correctResult, correctEssay, questionType, Float.parseFloat(mark),
+                Long.parseLong(quizzId));
 
         return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
     }
@@ -63,6 +65,7 @@ public class QuestionController {
                                                        @RequestParam("answerD") String answerD,
                                                        @RequestParam("correctResult") String correctResult,
                                                        @RequestParam("correctEssay") String correctEssay,
+                                                       @RequestParam("questionType") String questionType,
                                                        @RequestParam("mark") String mark,
                                                        @RequestParam("quizzId") String quizzId,
                                                        @RequestParam(value = "questionImageUrl", required = false)
@@ -70,7 +73,7 @@ public class QuestionController {
             throws IOException, NotAnImageFileException {
 
         questionService.updateQuestion(Long.parseLong(id), topicQuestion, answerA, answerB, answerC, answerD,
-                correctResult, correctEssay, Float.parseFloat(mark), Long.parseLong(quizzId), questionImageUrl);
+                correctResult, correctEssay, questionType, Float.parseFloat(mark), Long.parseLong(quizzId), questionImageUrl);
 
         return response(OK, SUCCESS, QUESTION_UPDATE_SUCCESSFUL);
     }
