@@ -53,8 +53,8 @@ public class Question {
     @JsonIgnore
     private int milestones;
 
-    @Column(name = "question_type", length = 9, nullable = false)
-    private String questionType;
+    @Column(name = "type", length = 9, nullable = false)
+    private String type;
 
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
