@@ -2,9 +2,11 @@ package com.hqh.graduationthesisserver.controller;
 
 import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.domain.TestQuizz;
+import com.hqh.graduationthesisserver.dto.TestQuizzDto;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzExistException;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzNotFoundException;
+import com.hqh.graduationthesisserver.request.TestQuizzRequest;
 import com.hqh.graduationthesisserver.service.TestQuizzHelperService;
 import com.hqh.graduationthesisserver.service.TestQuizzService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,26 +43,21 @@ public class TestQuizzController extends ExceptionHandling {
 
     @PostMapping("/add")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestParam("testName") String testName,
-                                                        @RequestParam("examTime") Integer examTime,
-                                                        @RequestParam("isStart") String isStart,
-                                                        @RequestParam("isEnd") String isEnd,
-                                                        @RequestParam(name = "topicId", required = false) String topicId)
+    public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestBody TestQuizzRequest testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException {
-        TestQuizz newQuizz = testQuizzService.createQuizz(testName, examTime, isStart, isEnd, Long.parseLong(topicId));
+        TestQuizz newQuizz = testQuizzService
+                .createQuizz(testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),
+                        testQuizz.getIsStart(), testQuizz.getIsEnd(), Long.parseLong(testQuizz.getTopicId()));
         return response(OK, SUCCESS, ADD_QUICK_TEST_SUCCESS);
-    }
+}
 
     @PatchMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> updateTestQuizz(@RequestParam("currentTestName") String currentTestName,
-                                                        @RequestParam("testName") String testName,
-                                                        @RequestParam("examTime") Integer examTime,
-                                                        @RequestParam("isStart") String isStart,
-                                                        @RequestParam("isEnd") String isEnd,
-                                                        @RequestParam(name = "topicId", required = false) String topicId)
+    public ResponseEntity<HttpResponse> updateTestQuizz(@RequestBody TestQuizzRequest testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException {
-        TestQuizz updateQuizz = testQuizzService.updateQuizz(currentTestName, testName, examTime, isStart, isEnd, Long.parseLong(topicId));
+        TestQuizz updateQuizz = testQuizzService
+                .updateQuizz(testQuizz.getCurrentTestName(), testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),
+                        testQuizz.getIsStart(), testQuizz.getIsEnd(), Long.parseLong(testQuizz.getTopicId()));
         return response(OK, SUCCESS, UPDATE_QUICK_TEST_SUCCESS);
     }
 

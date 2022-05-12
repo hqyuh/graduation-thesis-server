@@ -1,24 +1,18 @@
 package com.hqh.graduationthesisserver.service;
 
-import com.hqh.graduationthesisserver.domain.Question;
 import com.hqh.graduationthesisserver.dto.QuestionDto;
-import com.hqh.graduationthesisserver.exception.domain.user.NotAnImageFileException;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface QuestionService {
 
-    void createQuestion(String topicQuestion, MultipartFile questionImageUrl, String answerA,
+    void createQuestion(String topicQuestion, String answerA,
                         String answerB, String answerC, String answerD, String correctResult,
-                        String correctEssay, String type, float mark, Long quizzId)
-            throws IOException, NotAnImageFileException;
+                        String correctEssay, String type, float mark, Long quizzId);
 
     void updateQuestion(Long id, String topicQuestion, String answerA, String answerB,
                         String answerC, String answerD, String correctResult, String correctEssay,
-                        String type, float mark, Long quizzId, MultipartFile questionImageUrl)
-            throws IOException, NotAnImageFileException;
+                        String type, float mark, Long quizzId);
 
     void deleteQuestion(Long id);
 

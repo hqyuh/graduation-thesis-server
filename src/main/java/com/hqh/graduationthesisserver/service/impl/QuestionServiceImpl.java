@@ -45,7 +45,6 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
     /***
      *
      * @param topicQuestion
-     * @param questionImageUrl
      * @param answerA
      * @param answerB
      * @param answerC
@@ -53,12 +52,9 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
      * @param correctResult
      * @param mark
      * @param quizzId
-     * @throws IOException
-     * @throws NotAnImageFileException
      */
     @Override
     public void createQuestion(String topicQuestion,
-                               MultipartFile questionImageUrl,
                                String answerA,
                                String answerB,
                                String answerC,
@@ -67,8 +63,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                String correctEssay,
                                String type,
                                float mark,
-                               Long quizzId)
-            throws IOException, NotAnImageFileException {
+                               Long quizzId) {
 
         QuestionDto questionDto = new QuestionDto();
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
@@ -84,7 +79,6 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setType(type);
         question.setMark(mark);
         question.setMilestones(1);
-        saveQuestionImage(question, questionImageUrl);
 
         questionRepository.save(question);
 
@@ -138,9 +132,6 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
      * @param correctResult
      * @param mark
      * @param quizzId
-     * @param questionImageUrl
-     * @throws IOException
-     * @throws NotAnImageFileException
      */
     @Override
     public void updateQuestion(Long id,
@@ -153,9 +144,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                String correctEssay,
                                String type,
                                float mark,
-                               Long quizzId,
-                               MultipartFile questionImageUrl)
-            throws IOException, NotAnImageFileException {
+                               Long quizzId) {
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
         Question question = questionRepository.findQuestionById(id);
         question.setTopicQuestion(topicQuestion);
@@ -168,7 +157,6 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setType(type);
         question.setMark(mark);
         question.setTestQuizz(quizz);
-        saveQuestionImage(question, questionImageUrl);
 
         questionRepository.save(question);
     }
