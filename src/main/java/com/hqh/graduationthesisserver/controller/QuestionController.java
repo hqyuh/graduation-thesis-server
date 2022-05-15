@@ -1,7 +1,6 @@
 package com.hqh.graduationthesisserver.controller;
 
 import com.hqh.graduationthesisserver.domain.HttpResponse;
-import com.hqh.graduationthesisserver.domain.Question;
 import com.hqh.graduationthesisserver.dto.QuestionDto;
 import com.hqh.graduationthesisserver.exception.domain.user.NotAnImageFileException;
 import com.hqh.graduationthesisserver.helper.quizz.ExcelHelper;
@@ -20,7 +19,7 @@ import java.util.List;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.ERROR;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
-import static com.hqh.graduationthesisserver.constant.QuestionConstant.*;
+import static com.hqh.graduationthesisserver.constant.QuestionImplConstant.*;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController

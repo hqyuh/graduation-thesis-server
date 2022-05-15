@@ -14,4 +14,6 @@ public interface UserMarkService {
 
     List<UserMarkDto> getMarkTop3(Long quizzId);
 
+    void pointLock(Long userId, boolean isLock);
+
 }

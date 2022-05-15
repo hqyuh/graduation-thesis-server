@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.hqh.graduationthesisserver.constant.TopicConstant.NO_TOPIC_FOUND_BY_NAME;
-import static com.hqh.graduationthesisserver.constant.TopicConstant.TOPIC_ALREADY_EXISTS;
+import static com.hqh.graduationthesisserver.constant.TopicImplConstant.NO_TOPIC_FOUND_BY_NAME;
+import static com.hqh.graduationthesisserver.constant.TopicImplConstant.TOPIC_ALREADY_EXISTS;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service

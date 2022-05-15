@@ -15,6 +15,7 @@ public interface UserMarkMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "mark", ignore = true)
+    @Mapping(target = "pointLock", ignore = true)
     @Mapping(target = "testQuizz", source = "testQuizz")
     @Mapping(target = "user", source = "user")
     UserMark map(UserMarkDto userMarkDto, TestQuizz testQuizz, User user);

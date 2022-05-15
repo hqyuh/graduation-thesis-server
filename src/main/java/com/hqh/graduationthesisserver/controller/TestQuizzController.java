@@ -2,7 +2,6 @@ package com.hqh.graduationthesisserver.controller;
 
 import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.domain.TestQuizz;
-import com.hqh.graduationthesisserver.dto.TestQuizzDto;
 import com.hqh.graduationthesisserver.exception.ExceptionHandling;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzExistException;
 import com.hqh.graduationthesisserver.exception.domain.quizz.TestQuizzNotFoundException;
@@ -24,7 +23,7 @@ import java.util.Optional;
 
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
-import static com.hqh.graduationthesisserver.constant.TestQuizzConstant.*;
+import static com.hqh.graduationthesisserver.constant.TestQuizzImplConstant.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController

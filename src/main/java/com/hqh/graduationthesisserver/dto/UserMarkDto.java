@@ -24,6 +24,7 @@ public class UserMarkDto {
     private Instant completedDate;
     private String quizzName;
     private String username;
+    private boolean pointLock;
     private Long userId;
     private Long quizzId;
 

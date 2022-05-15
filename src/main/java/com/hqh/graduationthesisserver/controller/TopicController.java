@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
-import static com.hqh.graduationthesisserver.constant.TopicConstant.*;
+import static com.hqh.graduationthesisserver.constant.TopicImplConstant.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 

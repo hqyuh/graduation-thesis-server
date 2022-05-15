@@ -15,6 +15,7 @@ import com.hqh.graduationthesisserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.time.Instant;
 import java.util.List;
@@ -54,6 +55,7 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
                 .map(userMarkDto, quizzId, userId);
         userMark.setCompletedDate(Instant.now());
         userMark.setMark(userAnswerRepository.totalMarkByQuizzId(userMarkDto.getQuizzId()));
+        userMark.setPointLock(false);
 
         userMarkRepository.save(userMark);
     }
@@ -99,5 +101,11 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
     public ByteArrayInputStream loadUserMarkExcel(long id) {
         List<UserMark> userMark = userMarkRepository.findByTestQuizzId(id);
         return ExcelHelper.userMarkToExcel(userMark);
+    }
+
+    @Override
+    @Transactional
+    public void pointLock(Long userId, boolean isLock) {
+        userMarkRepository.markLock(userId, isLock);
     }
 }

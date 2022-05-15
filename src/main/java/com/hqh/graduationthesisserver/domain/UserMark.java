@@ -28,6 +28,9 @@ public class UserMark {
     @Column(name = "completed_date")
     private Instant completedDate;
 
+    @Column(name = "point_lock")
+    private boolean pointLock;
+
     @OneToOne
     @JoinColumn(name = "quizz_id")
     private TestQuizz testQuizz;

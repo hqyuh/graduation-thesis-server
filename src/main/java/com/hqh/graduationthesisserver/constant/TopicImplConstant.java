@@ -1,6 +1,6 @@
 package com.hqh.graduationthesisserver.constant;
 
-public class TopicConstant {
+public class TopicImplConstant {
 
     public static final String NO_TOPIC_FOUND_BY_NAME = "No topic found by name: ";
     public static final String TOPIC_ALREADY_EXISTS = "Topic already exists";

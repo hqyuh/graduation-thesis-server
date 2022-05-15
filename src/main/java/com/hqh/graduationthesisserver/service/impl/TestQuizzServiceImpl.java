@@ -30,7 +30,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Optional;
 
-import static com.hqh.graduationthesisserver.constant.TestQuizzConstant.*;
+import static com.hqh.graduationthesisserver.constant.TestQuizzImplConstant.*;
 import static java.time.temporal.ChronoField.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 

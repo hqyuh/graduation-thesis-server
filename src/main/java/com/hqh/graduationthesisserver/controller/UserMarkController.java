@@ -1,11 +1,13 @@
 package com.hqh.graduationthesisserver.controller;
 
+import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.dto.UserMarkDto;
 import com.hqh.graduationthesisserver.service.UserMarkHelperService;
 import com.hqh.graduationthesisserver.service.UserMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,9 @@ import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.FileConstant.APPLICATION_EXCEL;
+import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
+import static com.hqh.graduationthesisserver.constant.UserMarkImplConstant.SUCCESSFUL_LOCKED_POINTS;
+import static com.hqh.graduationthesisserver.constant.UserMarkImplConstant.UNLOCK_SUCCESS_POINTS;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -63,6 +68,22 @@ public class UserMarkController {
                              .header(HttpHeaders.CONTENT_DISPOSITION, ATTACHMENT_FILENAME + fileName)
                              .contentType(MediaType.parseMediaType(APPLICATION_EXCEL))
                              .body(file);
+    }
+
+    @GetMapping("/{id}/lock={isLock}")
+    public ResponseEntity<HttpResponse> userPointLock(@PathVariable("id") Long id,
+                                                      @PathVariable("isLock") String isLock) {
+        boolean isStatus = Boolean.parseBoolean(isLock);
+        userMarkService.pointLock(id, isStatus);
+        String message = isStatus ? SUCCESSFUL_LOCKED_POINTS : UNLOCK_SUCCESS_POINTS;
+        return response(OK, SUCCESS, message);
+    }
+
+
+    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
+        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
+                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
+        return new ResponseEntity<>(body, httpStatus);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.hqh.graduationthesisserver.constant;
 
-public class TestQuizzConstant {
+public class TestQuizzImplConstant {
 
     public static final String NO_QUIZZ_FOUND_BY_NAME = "No quizz found by name ";
     public static final String QUIZZ_ALREADY_EXISTS = "Quizz already exists";
