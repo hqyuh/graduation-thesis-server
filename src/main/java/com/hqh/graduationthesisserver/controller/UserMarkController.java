@@ -70,7 +70,7 @@ public class UserMarkController {
                              .body(file);
     }
 
-    @GetMapping("/{id}/lock/{isLock}")
+    @GetMapping("/{id}/locked/{isLock}")
     public ResponseEntity<HttpResponse> userPointLock(@PathVariable("id") Long id,
                                                       @PathVariable("isLock") String isLock) {
         boolean isStatus = Boolean.parseBoolean(isLock);
