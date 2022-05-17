@@ -70,7 +70,7 @@ public class UserMarkController {
                              .body(file);
     }
 
-    @GetMapping("/{id}/lock={isLock}")
+    @GetMapping("/{id}/lock/{isLock}")
     public ResponseEntity<HttpResponse> userPointLock(@PathVariable("id") Long id,
                                                       @PathVariable("isLock") String isLock) {
         boolean isStatus = Boolean.parseBoolean(isLock);
@@ -78,7 +78,6 @@ public class UserMarkController {
         String message = isStatus ? SUCCESSFUL_LOCKED_POINTS : UNLOCK_SUCCESS_POINTS;
         return response(OK, SUCCESS, message);
     }
-
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
         HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
