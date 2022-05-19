@@ -17,7 +17,8 @@ public class SecurityConstant {
             "/user/login",
             "/user/register",
             "/user/image/**",
-            "/user/resetPassword/**"
+            "/user/resetPassword/**",
+            "/swagger-ui/**",
     };
 
 }
