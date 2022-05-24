@@ -2,6 +2,7 @@ package com.hqh.graduationthesisserver.repository;
 
 import com.hqh.graduationthesisserver.domain.TestQuizz;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,5 +23,9 @@ public interface TestQuizzRepository extends JpaRepository<TestQuizz, Long> {
     List<TestQuizz> findTestQuizzByTopicId(Long id);
 
     TestQuizz findTestQuizzById(Long id);
+
+    @Modifying
+    @Query("UPDATE TestQuizz t SET t.isStatus = ?2 WHERE t.id = ?1")
+    void quizzLock(Long id, boolean isStatus);
 
 }

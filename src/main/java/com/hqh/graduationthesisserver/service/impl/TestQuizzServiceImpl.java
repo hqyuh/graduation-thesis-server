@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -146,6 +147,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         quizz.setExamTime(examTime);
         quizz.setIsStart(convertTime(isStart));
         quizz.setIsEnd(convertTime(isEnd));
+        quizz.setStatus(true);
         LOGGER.info(CODE + code + IS_FOR_TEST_NAME + testName);
         quizz.addUser(userId);
         quizzRepository.save(quizz);
@@ -234,5 +236,11 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         TestQuizz quizz = quizzRepository.findTestQuizzById(id);
 
         return ExcelHelper.quizzesToExcel(quizz);
+    }
+
+    @Override
+    @Transactional
+    public void lockQuizz(Long id, boolean isStatus) {
+        quizzRepository.quizzLock(id, isStatus);
     }
 }

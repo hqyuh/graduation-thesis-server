@@ -47,6 +47,9 @@ public class TestQuizz {
     @Column(name = "activation_code", nullable = false, length = 7)
     private String activationCode;
 
+    @Column(name = "is_status")
+    private boolean isStatus;
+
     @ManyToMany
     @JsonIgnore
     @JoinTable(

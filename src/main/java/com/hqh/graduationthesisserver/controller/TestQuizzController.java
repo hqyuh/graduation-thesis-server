@@ -24,6 +24,8 @@ import java.util.Optional;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.TestQuizzImplConstant.*;
+import static com.hqh.graduationthesisserver.constant.UserImplConstant.ACCOUNT_LOCK_SUCCESSFUL;
+import static com.hqh.graduationthesisserver.constant.UserImplConstant.ACCOUNT_UNLOCK_SUCCESSFUL;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -105,6 +107,15 @@ public class TestQuizzController extends ExceptionHandling {
                              .header(HttpHeaders.CONTENT_DISPOSITION, ATTACHMENT_FILENAME + fileName)
                              .contentType(MediaType.parseMediaType(APPLICATION_EXCEL))
                              .body(file);
+    }
+
+    @GetMapping("/{id}/locked/{isStatus}")
+    public ResponseEntity<?> quizzLock(@PathVariable("id") Long id,
+                                       @PathVariable("isStatus") String isStatus) {
+        testQuizzService.lockQuizz(id, Boolean.parseBoolean(isStatus));
+        String message = Boolean.parseBoolean(isStatus) ? "LOCK OK" : "UNLOCK OK";
+
+        return response(OK, SUCCESS, message);
     }
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){

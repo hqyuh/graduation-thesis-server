@@ -29,4 +29,6 @@ public interface TestQuizzService {
 
     TestQuizz findTestQuizzById(Long id);
 
+    void lockQuizz(Long id, boolean isStatus);
+
 }
