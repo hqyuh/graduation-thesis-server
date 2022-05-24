@@ -14,10 +14,9 @@ public class SecurityConstant {
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page.";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String[] PUBLIC_URLS = {
-            "/user/login",
-            "/user/register",
-            "/user/image/**",
-            "/user/resetPassword/**",
+            "/auth/login",
+            "/auth/register",
+            "/auth/resetPassword/**",
             "/swagger-ui/**",
     };
 

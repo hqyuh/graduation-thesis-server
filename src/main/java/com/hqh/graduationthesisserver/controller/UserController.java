@@ -5,17 +5,13 @@ import com.hqh.graduationthesisserver.exception.ExceptionHandling;
 import com.hqh.graduationthesisserver.exception.domain.user.*;
 import com.hqh.graduationthesisserver.service.UserHelperService;
 import com.hqh.graduationthesisserver.service.UserService;
-import com.hqh.graduationthesisserver.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,70 +46,19 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 public class UserController extends ExceptionHandling {
 
     private final UserService userService;
-    private final JWTTokenProvider jwtTokenProvider;
-    private final AuthenticationManager authenticationManager;
     private final UserHelperService helperService;
 
     @Autowired
     public UserController(UserService userService,
-                          JWTTokenProvider jwtTokenProvider,
-                          AuthenticationManager authenticationManager,
                           UserHelperService helperService) {
         this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.authenticationManager = authenticationManager;
         this.helperService = helperService;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<HttpResponse> register(@Valid @RequestBody User user)
-            throws UserNotFoundException, EmailExistException, UsernameExistException {
-        User newUser = userService.register(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRoles(),
-                user.getPassword()
-        );
-        return response(OK, SUCCESS, SIGN_UP_SUCCESS);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
-
-        // authenticate -> get username and password for authentication
-        authenticate(user.getEmail(), user.getPassword());
-        User loginUser = userService.findUserByEmail(user.getEmail());
-        // provide user for UserPrincipal
-        UserPrincipal userPrincipal = new UserPrincipal(loginUser);
-        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-
-        return new ResponseEntity<>(loginUser, jwtHeader, OK);
-    }
-
-    private HttpHeaders getJwtHeader(UserPrincipal userPrincipal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(userPrincipal));
-        return headers;
-    }
-
-    private void authenticate(String email, String password) {
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(email, password));
     }
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
         HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
                 httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
         return new ResponseEntity<>(body, httpStatus);
-    }
-
-    @GetMapping("/resetPassword/{email}")
-    public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email)
-            throws EmailNotFoundException, MessagingException {
-        userService.resetPassword(email);
-        return response(OK, SUCCESS,EMAIL_SENT + email);
     }
 
     @PostMapping("/add")
@@ -242,7 +187,7 @@ public class UserController extends ExceptionHandling {
                 .body(file);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/my")
     public ResponseEntity<User> currentUsername() {
         return ResponseEntity
                 .status(OK)
