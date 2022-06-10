@@ -11,7 +11,6 @@ import com.hqh.graduationthesisserver.service.TestQuizzService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,8 +23,7 @@ import java.util.Optional;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.TestQuizzImplConstant.*;
-import static com.hqh.graduationthesisserver.constant.UserImplConstant.ACCOUNT_LOCK_SUCCESSFUL;
-import static com.hqh.graduationthesisserver.constant.UserImplConstant.ACCOUNT_UNLOCK_SUCCESSFUL;
+import static com.hqh.graduationthesisserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -116,12 +114,6 @@ public class TestQuizzController extends ExceptionHandling {
         String message = Boolean.parseBoolean(isStatus) ? "LOCK OK" : "UNLOCK OK";
 
         return response(OK, SUCCESS, message);
-    }
-
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
-                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
-        return new ResponseEntity<>(body, httpStatus);
     }
 
 }

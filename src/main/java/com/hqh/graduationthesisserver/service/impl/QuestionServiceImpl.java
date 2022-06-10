@@ -10,7 +10,7 @@ import com.hqh.graduationthesisserver.repository.QuestionRepository;
 import com.hqh.graduationthesisserver.repository.TestQuizzRepository;
 import com.hqh.graduationthesisserver.service.QuestionHelperService;
 import com.hqh.graduationthesisserver.service.QuestionService;
-import com.hqh.graduationthesisserver.utils.FileUpLoadUtil;
+import com.hqh.graduationthesisserver.utils.FileUpLoadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
@@ -45,16 +46,22 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
     /***
      *
      * @param topicQuestion
+     * @param questionImageUrl
      * @param answerA
      * @param answerB
      * @param answerC
      * @param answerD
      * @param correctResult
+     * @param correctEssay
+     * @param type
      * @param mark
      * @param quizzId
+     * @throws IOException
+     * @throws NotAnImageFileException
      */
     @Override
     public void createQuestion(String topicQuestion,
+                               MultipartFile questionImageUrl,
                                String answerA,
                                String answerB,
                                String answerC,
@@ -63,7 +70,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                String correctEssay,
                                String type,
                                float mark,
-                               Long quizzId) {
+                               Long quizzId) throws IOException, NotAnImageFileException {
 
         QuestionDto questionDto = new QuestionDto();
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
@@ -79,7 +86,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setType(type);
         question.setMark(mark);
         question.setMilestones(1);
-
+        saveQuestionImage(question, questionImageUrl);
         questionRepository.save(question);
 
     }
@@ -101,13 +108,13 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                 throw new NotAnImageFileException(questionImage.getOriginalFilename() + PLEASE_UPLOAD_AN_IMAGE);
             }
 
-            String fileName = cleanPath(questionImage.getOriginalFilename());
+            String fileName = cleanPath(Objects.requireNonNull(questionImage.getOriginalFilename()));
             question.setQuestionImageUrl(fileName);
             Question savedQuestion = questionRepository.save(question);
 
             String uploadDir = QUESTION_IMAGE_PATH + savedQuestion.getId();
-            FileUpLoadUtil.clearDir(uploadDir);
-            FileUpLoadUtil.saveFile(uploadDir, fileName, questionImage);
+            FileUpLoadUtils.clearDir(uploadDir);
+            FileUpLoadUtils.saveFile(uploadDir, fileName, questionImage);
 
         }
     }
@@ -144,7 +151,9 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                String correctEssay,
                                String type,
                                float mark,
-                               Long quizzId) {
+                               Long quizzId,
+                               MultipartFile questionImageUrl)
+            throws IOException, NotAnImageFileException {
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
         Question question = questionRepository.findQuestionById(id);
         question.setTopicQuestion(topicQuestion);
@@ -157,7 +166,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setType(type);
         question.setMark(mark);
         question.setTestQuizz(quizz);
-
+        saveQuestionImage(question, questionImageUrl);
         questionRepository.save(question);
     }
 

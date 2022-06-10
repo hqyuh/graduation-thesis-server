@@ -13,9 +13,9 @@ import java.nio.file.StandardCopyOption;
 
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 
-public class FileUpLoadUtil {
+public class FileUpLoadUtils {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(FileUpLoadUtil.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(FileUpLoadUtils.class);
 
     public static void saveFile(String uploadDir,
                                 String fileName,

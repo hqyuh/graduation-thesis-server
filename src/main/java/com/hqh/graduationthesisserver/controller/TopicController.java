@@ -6,7 +6,6 @@ import com.hqh.graduationthesisserver.exception.domain.topic.TopicExistException
 import com.hqh.graduationthesisserver.exception.domain.topic.TopicNotFoundException;
 import com.hqh.graduationthesisserver.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +13,7 @@ import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.TopicImplConstant.*;
+import static com.hqh.graduationthesisserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -55,12 +55,6 @@ public class TopicController {
         List<Topic> topicList = topicService.getAllTopic();
 
         return new ResponseEntity<>(topicList, OK);
-    }
-
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
-                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
-        return new ResponseEntity<>(body, httpStatus);
     }
 
 }

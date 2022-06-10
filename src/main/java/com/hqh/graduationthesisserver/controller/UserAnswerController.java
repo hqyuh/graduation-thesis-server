@@ -5,7 +5,6 @@ import com.hqh.graduationthesisserver.dto.ReviewAnswerDto;
 import com.hqh.graduationthesisserver.dto.UserAnswerDto;
 import com.hqh.graduationthesisserver.service.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
+import static com.hqh.graduationthesisserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -41,10 +41,5 @@ public class UserAnswerController {
                 .body(userAnswerService.reviewAnswerUser(quizzId, userId));
     }
 
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
-                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
-        return new ResponseEntity<>(body, httpStatus);
-    }
 
 }

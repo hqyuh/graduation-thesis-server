@@ -4,11 +4,9 @@ import com.hqh.graduationthesisserver.domain.HttpResponse;
 import com.hqh.graduationthesisserver.dto.QuestionDto;
 import com.hqh.graduationthesisserver.exception.domain.user.NotAnImageFileException;
 import com.hqh.graduationthesisserver.helper.quizz.ExcelHelper;
-import com.hqh.graduationthesisserver.request.QuestionRequest;
 import com.hqh.graduationthesisserver.service.QuestionHelperService;
 import com.hqh.graduationthesisserver.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +18,7 @@ import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.ERROR;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.QuestionImplConstant.*;
+import static com.hqh.graduationthesisserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -36,83 +35,56 @@ public class QuestionController {
         this.helperService = helperService;
     }
 
-    //    @PostMapping("/add")
-    //    public ResponseEntity<HttpResponse> createQuestion(@RequestParam("topicQuestion") String topicQuestion,
-    //                                                       @RequestParam(value = "questionImageUrl", required = false)
-    //                                                               MultipartFile questionImageUrl,
-    //                                                       @RequestParam("answerA") String answerA,
-    //                                                       @RequestParam("answerB") String answerB,
-    //                                                       @RequestParam("answerC") String answerC,
-    //                                                       @RequestParam("answerD") String answerD,
-    //                                                       @RequestParam("correctResult") String correctResult,
-    //                                                       @RequestParam("correctEssay") String correctEssay,
-    //                                                       @RequestParam("type") String type,
-    //                                                       @RequestParam("mark") String mark,
-    //                                                       @RequestParam("quizzId") String quizzId)
-    //            throws IOException, NotAnImageFileException {
-    //        questionService.createQuestion(topicQuestion, questionImageUrl, answerA, answerB,
-    //                answerC, answerD, correctResult, correctEssay, type, Float.parseFloat(mark),
-    //                Long.parseLong(quizzId));
-    //
-    //        return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
-    //    }
+        @PostMapping("/add")
+        public ResponseEntity<HttpResponse> createQuestion(@RequestParam("topicQuestion") String topicQuestion,
+                                                           @RequestParam(value = "questionImageUrl", required = false)
+                                                                   MultipartFile questionImageUrl,
+                                                           @RequestParam("answerA") String answerA,
+                                                           @RequestParam("answerB") String answerB,
+                                                           @RequestParam("answerC") String answerC,
+                                                           @RequestParam("answerD") String answerD,
+                                                           @RequestParam("correctResult") String correctResult,
+                                                           @RequestParam("correctEssay") String correctEssay,
+                                                           @RequestParam("type") String type,
+                                                           @RequestParam("mark") String mark,
+                                                           @RequestParam("quizzId") String quizzId)
+                throws IOException, NotAnImageFileException {
+            questionService.createQuestion(
+                    topicQuestion, questionImageUrl,
+                    answerA, answerB, answerC, answerD,
+                    correctResult, correctEssay, type,
+                    Float.parseFloat(mark), Long.parseLong(quizzId)
+            );
 
-    @PostMapping("/add")
-    public ResponseEntity<HttpResponse> createQuestion(@RequestBody QuestionRequest questionRequest)
-            throws IOException, NotAnImageFileException {
-        questionService.createQuestion(
-                questionRequest.getTopicQuestion(),
-                questionRequest.getAnswerA(),
-                questionRequest.getAnswerB(),
-                questionRequest.getAnswerC(),
-                questionRequest.getAnswerD(),
-                questionRequest.getCorrectResult(),
-                questionRequest.getCorrectEssay(),
-                questionRequest.getType(),
-                questionRequest.getMark(),
-                questionRequest.getQuizzId()
-        );
-        return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
-    }
+            return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
+        }
 
-//    @PatchMapping("/update")
-//    public ResponseEntity<HttpResponse> updateQuestion(@RequestParam("id") String id,
-//                                                       @RequestParam("topicQuestion") String topicQuestion,
-//                                                       @RequestParam("answerA") String answerA,
-//                                                       @RequestParam("answerB") String answerB,
-//                                                       @RequestParam("answerC") String answerC,
-//                                                       @RequestParam("answerD") String answerD,
-//                                                       @RequestParam("correctResult") String correctResult,
-//                                                       @RequestParam("correctEssay") String correctEssay,
-//                                                       @RequestParam("type") String type,
-//                                                       @RequestParam("mark") String mark,
-//                                                       @RequestParam("quizzId") String quizzId,
-//                                                       @RequestParam(value = "questionImageUrl", required = false)
-//                                                                   MultipartFile questionImageUrl)
-//            throws IOException, NotAnImageFileException {
-//
-//        questionService.updateQuestion(Long.parseLong(id), topicQuestion, answerA, answerB, answerC, answerD,
-//                correctResult, correctEssay, type, Float.parseFloat(mark), Long.parseLong(quizzId), questionImageUrl);
-//
-//        return response(OK, SUCCESS, QUESTION_UPDATE_SUCCESSFUL);
-//    }
 
     @PatchMapping("/update")
-    public ResponseEntity<HttpResponse> updateQuestion(@RequestBody QuestionRequest questionRequest)
+    public ResponseEntity<HttpResponse> updateQuestion(@RequestParam("id") String id,
+                                                       @RequestParam("topicQuestion") String topicQuestion,
+                                                       @RequestParam("answerA") String answerA,
+                                                       @RequestParam("answerB") String answerB,
+                                                       @RequestParam("answerC") String answerC,
+                                                       @RequestParam("answerD") String answerD,
+                                                       @RequestParam("correctResult") String correctResult,
+                                                       @RequestParam("correctEssay") String correctEssay,
+                                                       @RequestParam("type") String type,
+                                                       @RequestParam("mark") String mark,
+                                                       @RequestParam("quizzId") String quizzId,
+                                                       @RequestParam(value = "questionImageUrl", required = false)
+                                                                   MultipartFile questionImageUrl)
             throws IOException, NotAnImageFileException {
+
         questionService.updateQuestion(
-                questionRequest.getId(),
-                questionRequest.getTopicQuestion(),
-                questionRequest.getAnswerA(),
-                questionRequest.getAnswerB(),
-                questionRequest.getAnswerC(),
-                questionRequest.getAnswerD(),
-                questionRequest.getCorrectResult(),
-                questionRequest.getCorrectEssay(),
-                questionRequest.getType(),
-                questionRequest.getMark(),
-                questionRequest.getQuizzId()
+                Long.parseLong(id), topicQuestion,
+                answerA, answerB,
+                answerC, answerD,
+                correctResult, correctEssay, type,
+                Float.parseFloat(mark), Long.parseLong(quizzId),
+                questionImageUrl
         );
+
         return response(OK, SUCCESS, QUESTION_UPDATE_SUCCESSFUL);
     }
 
@@ -144,13 +116,6 @@ public class QuestionController {
             }
         }
         return response(BAD_REQUEST, ERROR, PLEASE_UPLOAD_AN_EXCEL_FILE);
-    }
-
-
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
-                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
-        return new ResponseEntity<>(body, httpStatus);
     }
 
 }

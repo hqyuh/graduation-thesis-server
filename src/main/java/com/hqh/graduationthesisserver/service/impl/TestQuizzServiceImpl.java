@@ -22,17 +22,12 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Optional;
 
 import static com.hqh.graduationthesisserver.constant.TestQuizzImplConstant.*;
-import static java.time.temporal.ChronoField.*;
+import static com.hqh.graduationthesisserver.utils.ConvertTimeUtils.convertTime;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service
@@ -94,27 +89,6 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
      */
     private String generateActivationCode() {
         return RandomStringUtils.randomNumeric(6);
-    }
-
-    /***
-     * convert from dd/MM/yyyy to timestamp in sql
-     *
-     * @param time
-     * @return timestamp
-     */
-    private Timestamp convertTime(String time) {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter DATE_FORMAT =
-                new DateTimeFormatterBuilder().appendPattern(DD_MM_YYYY_HH_MM_SS_SSS)
-                                              .parseDefaulting(HOUR_OF_DAY, now.getHour())
-                                              .parseDefaulting(MINUTE_OF_HOUR, now.getMinute())
-                                              .parseDefaulting(SECOND_OF_MINUTE, now.getSecond())
-                                              .parseDefaulting(NANO_OF_SECOND, now.getNano())
-                                              .toFormatter()
-                                              .withZone(ZoneId.of(ZONE_ID));
-        LocalDateTime localDateTime = LocalDateTime.from(DATE_FORMAT.parse(time));
-
-        return Timestamp.valueOf(localDateTime);
     }
 
     /***

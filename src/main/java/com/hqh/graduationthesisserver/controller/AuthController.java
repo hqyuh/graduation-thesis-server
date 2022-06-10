@@ -11,7 +11,6 @@ import com.hqh.graduationthesisserver.service.UserService;
 import com.hqh.graduationthesisserver.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +23,7 @@ import static com.hqh.graduationthesisserver.constant.DomainConstant.SIGN_UP_SUC
 import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
+import static com.hqh.graduationthesisserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -86,12 +86,6 @@ public class AuthController {
     private void authenticate(String email, String password) {
         authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(email, password));
-    }
-
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
-                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
-        return new ResponseEntity<>(body, httpStatus);
     }
 
 }

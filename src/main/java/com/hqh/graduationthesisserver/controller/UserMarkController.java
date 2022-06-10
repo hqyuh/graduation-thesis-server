@@ -7,7 +7,6 @@ import com.hqh.graduationthesisserver.service.UserMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,7 @@ import static com.hqh.graduationthesisserver.constant.FileConstant.APPLICATION_E
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.graduationthesisserver.constant.UserMarkImplConstant.SUCCESSFUL_LOCKED_POINTS;
 import static com.hqh.graduationthesisserver.constant.UserMarkImplConstant.UNLOCK_SUCCESS_POINTS;
+import static com.hqh.graduationthesisserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -77,12 +77,6 @@ public class UserMarkController {
         userMarkService.pointLock(id, isStatus);
         String message = isStatus ? SUCCESSFUL_LOCKED_POINTS : UNLOCK_SUCCESS_POINTS;
         return response(OK, SUCCESS, message);
-    }
-
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
-                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
-        return new ResponseEntity<>(body, httpStatus);
     }
 
 }

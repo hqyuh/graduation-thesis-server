@@ -8,7 +8,6 @@ import com.hqh.graduationthesisserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,17 +26,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static com.hqh.graduationthesisserver.constant.DomainConstant.SIGN_UP_SUCCESS;
 import static com.hqh.graduationthesisserver.constant.DomainConstant.USER_DELETED_SUCCESSFULLY;
 import static com.hqh.graduationthesisserver.constant.FileConstant.*;
 import static com.hqh.graduationthesisserver.constant.MessageTypeConstant.*;
 import static com.hqh.graduationthesisserver.constant.PasswordConstant.CHANGE_PASSWORD_SUCCESSFULLY;
-import static com.hqh.graduationthesisserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static com.hqh.graduationthesisserver.constant.UserImplConstant.*;
+import static com.hqh.graduationthesisserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
-import static com.hqh.graduationthesisserver.constant.EmailConstant.EMAIL_SENT;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
@@ -55,12 +52,6 @@ public class UserController extends ExceptionHandling {
         this.helperService = helperService;
     }
 
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String type, String message){
-        HttpResponse body = new HttpResponse(httpStatus.value(), httpStatus, type.toUpperCase(),
-                httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
-        return new ResponseEntity<>(body, httpStatus);
-    }
-
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<User> addNewUser(@Valid
@@ -75,8 +66,16 @@ public class UserController extends ExceptionHandling {
             throws UserNotFoundException, EmailExistException, UsernameExistException, IOException,
             NotAnImageFileException, MessagingException {
 
-        User newUser = userService.addNewUser(firstName, lastName, username, email, role,
-                Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
+        User newUser = userService.addNewUser(
+                firstName,
+                lastName,
+                username,
+                email,
+                role,
+                Boolean.parseBoolean(isNonLocked),
+                Boolean.parseBoolean(isActive),
+                profileImage
+        );
 
         return new ResponseEntity<>(newUser, CREATED);
     }
