@@ -15,7 +15,7 @@ Here is my repo project. Feel free to use it if you like it.
 
 ## Checkout SDK from Github
 ```sh
-git clone https://github.com/hqyuh/graduation-thesis-server.git
+git clone [https://github.com/hqyuh/graduation-thesis-server.git](https://github.com/hqyuh/quiz-online-server)
 ```
 
 ## Environment
