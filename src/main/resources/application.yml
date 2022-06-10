@@ -1,43 +1,5 @@
 jwt:
     secret: '[a-zA-Z0-9._]^+$Guidelines89797987forAlphabeticalArrNumberSym$^@GHJ@YUH@HQH'
-server:
-    port: 8081
-    error:
-        path: /error
-spring:
-    datasource:
-        password: 123456
-        url: jdbc:mysql://localhost:3306/graduation_thesis_server
-        username: root
-    jpa:
-        hibernate:
-            ddl-auto: update
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.MySQL8Dialect
-                format_sql: true
-        show-sql: true
-    mail:
-        host: smtp.gmail.com
-        username: hoquang.huyy@gmail.com
-        password: cjegddncawaugpne
-        port: 587
-        properties:
-            mail:
-                smtp:
-                    auth: true
-                    starttls:
-                        enable: true
-    servlet:
-        multipart:
-            max-file-size: 2MB
-            max-request-size: 2MB
-    sql:
-        init:
-            mode: always
-    mvc:
-        pathmatch:
-            matching-strategy: ant_path_matcher
 logging:
     file:
         name: gts.log
@@ -53,3 +15,43 @@ logging:
             max-file-size: 100KB
             max-history: 14
             total-size-cap: 1MB
+server:
+    error:
+        path: /error
+    port: 8081
+    servlet:
+        context-path: /api
+spring:
+    datasource:
+        password: 123456
+        url: jdbc:mysql://localhost:3306/quiz
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+                format_sql: true
+        show-sql: true
+    mail:
+        host: smtp.gmail.com
+        password: cjegddncawaugpne
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+        username: hoquang.huyy@gmail.com
+    mvc:
+        pathmatch:
+            matching-strategy: ant_path_matcher
+    servlet:
+        multipart:
+            max-file-size: 2MB
+            max-request-size: 2MB
+    sql:
+        init:
+            mode: always
