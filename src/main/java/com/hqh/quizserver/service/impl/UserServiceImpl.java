@@ -276,7 +276,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
                            boolean isActive,
                            MultipartFile multipartFile)
             throws UserNotFoundException, EmailExistException, UsernameExistException, IOException,
-            NotAnImageFileException, MessagingException {
+            NotAnImageFileException {
         validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         String password = generatePassword();
@@ -293,8 +293,9 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         user.setAuthorities(getRoleEnumName(role).getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         saveProfileImage(user, multipartFile);
-        String name = user.getFirstName();
-        emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_NEW_USER);
+        System.out.println(password);
+        // String name = user.getFirstName();
+        // emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_NEW_USER);
         userRepository.updateUserStatistics();
         userRepository.save(user);
 
@@ -372,16 +373,18 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
             throws UserNotFoundException, EmailExistException, UsernameExistException,
             IOException, NotAnImageFileException {
         User currentUser = validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
-        currentUser.setFirstName(newFirstName);
-        currentUser.setLastName(newLastName);
-        currentUser.setEmail(newEmail);
-        currentUser.setUsername(newUsername);
-        currentUser.setActive(isActive);
-        currentUser.setNotLocked(isNonLocked);
-        currentUser.setRoles(getRoleEnumName(role).name());
-        currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
-        userRepository.save(currentUser);
-        saveProfileImage(currentUser, profileImage);
+        if (currentUser != null) {
+            currentUser.setFirstName(newFirstName);
+            currentUser.setLastName(newLastName);
+            currentUser.setEmail(newEmail);
+            currentUser.setUsername(newUsername);
+            currentUser.setActive(isActive);
+            currentUser.setNotLocked(isNonLocked);
+            currentUser.setRoles(getRoleEnumName(role).name());
+            currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
+            userRepository.save(currentUser);
+            saveProfileImage(currentUser, profileImage);
+        }
 
         return currentUser;
     }
