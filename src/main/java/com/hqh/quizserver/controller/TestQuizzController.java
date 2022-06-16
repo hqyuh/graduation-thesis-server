@@ -44,7 +44,7 @@ public class TestQuizzController extends ExceptionHandling {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
     public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestBody TestQuizzRequest testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException {
-        TestQuizz newQuizz = testQuizzService
+        testQuizzService
                 .createQuizz(testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),
                         testQuizz.getIsStart(), testQuizz.getIsEnd(), Long.parseLong(testQuizz.getTopicId()));
         return response(OK, SUCCESS, ADD_QUICK_TEST_SUCCESS);

@@ -70,8 +70,8 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                String correctEssay,
                                String type,
                                float mark,
-                               Long quizzId) throws IOException, NotAnImageFileException {
-
+                               Long quizzId)
+            throws IOException, NotAnImageFileException {
         QuestionDto questionDto = new QuestionDto();
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
         Question question = questionMapper.map(questionDto, quizz);
@@ -88,7 +88,6 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setMilestones(1);
         saveQuestionImage(question, questionImageUrl);
         questionRepository.save(question);
-
     }
 
     /***

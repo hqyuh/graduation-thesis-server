@@ -133,13 +133,13 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(user, OK);
     }
 
-    @GetMapping(path = "/image/{username}/{fileName}", produces = { IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE })
+    @GetMapping(path = "/{username}/{fileName}", produces = { IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE })
     public byte[] getProfileImage(@PathVariable("username") String username,
                                   @PathVariable("fileName") String fileName) throws IOException {
         return Files.readAllBytes(Paths.get(USER_FOLDER + username + FORWARD_SLASH + fileName));
     }
 
-    @GetMapping(path = "/image/profile/{username}", produces = { IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE })
+    @GetMapping(path = "/profile/{username}", produces = { IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE })
     public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
         URL url = new URL(TEMP_PROFILE_IMAGE_BASE_URL + username + DOT + PNG_EXTENSION);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

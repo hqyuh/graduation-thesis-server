@@ -35,29 +35,29 @@ public class QuestionController {
         this.helperService = helperService;
     }
 
-        @PostMapping("/add")
-        public ResponseEntity<HttpResponse> createQuestion(@RequestParam("topicQuestion") String topicQuestion,
-                                                           @RequestParam(value = "questionImageUrl", required = false)
-                                                                   MultipartFile questionImageUrl,
-                                                           @RequestParam("answerA") String answerA,
-                                                           @RequestParam("answerB") String answerB,
-                                                           @RequestParam("answerC") String answerC,
-                                                           @RequestParam("answerD") String answerD,
-                                                           @RequestParam("correctResult") String correctResult,
-                                                           @RequestParam("correctEssay") String correctEssay,
-                                                           @RequestParam("type") String type,
-                                                           @RequestParam("mark") String mark,
-                                                           @RequestParam("quizzId") String quizzId)
-                throws IOException, NotAnImageFileException {
-            questionService.createQuestion(
-                    topicQuestion, questionImageUrl,
-                    answerA, answerB, answerC, answerD,
-                    correctResult, correctEssay, type,
-                    Float.parseFloat(mark), Long.parseLong(quizzId)
-            );
+    @PostMapping("/add")
+    public ResponseEntity<HttpResponse> createQuestion(@RequestParam("topicQuestion") String topicQuestion,
+                                                       @RequestParam(value = "questionImageUrl", required = false)
+                                                               MultipartFile questionImageUrl,
+                                                       @RequestParam("answerA") String answerA,
+                                                       @RequestParam("answerB") String answerB,
+                                                       @RequestParam("answerC") String answerC,
+                                                       @RequestParam("answerD") String answerD,
+                                                       @RequestParam("correctResult") String correctResult,
+                                                       @RequestParam("correctEssay") String correctEssay,
+                                                       @RequestParam("type") String type,
+                                                       @RequestParam("mark") String mark,
+                                                       @RequestParam("quizzId") String quizzId)
+            throws IOException, NotAnImageFileException {
+        questionService.createQuestion(
+                topicQuestion, questionImageUrl,
+                answerA, answerB, answerC, answerD,
+                correctResult, correctEssay, type,
+                Float.parseFloat(mark), Long.parseLong(quizzId)
+        );
 
-            return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
-        }
+        return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
+    }
 
 
     @PatchMapping("/update")
