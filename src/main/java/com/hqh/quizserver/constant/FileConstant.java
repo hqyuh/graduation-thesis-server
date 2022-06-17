@@ -29,7 +29,7 @@ public class FileConstant {
     public static final String ATTACHMENT_FILENAME = "attachment; filename=";
     // csv
     public static final String FAIL_TO_IMPORT_DATA_TO_CSV_FILE = "Fail to import data to CSV file: ";
-    public static final String[] USER_HEADER = {"ID", "First name", "Last name", "Username", "Email", "Join date", "Role"};
+    public static final String[] USER_HEADER = {"ID", "First name", "Last name", "Username", "Email", "Phone Number", "Date Of Birth", "Join date", "Role"};
     public static final String APPLICATION_CSV = "application/csv";
     public static final String CSV_EXTENSION = "csv";
     // excel

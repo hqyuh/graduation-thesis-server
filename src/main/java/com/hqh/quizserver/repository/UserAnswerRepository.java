@@ -36,15 +36,15 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
     float totalMarkByQuizzId(@Param("id") Long id);
 
     @Query("SELECT new com.hqh.quizserver.dto.ReviewAnswerDto(" +
-            "q.topicQuestion, q.answerA, q.answerB, q.answerC, q.answerD, " +
-            "q.correctResult, u.isSelected, u.shortAnswer, q.correctEssay)" +
-            "FROM Question q " +
-            "INNER JOIN UserAnswer u " +
-            "ON q.id = u.question.id " +
-            "INNER JOIN TestQuizz t " +
-            "ON q.testQuizz.id = t.id " +
-            "AND t.id = :quizzId " +
-            "AND u.user.id = :userId")
+           "q.topicQuestion, q.answerA, q.answerB, q.answerC, q.answerD, " +
+           "q.correctResult, u.isSelected, u.shortAnswer, q.correctEssay)" +
+           "FROM Question q " +
+           "INNER JOIN UserAnswer u " +
+           "ON q.id = u.question.id " +
+           "INNER JOIN TestQuizz t " +
+           "ON q.testQuizz.id = t.id " +
+           "AND t.id = :quizzId " +
+           "AND u.user.id = :userId")
     List<ReviewAnswerDto> reviewAnswerUser(@Param("quizzId") Long quizzId,
                                            @Param("userId") Long userId);
 

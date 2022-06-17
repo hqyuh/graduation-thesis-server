@@ -35,4 +35,15 @@ public class ConvertTimeUtils {
         return Timestamp.valueOf(localDateTime);
     }
 
+    /***
+     * convert timestamp in sql to dd/MM/yyyy
+     *
+     * @param dayOfBirth
+     * @return string
+     */
+    public static String formatTimeDayOfBirth(Timestamp dayOfBirth) {
+        DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return dayOfBirth.toLocalDateTime().format(FORMATTER);
+    }
+
 }

@@ -46,8 +46,7 @@ public class ExceptionHandling implements ErrorController {
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(),
                 httpStatus,
                 type.toUpperCase(),
-                httpStatus.getReasonPhrase()
-                          .toUpperCase(),
+                httpStatus.getReasonPhrase().toUpperCase(),
                 message.toUpperCase()), httpStatus);
     }
 
