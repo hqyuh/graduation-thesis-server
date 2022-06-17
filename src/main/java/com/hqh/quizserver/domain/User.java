@@ -23,7 +23,7 @@ import static com.hqh.quizserver.constant.PatternConstant.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "user")
+@Table(name = "tbl_user")
 @Entity
 public class User implements Serializable {
 

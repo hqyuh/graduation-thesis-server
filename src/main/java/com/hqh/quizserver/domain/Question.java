@@ -12,7 +12,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "question")
+@Table(name = "tbl_question")
 public class Question {
 
     @Id

@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "topic")
+@Table(name = "tbl_topic")
 public class Topic {
 
     @Id
