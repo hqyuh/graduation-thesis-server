@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -82,14 +83,12 @@ public class ExcelHelper {
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(SHEET_QUIZZES);
             Iterator<Row> rows = sheet.iterator();
-
             List<Question> questions = new ArrayList<>();
-            int rowNumber = 0;
 
             while (rows.hasNext()) {
                 Row currentRow = rows.next();
-                if(rowNumber == 0) {
-                    rowNumber++;
+                if (currentRow.getRowNum() == 0) {
+                    continue;
                 }
                 Iterator<Cell> cellsInRow = currentRow.iterator();
                 Question question = new Question();
@@ -117,13 +116,21 @@ public class ExcelHelper {
                             break;
                         case 6:
                             question.setMark((float) currentCell.getNumericCellValue());
+                            break;
+                        case 7:
+                            question.setType(currentCell.getStringCellValue());
+                            break;
+                        case 8:
+                            question.setCorrectEssay(currentCell.getStringCellValue());
+                            break;
                         default:
                             break;
                     }
-                    question.setTestQuizz(quizzId);
-                    question.setMilestones(1);
                     cellIdx++;
                 }
+                question.setTestQuizz(quizzId);
+                question.setMilestones(1);
+                question.setDateCreated(Instant.now());
                 questions.add(question);
             }
             workbook.close();
