@@ -1,9 +1,9 @@
 package com.hqh.quizserver.mapper;
 
-import com.hqh.quizserver.domain.Question;
-import com.hqh.quizserver.domain.TestQuizz;
-import com.hqh.quizserver.domain.User;
-import com.hqh.quizserver.domain.UserAnswer;
+import com.hqh.quizserver.entities.Question;
+import com.hqh.quizserver.entities.TestQuizz;
+import com.hqh.quizserver.entities.User;
+import com.hqh.quizserver.entities.UserAnswer;
 import com.hqh.quizserver.dto.UserAnswerDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

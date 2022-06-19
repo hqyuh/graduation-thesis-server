@@ -1,8 +1,8 @@
 package com.hqh.quizserver.helper.quizz;
 
-import com.hqh.quizserver.domain.Question;
-import com.hqh.quizserver.domain.TestQuizz;
-import com.hqh.quizserver.domain.UserMark;
+import com.hqh.quizserver.entities.Question;
+import com.hqh.quizserver.entities.TestQuizz;
+import com.hqh.quizserver.entities.UserMark;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

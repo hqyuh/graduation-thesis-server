@@ -1,9 +1,9 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.domain.HttpResponse;
+import com.hqh.quizserver.entities.HttpResponse;
 import com.hqh.quizserver.dto.UserMarkDto;
-import com.hqh.quizserver.service.UserMarkHelperService;
-import com.hqh.quizserver.service.UserMarkService;
+import com.hqh.quizserver.services.UserMarkHelperService;
+import com.hqh.quizserver.services.UserMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;

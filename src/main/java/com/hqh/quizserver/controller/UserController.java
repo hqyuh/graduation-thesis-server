@@ -1,10 +1,10 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.domain.*;
-import com.hqh.quizserver.exception.ExceptionHandling;
-import com.hqh.quizserver.exception.domain.user.*;
-import com.hqh.quizserver.service.UserHelperService;
-import com.hqh.quizserver.service.UserService;
+import com.hqh.quizserver.entities.*;
+import com.hqh.quizserver.exceptions.ExceptionHandling;
+import com.hqh.quizserver.exceptions.domain.user.*;
+import com.hqh.quizserver.services.UserHelperService;
+import com.hqh.quizserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;

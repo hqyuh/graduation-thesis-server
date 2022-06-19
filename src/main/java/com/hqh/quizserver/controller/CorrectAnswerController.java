@@ -1,7 +1,7 @@
 package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.dto.CorrectAnswerDto;
-import com.hqh.quizserver.service.CorrectAnswerService;
+import com.hqh.quizserver.services.CorrectAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

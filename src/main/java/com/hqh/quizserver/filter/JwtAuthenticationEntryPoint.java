@@ -1,7 +1,7 @@
 package com.hqh.quizserver.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hqh.quizserver.domain.HttpResponse;
+import com.hqh.quizserver.entities.HttpResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Component;

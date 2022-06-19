@@ -1,11 +1,11 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.domain.HttpResponse;
+import com.hqh.quizserver.entities.HttpResponse;
 import com.hqh.quizserver.dto.QuestionDto;
-import com.hqh.quizserver.exception.domain.user.NotAnImageFileException;
+import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
-import com.hqh.quizserver.service.QuestionHelperService;
-import com.hqh.quizserver.service.QuestionService;
+import com.hqh.quizserver.services.QuestionHelperService;
+import com.hqh.quizserver.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

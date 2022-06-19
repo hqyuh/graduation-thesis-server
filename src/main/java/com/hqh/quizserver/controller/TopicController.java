@@ -1,10 +1,10 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.domain.HttpResponse;
-import com.hqh.quizserver.domain.Topic;
-import com.hqh.quizserver.exception.domain.topic.TopicExistException;
-import com.hqh.quizserver.exception.domain.topic.TopicNotFoundException;
-import com.hqh.quizserver.service.TopicService;
+import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.Topic;
+import com.hqh.quizserver.exceptions.domain.topic.TopicExistException;
+import com.hqh.quizserver.exceptions.domain.topic.TopicNotFoundException;
+import com.hqh.quizserver.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,13 +1,13 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.domain.HttpResponse;
-import com.hqh.quizserver.domain.User;
-import com.hqh.quizserver.domain.UserPrincipal;
-import com.hqh.quizserver.exception.domain.user.EmailExistException;
-import com.hqh.quizserver.exception.domain.user.EmailNotFoundException;
-import com.hqh.quizserver.exception.domain.user.UserNotFoundException;
-import com.hqh.quizserver.exception.domain.user.UsernameExistException;
-import com.hqh.quizserver.service.UserService;
+import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.User;
+import com.hqh.quizserver.entities.UserPrincipal;
+import com.hqh.quizserver.exceptions.domain.user.EmailExistException;
+import com.hqh.quizserver.exceptions.domain.user.EmailNotFoundException;
+import com.hqh.quizserver.exceptions.domain.user.UserNotFoundException;
+import com.hqh.quizserver.exceptions.domain.user.UsernameExistException;
+import com.hqh.quizserver.services.UserService;
 import com.hqh.quizserver.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

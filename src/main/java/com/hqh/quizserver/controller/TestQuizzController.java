@@ -1,13 +1,13 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.domain.HttpResponse;
-import com.hqh.quizserver.domain.TestQuizz;
-import com.hqh.quizserver.exception.ExceptionHandling;
-import com.hqh.quizserver.exception.domain.quizz.TestQuizzExistException;
-import com.hqh.quizserver.exception.domain.quizz.TestQuizzNotFoundException;
+import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.TestQuizz;
+import com.hqh.quizserver.exceptions.ExceptionHandling;
+import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
+import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
 import com.hqh.quizserver.request.TestQuizzRequest;
-import com.hqh.quizserver.service.TestQuizzHelperService;
-import com.hqh.quizserver.service.TestQuizzService;
+import com.hqh.quizserver.services.TestQuizzHelperService;
+import com.hqh.quizserver.services.TestQuizzService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;

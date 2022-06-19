@@ -1,7 +1,7 @@
 package com.hqh.quizserver.listener;
 
-import com.hqh.quizserver.domain.User;
-import com.hqh.quizserver.service.LoginAttemptService;
+import com.hqh.quizserver.entities.User;
+import com.hqh.quizserver.services.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
