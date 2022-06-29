@@ -12,23 +12,23 @@ import java.util.List;
 @Repository
 public interface UserMarkRepository extends JpaRepository<UserMark, Long> {
 
-    @Query("SELECT u " +
-           "FROM UserMark u " +
-           "WHERE u.user.username = :username")
+    @Query("SELECT u "
+         + "FROM UserMark u "
+         + "WHERE u.user.username = :username")
     List<UserMark> findByAllUsername(@Param("username") String username);
 
     List<UserMark> findByTestQuizzId(Long id);
 
-    @Query("SELECT u " +
-           "FROM UserMark u " +
-           "WHERE u.testQuizz.id = :id " +
-           "ORDER BY u.mark DESC ")
+    @Query("SELECT u "
+         + "FROM UserMark u "
+         + "WHERE u.testQuizz.id = :id "
+         + "ORDER BY u.mark DESC ")
     List<UserMark> getMarkTop3(@Param("id") Long id);
 
     @Modifying
-    @Query("UPDATE UserMark u " +
-           "SET u.pointLock = ?2 " +
-           "WHERE u.user.id = ?1")
+    @Query("UPDATE UserMark u "
+         + "SET u.pointLock = ?2 "
+         + "WHERE u.user.id = ?1")
     void markLock(Long userId, boolean isLock);
 
 }

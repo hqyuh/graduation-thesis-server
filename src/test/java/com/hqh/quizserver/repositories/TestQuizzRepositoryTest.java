@@ -136,4 +136,9 @@ class TestQuizzRepositoryTest {
         listQuizz.forEach(System.out::println);
     }
 
+    @Test
+    public void testSearchQuizzes() {
+        List<TestQuizz> lists = quizzRepository.searchTestQuizzes("jav");
+        lists.forEach(System.out::println);
+    }
 }
