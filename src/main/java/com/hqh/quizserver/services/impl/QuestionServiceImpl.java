@@ -30,6 +30,7 @@ import static org.springframework.util.StringUtils.cleanPath;
 @Service
 public class QuestionServiceImpl implements QuestionService, QuestionHelperService {
 
+    public static final int NUMBER_OF_QUESTIONS = 3;
     private final QuestionRepository questionRepository;
     private final TestQuizzRepository quizzRepository;
     private final QuestionMapper questionMapper;
@@ -119,9 +120,15 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
     }
 
     @Override
-    public List<QuestionDto> getAllQuestion() {
-        return questionRepository
-                .findAll()
+    public List<QuestionDto> getAllQuestion(int currentPage) {
+        // int totalNumberOfRecords = questionRepository.getTotalNumberOfRecords();
+        // int totalPage = totalNumberOfRecords / NUMBER_OF_QUESTIONS;
+        int START = (currentPage - 1) * NUMBER_OF_QUESTIONS;
+        int END = NUMBER_OF_QUESTIONS;
+        if (START > END) {
+            START = END;
+        }
+        return questionRepository.questionsPagination(START, END)
                 .stream()
                 .map(questionMapper::mapToDto)
                 .collect(Collectors.toList());

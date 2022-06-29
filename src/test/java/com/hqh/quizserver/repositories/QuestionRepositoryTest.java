@@ -81,4 +81,16 @@ class QuestionRepositoryTest {
         question.forEach(System.out::println);
     }
 
+    @Test
+    public void testQuestionsPagination() {
+        List<Question> questions = questionRepository.questionsPagination(1,  2);
+        questions.forEach(System.out::println);
+    }
+
+    @Test
+    public void testCountQuestions() {
+        int sum = questionRepository.getTotalNumberOfRecords();
+        System.out.println(sum);
+    }
+
 }

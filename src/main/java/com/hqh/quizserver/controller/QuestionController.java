@@ -88,11 +88,11 @@ public class QuestionController {
         return response(OK, SUCCESS, QUESTION_UPDATE_SUCCESSFUL);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<QuestionDto>> getAllQuestion() {
+    @GetMapping("/list/{pageNum}")
+    public ResponseEntity<List<QuestionDto>> getAllQuestion(@PathVariable("pageNum") Integer pageNum) {
         return ResponseEntity
                 .status(OK)
-                .body(questionService.getAllQuestion());
+                .body(questionService.getAllQuestion(pageNum));
     }
 
     @DeleteMapping("/delete/{id}")

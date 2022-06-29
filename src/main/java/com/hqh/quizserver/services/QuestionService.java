@@ -27,6 +27,6 @@ public interface QuestionService {
 
     void deleteQuestion(Long id);
 
-    List<QuestionDto> getAllQuestion();
+    List<QuestionDto> getAllQuestion(int currentPage);
 
 }
