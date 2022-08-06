@@ -20,13 +20,13 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(nativeQuery = true,
            value = "SELECT * "
-                 + "FROM tbl_question q LIMIT :page, :size")
+                 + "FROM question q LIMIT :page, :size")
     List<Question> questionsPagination(@Param("page") Integer page,
                                        @Param("size") Integer size);
 
     @Query(nativeQuery = true,
            value = "SELECT COUNT(id) "
-                 + "FROM tbl_question q")
+                 + "FROM question q")
     Integer getTotalNumberOfRecords();
 
 }

@@ -3,7 +3,7 @@ package com.hqh.quizserver.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tbl_user_quizz")
+@Table(name = "user_quizz")
 public class UserQuizz {
 
     @EmbeddedId

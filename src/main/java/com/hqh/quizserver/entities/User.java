@@ -23,7 +23,7 @@ import static com.hqh.quizserver.constant.PatternConstant.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "tbl_user")
+@Table(name = "users")
 @Entity
 public class User implements Serializable {
 
@@ -82,6 +82,7 @@ public class User implements Serializable {
     private Date joinDate;
 
     private String roles;
+
     private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
