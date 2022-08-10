@@ -22,6 +22,7 @@ public class FileConstant {
     public static final String USER_FOLDER = System.getProperty("user.dir") + "/user/";
     public static final String COULD_NOT_SAVE_FILE = "Could not save file: ";
     public static final String COULD_NOT_DELETE_FILE = "Could not delete file: ";
+    public static final String COULD_NOT_REMOVE_DIRECTORY = "Could not remove directory: ";
     public static final String COULD_NOT_DIST_DIRECTORY = "Could not dist directory: ";
     public static final String PLEASE_UPLOAD_AN_IMAGE = "is not an image file. Please upload an image";
 
