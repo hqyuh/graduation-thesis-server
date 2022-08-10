@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.time.Instant;
 
 @AllArgsConstructor
@@ -13,7 +14,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "question")
-public class Question {
+public class Question extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

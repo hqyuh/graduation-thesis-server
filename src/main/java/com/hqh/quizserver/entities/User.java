@@ -25,10 +25,10 @@ import static com.hqh.quizserver.constant.PatternConstant.*;
 @Setter
 @Table(name = "users")
 @Entity
-public class User implements Serializable {
+public class User extends TimeEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long id;
 

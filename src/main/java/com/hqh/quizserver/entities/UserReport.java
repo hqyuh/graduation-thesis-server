@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "report_and_suggestions")
-public class UserReport {
+public class UserReport extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
