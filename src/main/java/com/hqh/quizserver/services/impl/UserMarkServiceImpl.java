@@ -1,9 +1,10 @@
 package com.hqh.quizserver.services.impl;
 
+import com.hqh.quizserver.dto.UserDTO;
+import com.hqh.quizserver.dto.UserMarkDTO;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.entities.UserMark;
-import com.hqh.quizserver.dto.UserMarkDto;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.mapper.UserMarkMapper;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
@@ -48,9 +49,9 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
      * @param userMarkDto
      */
     @Override
-    public void saveUserMark(UserMarkDto userMarkDto) {
+    public void saveUserMark(UserMarkDTO userMarkDto) {
         TestQuizz quizzId = quizzRepository.findTestQuizzById(userMarkDto.getQuizzId());
-        User userId = userService.getCurrentUser();
+        UserDTO userId = userService.getCurrentUser();
         UserMark userMark = userMarkMapper
                 .map(userMarkDto, quizzId, userId);
         userMark.setCompletedDate(Instant.now());
@@ -61,7 +62,7 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
     }
 
     @Override
-    public List<UserMarkDto> getAllUserByUsername(String username) {
+    public List<UserMarkDTO> getAllUserByUsername(String username) {
         return userMarkRepository.findByAllUsername(username)
                                  .stream()
                                  .map(userMarkMapper::mapToDto)
@@ -69,7 +70,7 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
     }
 
     @Override
-    public List<UserMarkDto> getAllUserByQuizzId(Long quizzId) {
+    public List<UserMarkDTO> getAllUserByQuizzId(Long quizzId) {
         return userMarkRepository.findByTestQuizzId(quizzId)
                                  .stream()
                                  .map(userMarkMapper::mapToDto)
@@ -83,7 +84,7 @@ public class UserMarkServiceImpl implements UserMarkService, UserMarkHelperServi
      * @return list
      */
     @Override
-    public List<UserMarkDto> getMarkTop3(Long quizzId) {
+    public List<UserMarkDTO> getMarkTop3(Long quizzId) {
         return userMarkRepository.getMarkTop3(quizzId)
                                  .stream()
                                  .limit(3)

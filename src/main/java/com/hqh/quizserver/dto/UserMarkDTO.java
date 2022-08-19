@@ -12,7 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserMarkDto {
+public class UserMarkDTO {
 
     private Long id;
     private float mark;

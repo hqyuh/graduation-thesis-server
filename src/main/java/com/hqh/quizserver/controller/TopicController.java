@@ -31,7 +31,7 @@ public class TopicController {
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> createTopic(@RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
-        Topic topic = topicService.createTopic(topicName);
+        topicService.createTopic(topicName);
         return response(CREATED, SUCCESS, ADD_TOPIC_SUCCESS);
     }
 
@@ -39,7 +39,7 @@ public class TopicController {
     public ResponseEntity<ApiResponse> createTopic(@RequestParam("currentTopicName") String currentTopicName,
                                                    @RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
-        Topic topic = topicService.updateTopic(currentTopicName, topicName);
+        topicService.updateTopic(currentTopicName, topicName);
         return response(OK, SUCCESS, UPDATE_TOPIC_SUCCESS);
     }
 

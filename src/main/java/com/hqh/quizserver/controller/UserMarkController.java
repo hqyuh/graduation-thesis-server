@@ -1,7 +1,7 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.UserMarkDTO;
 import com.hqh.quizserver.entities.ApiResponse;
-import com.hqh.quizserver.dto.UserMarkDto;
 import com.hqh.quizserver.services.UserMarkHelperService;
 import com.hqh.quizserver.services.UserMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,26 +36,26 @@ public class UserMarkController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<UserMarkDto> saveUserMark(@RequestBody UserMarkDto userMarkDto) {
+    public ResponseEntity<UserMarkDTO> saveUserMark(@RequestBody UserMarkDTO userMarkDto) {
         userMarkService.saveUserMark(userMarkDto);
 
         return new ResponseEntity<>(OK);
     }
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<List<UserMarkDto>> getAllMarkByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<List<UserMarkDTO>> getAllMarkByUsername(@PathVariable("username") String username) {
         return ResponseEntity.status(OK)
                              .body(userMarkService.getAllUserByUsername(username));
     }
 
     @GetMapping("/quizz/{id}")
-    public ResponseEntity<List<UserMarkDto>> getAllMarkByQuizzId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<UserMarkDTO>> getAllMarkByQuizzId(@PathVariable("id") Long id) {
         return ResponseEntity.status(OK)
                              .body(userMarkService.getAllUserByQuizzId(id));
     }
 
     @GetMapping("/quizz/top/{id}")
-    public ResponseEntity<List<UserMarkDto>> getMarkTop3(@PathVariable("id") Long id) {
+    public ResponseEntity<List<UserMarkDTO>> getMarkTop3(@PathVariable("id") Long id) {
         return ResponseEntity.status(OK)
                              .body(userMarkService.getMarkTop3(id));
     }

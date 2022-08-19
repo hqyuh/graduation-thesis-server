@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class ReviewAnswerDto implements Serializable {
+public class ReviewAnswerDTO implements Serializable {
 
     private String topicQuestion;
     private String answerA;

@@ -44,9 +44,13 @@ public class TestQuizzController extends ExceptionHandling {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
     public ResponseEntity<ApiResponse> addNewTestQuizz(@RequestBody TestQuizzRequest testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException {
-        testQuizzService
-                .createQuizz(testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),
-                        testQuizz.getIsStart(), testQuizz.getIsEnd(), Long.parseLong(testQuizz.getTopicId()));
+        testQuizzService.createQuizz(
+                testQuizz.getTestName(),
+                Integer.parseInt(testQuizz.getExamTime()),
+                testQuizz.getIsStart(),
+                testQuizz.getIsEnd(),
+                Long.parseLong(testQuizz.getTopicId())
+        );
         return response(OK, SUCCESS, ADD_QUICK_TEST_SUCCESS);
 }
 
@@ -54,9 +58,14 @@ public class TestQuizzController extends ExceptionHandling {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
     public ResponseEntity<ApiResponse> updateTestQuizz(@RequestBody TestQuizzRequest testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException {
-        TestQuizz updateQuizz = testQuizzService
-                .updateQuizz(testQuizz.getCurrentTestName(), testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),
-                        testQuizz.getIsStart(), testQuizz.getIsEnd(), Long.parseLong(testQuizz.getTopicId()));
+        testQuizzService.updateQuizz(
+                testQuizz.getCurrentTestName(),
+                testQuizz.getTestName(),
+                Integer.parseInt(testQuizz.getExamTime()),
+                testQuizz.getIsStart(),
+                testQuizz.getIsEnd(),
+                Long.parseLong(testQuizz.getTopicId())
+        );
         return response(OK, SUCCESS, UPDATE_QUICK_TEST_SUCCESS);
     }
 

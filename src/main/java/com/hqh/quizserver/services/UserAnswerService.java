@@ -1,15 +1,15 @@
 package com.hqh.quizserver.services;
 
-import com.hqh.quizserver.dto.ReviewAnswerDto;
-import com.hqh.quizserver.dto.UserAnswerDto;
+import com.hqh.quizserver.dto.ReviewAnswerDTO;
+import com.hqh.quizserver.dto.UserAnswerDTO;
 
 import java.util.List;
 
 
 public interface UserAnswerService {
 
-    void saveAllUserAnswer(List<UserAnswerDto> userAnswerDto);
+    void saveAllUserAnswer(List<UserAnswerDTO> userAnswerDto);
 
-    List<ReviewAnswerDto> reviewAnswerUser(Long quizzId, Long userId);
+    List<ReviewAnswerDTO> reviewAnswerUser(Long quizzId, Long userId);
 
 }

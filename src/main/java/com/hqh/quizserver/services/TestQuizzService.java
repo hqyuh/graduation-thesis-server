@@ -1,5 +1,6 @@
 package com.hqh.quizserver.services;
 
+import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
@@ -17,7 +18,7 @@ public interface TestQuizzService {
                           String isStart, String isEnd, Long topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException;
 
-    TestQuizz findTestQuizzByTestName(String testName);
+    TestQuizzDTO findTestQuizzByTestName(String testName);
 
     List<TestQuizz> getAllQuizz();
 

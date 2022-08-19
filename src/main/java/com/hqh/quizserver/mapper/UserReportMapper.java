@@ -1,8 +1,8 @@
 package com.hqh.quizserver.mapper;
 
+import com.hqh.quizserver.dto.UserReportDTO;
 import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.entities.UserReport;
-import com.hqh.quizserver.dto.UserReportDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -15,8 +15,8 @@ public interface UserReportMapper {
     @Mapping(target = "type", ignore = true)
     @Mapping(target = "comment", ignore = true)
     @Mapping(target = "user", source = "user")
-    UserReport map(UserReportDto userReportDto, User user);
+    UserReport map(UserReportDTO userReportDto, User user);
 
     @Mapping(target = "userId", expression = "java(userReport.getUser().getId())")
-    UserReportDto mapToDto(UserReport userReport);
+    UserReportDTO mapToDto(UserReport userReport);
 }

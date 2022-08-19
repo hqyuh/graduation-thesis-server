@@ -1,8 +1,9 @@
 package com.hqh.quizserver.services.impl;
 
+import com.hqh.quizserver.dto.UserAnswerDTO;
+import com.hqh.quizserver.dto.UserDTO;
 import com.hqh.quizserver.entities.*;
-import com.hqh.quizserver.dto.ReviewAnswerDto;
-import com.hqh.quizserver.dto.UserAnswerDto;
+import com.hqh.quizserver.dto.ReviewAnswerDTO;
 import com.hqh.quizserver.mapper.UserAnswerMapper;
 import com.hqh.quizserver.repositories.QuestionRepository;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
@@ -43,12 +44,12 @@ public class UserAnswerServiceImpl implements UserAnswerService {
      * @param userAnswerDto
      */
     @Override
-    public void saveAllUserAnswer(List<UserAnswerDto> userAnswerDto) {
+    public void saveAllUserAnswer(List<UserAnswerDTO> userAnswerDto) {
         List<UserAnswer> userAnswerList = new ArrayList<>();
-        for (UserAnswerDto userAnswerTemp : userAnswerDto) {
+        for (UserAnswerDTO userAnswerTemp : userAnswerDto) {
             TestQuizz quizzId = quizzRepository.findTestQuizzById(userAnswerTemp.getQuizzId());
             Question questionId = questionRepository.findQuestionById(userAnswerTemp.getQuestionId());
-            User userId = userService.getCurrentUser();
+            UserDTO userId = userService.getCurrentUser();
             UserAnswer userAnswer = userAnswerMapper
                     .map(userAnswerTemp, quizzId, questionId, userId);
             userAnswer.setIsSelected(userAnswerTemp.getIsSelected());
@@ -60,7 +61,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     }
 
     @Override
-    public List<ReviewAnswerDto> reviewAnswerUser(Long quizzId, Long userId) {
+    public List<ReviewAnswerDTO> reviewAnswerUser(Long quizzId, Long userId) {
         return userAnswerRepository.reviewAnswerUser(quizzId, userId);
     }
 }

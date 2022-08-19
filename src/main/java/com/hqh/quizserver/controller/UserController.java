@@ -1,5 +1,6 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.UserDTO;
 import com.hqh.quizserver.entities.*;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
 import com.hqh.quizserver.exceptions.domain.user.*;
@@ -187,7 +188,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<User> currentUsername() {
+    public ResponseEntity<UserDTO> currentUsername() {
         return ResponseEntity
                 .status(OK)
                 .body(userService.getCurrentUser());

@@ -1,9 +1,9 @@
 package com.hqh.quizserver.services;
 
-import com.hqh.quizserver.dto.CorrectAnswerDto;
+import com.hqh.quizserver.dto.CorrectAnswerDTO;
 
 public interface CorrectAnswerService {
 
-    CorrectAnswerDto getTotalNumberOfCorrectAnswers(Long id);
+    CorrectAnswerDTO getTotalNumberOfCorrectAnswers(Long id);
 
 }

@@ -1,6 +1,6 @@
 package com.hqh.quizserver.services.impl;
 
-import com.hqh.quizserver.dto.UserReportDto;
+import com.hqh.quizserver.dto.UserReportDTO;
 import com.hqh.quizserver.mapper.UserReportMapper;
 import com.hqh.quizserver.repositories.UserReportRepository;
 import com.hqh.quizserver.services.UserReportService;
@@ -25,7 +25,7 @@ public class UserReportServiceImpl implements UserReportService {
     }
 
     @Override
-    public void saveReport(UserReportDto userReportDto) {
+    public void saveReport(UserReportDTO userReportDto) {
 
     }
 

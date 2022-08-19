@@ -1,8 +1,8 @@
 package com.hqh.quizserver.services.impl;
 
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
-import com.hqh.quizserver.dto.QuestionDto;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.mapper.QuestionMapper;
@@ -31,6 +31,7 @@ import static org.springframework.util.StringUtils.cleanPath;
 public class QuestionServiceImpl implements QuestionService, QuestionHelperService {
 
     public static final int NUMBER_OF_QUESTIONS = 3;
+
     private final QuestionRepository questionRepository;
     private final TestQuizzRepository quizzRepository;
     private final QuestionMapper questionMapper;
@@ -44,36 +45,29 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         this.questionMapper = questionMapper;
     }
 
-    /***
+
+    /**
+     * <h3>This function creates a question and saves it to the database</h3>
      *
-     * @param topicQuestion
-     * @param questionImageUrl
-     * @param answerA
-     * @param answerB
-     * @param answerC
-     * @param answerD
-     * @param correctResult
-     * @param correctEssay
-     * @param type
-     * @param mark
-     * @param quizzId
-     * @throws IOException
-     * @throws NotAnImageFileException
+     * @param topicQuestion The question itself
+     * @param questionImageUrl The image file that the user uploads.
+     * @param answerA The answer to the question
+     * @param answerB The answer to the question
+     * @param answerC String
+     * @param answerD "D"
+     * @param correctResult the correct answer to the question
+     * @param correctEssay the correct answer for the essay question
+     * @param type is the type of question, it can be either "multiple choice" or "essay"
+     * @param mark the mark of the question
+     * @param quizzId the id of the quiz that the question belongs to
      */
     @Override
-    public void createQuestion(String topicQuestion,
-                               MultipartFile questionImageUrl,
-                               String answerA,
-                               String answerB,
-                               String answerC,
-                               String answerD,
-                               String correctResult,
-                               String correctEssay,
-                               String type,
-                               float mark,
-                               Long quizzId)
+    public void createQuestion(String topicQuestion, MultipartFile questionImageUrl, String answerA, String answerB,
+                               String answerC, String answerD, String correctResult, String correctEssay, String type,
+                               float mark, Long quizzId)
             throws IOException, NotAnImageFileException {
-        QuestionDto questionDto = new QuestionDto();
+
+        QuestionDTO questionDto = new QuestionDTO();
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
         Question question = questionMapper.map(questionDto, quizz);
         question.setTopicQuestion(topicQuestion);
@@ -89,17 +83,17 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setMilestones(1);
         saveQuestionImage(question, questionImageUrl);
         questionRepository.save(question);
+
     }
 
-    /***
+
+    /**
+     * <h3>It saves the question image to the server and updates the question image url in the database</h3>
      *
-     * @param question
-     * @param questionImage
-     * @throws NotAnImageFileException
-     * @throws IOException
+     * @param question The question object that we want to save the image for.
+     * @param questionImage The image file that the user uploads.
      */
-    private void saveQuestionImage(Question question,
-                                   MultipartFile questionImage)
+    private void saveQuestionImage(Question question, MultipartFile questionImage)
             throws NotAnImageFileException, IOException {
 
         if(!questionImage.isEmpty()) {
@@ -120,7 +114,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
     }
 
     @Override
-    public List<QuestionDto> getAllQuestion(int currentPage) {
+    public List<QuestionDTO> getAllQuestion(int currentPage) {
         // int totalNumberOfRecords = questionRepository.getTotalNumberOfRecords();
         // int totalPage = totalNumberOfRecords / NUMBER_OF_QUESTIONS;
         int START = (currentPage - 1) * NUMBER_OF_QUESTIONS;

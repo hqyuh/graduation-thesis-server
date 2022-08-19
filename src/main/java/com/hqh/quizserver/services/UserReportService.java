@@ -1,10 +1,10 @@
 package com.hqh.quizserver.services;
 
-import com.hqh.quizserver.dto.UserReportDto;
+import com.hqh.quizserver.dto.UserReportDTO;
 
 public interface UserReportService {
 
-    void saveReport(UserReportDto userReportDto);
+    void saveReport(UserReportDTO userReportDto);
 
     void deleteTopic(Long id);
 

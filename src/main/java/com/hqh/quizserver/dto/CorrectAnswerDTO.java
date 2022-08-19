@@ -1,15 +1,13 @@
 package com.hqh.quizserver.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class CorrectAnswerDto {
+@Builder
+public class CorrectAnswerDTO {
 
     private float totalNumberOfCorrectAnswers;
     private float totalNumberOfAnswers;

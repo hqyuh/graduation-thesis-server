@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.dto.CorrectAnswerDto;
+import com.hqh.quizserver.dto.CorrectAnswerDTO;
 import com.hqh.quizserver.services.CorrectAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class CorrectAnswerController {
     }
 
     @GetMapping("/show/{id}")
-    public ResponseEntity<CorrectAnswerDto> getCorrectAnswer(@PathVariable("id") Long id) {
+    public ResponseEntity<CorrectAnswerDTO> getCorrectAnswer(@PathVariable("id") Long id) {
         return ResponseEntity
                 .status(OK)
                 .body(correctAnswerService.getTotalNumberOfCorrectAnswers(id));

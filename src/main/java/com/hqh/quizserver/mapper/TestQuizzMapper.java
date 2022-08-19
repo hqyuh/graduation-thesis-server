@@ -1,8 +1,8 @@
 package com.hqh.quizserver.mapper;
 
+import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.Topic;
-import com.hqh.quizserver.dto.TestQuizzDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -20,9 +20,9 @@ public interface TestQuizzMapper {
     @Mapping(target = "isEnd", ignore = true)
     @Mapping(target = "activationCode", ignore = true)
     @Mapping(target = "topic", source = "topic")
-    TestQuizz map(TestQuizzDto testQuizzDto, Topic topic);
+    TestQuizz map(TestQuizzDTO testQuizzDto, Topic topic);
 
     @Mapping(target = "topicId", expression = "java(testQuizz.getTopic().getId())")
-    TestQuizzDto mapToDto(TestQuizz testQuizz);
+    TestQuizzDTO mapToDto(TestQuizz testQuizz);
 
 }
