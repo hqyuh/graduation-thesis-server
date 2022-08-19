@@ -25,7 +25,7 @@ import static com.hqh.quizserver.constant.PatternConstant.*;
 @Setter
 @Table(name = "users")
 @Entity
-public class User extends TimeEntity implements Serializable {
+public class User extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

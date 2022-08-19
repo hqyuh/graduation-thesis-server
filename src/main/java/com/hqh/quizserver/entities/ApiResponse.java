@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class HttpResponse {
+public class ApiResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,
             pattern = "MM-dd-yyyy hh:mm:ss", timezone = "Asia/Ho_Chi_Minh")
@@ -20,11 +20,11 @@ public class HttpResponse {
     private String reason;
     private String message;
 
-    public HttpResponse(int httpStatusCode,
-                        HttpStatus httpStatus,
-                        String type,
-                        String reason,
-                        String message) {
+    public ApiResponse(int httpStatusCode,
+                       HttpStatus httpStatus,
+                       String type,
+                       String reason,
+                       String message) {
         this.timeStamp = new Date();
         this.httpStatusCode = httpStatusCode;
         this.httpStatus = httpStatus;

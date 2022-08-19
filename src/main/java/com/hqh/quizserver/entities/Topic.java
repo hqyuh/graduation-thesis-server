@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.util.List;
 
 @AllArgsConstructor
@@ -16,7 +15,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "topic")
-public class Topic extends TimeEntity {
+public class Topic extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

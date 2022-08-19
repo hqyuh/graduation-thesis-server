@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.ApiResponse;
 import com.hqh.quizserver.dto.ReviewAnswerDto;
 import com.hqh.quizserver.dto.UserAnswerDto;
 import com.hqh.quizserver.services.UserAnswerService;
@@ -28,7 +28,7 @@ public class UserAnswerController {
     }
 
     @PostMapping("/save-answer")
-    public ResponseEntity<HttpResponse> saveAllUserAnswer(@RequestBody List<UserAnswerDto> userAnswerDto) {
+    public ResponseEntity<ApiResponse> saveAllUserAnswer(@RequestBody List<UserAnswerDto> userAnswerDto) {
         userAnswerService.saveAllUserAnswer(userAnswerDto);
         return response(OK, SUCCESS, SUCCESSFUL_TEST_SUBMISSION);
     }

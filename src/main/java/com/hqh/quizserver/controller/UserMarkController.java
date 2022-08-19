@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.ApiResponse;
 import com.hqh.quizserver.dto.UserMarkDto;
 import com.hqh.quizserver.services.UserMarkHelperService;
 import com.hqh.quizserver.services.UserMarkService;
@@ -71,8 +71,8 @@ public class UserMarkController {
     }
 
     @GetMapping("/{id}/locked/{isLock}")
-    public ResponseEntity<HttpResponse> userPointLock(@PathVariable("id") Long id,
-                                                      @PathVariable("isLock") String isLock) {
+    public ResponseEntity<ApiResponse> userPointLock(@PathVariable("id") Long id,
+                                                     @PathVariable("isLock") String isLock) {
         boolean isStatus = Boolean.parseBoolean(isLock);
         userMarkService.pointLock(id, isStatus);
         String message = isStatus ? SUCCESSFUL_LOCKED_POINTS : UNLOCK_SUCCESS_POINTS;

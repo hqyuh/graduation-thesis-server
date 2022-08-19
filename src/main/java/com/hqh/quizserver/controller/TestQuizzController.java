@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.ApiResponse;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
@@ -42,7 +42,7 @@ public class TestQuizzController extends ExceptionHandling {
 
     @PostMapping("/add")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestBody TestQuizzRequest testQuizz)
+    public ResponseEntity<ApiResponse> addNewTestQuizz(@RequestBody TestQuizzRequest testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException {
         testQuizzService
                 .createQuizz(testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),
@@ -52,7 +52,7 @@ public class TestQuizzController extends ExceptionHandling {
 
     @PatchMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> updateTestQuizz(@RequestBody TestQuizzRequest testQuizz)
+    public ResponseEntity<ApiResponse> updateTestQuizz(@RequestBody TestQuizzRequest testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException {
         TestQuizz updateQuizz = testQuizzService
                 .updateQuizz(testQuizz.getCurrentTestName(), testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),

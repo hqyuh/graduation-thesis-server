@@ -154,7 +154,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<HttpResponse> changePassword(@RequestBody Password password)
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody Password password)
             throws PasswordException {
         userService.changePassword(
                 password.getEmail(),

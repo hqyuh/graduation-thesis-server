@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.ApiResponse;
 import com.hqh.quizserver.entities.Topic;
 import com.hqh.quizserver.exceptions.domain.topic.TopicExistException;
 import com.hqh.quizserver.exceptions.domain.topic.TopicNotFoundException;
@@ -29,15 +29,15 @@ public class TopicController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<HttpResponse> createTopic(@RequestParam("topicName") String topicName)
+    public ResponseEntity<ApiResponse> createTopic(@RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
         Topic topic = topicService.createTopic(topicName);
         return response(CREATED, SUCCESS, ADD_TOPIC_SUCCESS);
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<HttpResponse> createTopic(@RequestParam("currentTopicName") String currentTopicName,
-                                                    @RequestParam("topicName") String topicName)
+    public ResponseEntity<ApiResponse> createTopic(@RequestParam("currentTopicName") String currentTopicName,
+                                                   @RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
         Topic topic = topicService.updateTopic(currentTopicName, topicName);
         return response(OK, SUCCESS, UPDATE_TOPIC_SUCCESS);
