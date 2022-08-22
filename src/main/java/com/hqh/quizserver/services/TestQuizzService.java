@@ -24,7 +24,7 @@ public interface TestQuizzService {
 
     void deleteQuizz(Long id);
 
-    Optional<TestQuizz> findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException;
+    TestQuizzDTO findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException;
 
     List<TestQuizz> findAllTestQuizzByTopicId(Long id);
 

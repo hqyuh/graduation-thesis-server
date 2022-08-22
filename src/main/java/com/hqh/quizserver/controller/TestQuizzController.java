@@ -1,5 +1,6 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.entities.ApiResponse;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
@@ -85,9 +86,9 @@ public class TestQuizzController extends ExceptionHandling {
     }
 
     @GetMapping("/code/{code}")
-    public ResponseEntity<Object> getTestQuizzByCode(@PathVariable("code") String code)
+    public ResponseEntity<TestQuizzDTO> getTestQuizzByCode(@PathVariable("code") String code)
             throws TestQuizzNotFoundException {
-        Optional<TestQuizz> quizz = testQuizzService.findTestQuizzByActivationCode(code);
+        TestQuizzDTO quizz = testQuizzService.findTestQuizzByActivationCode(code);
 
         return new ResponseEntity<>(quizz, OK);
     }
@@ -102,6 +103,13 @@ public class TestQuizzController extends ExceptionHandling {
     @GetMapping("/find/{id}")
     public ResponseEntity<TestQuizz> getQuizzById(@PathVariable("id") Long id) {
         TestQuizz quizz = testQuizzService.findTestQuizzById(id);
+
+        return new ResponseEntity<>(quizz, OK);
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<TestQuizzDTO> getQuizzByName(@RequestParam("name") String name) {
+        TestQuizzDTO quizz = testQuizzService.findTestQuizzByTestName(name);
 
         return new ResponseEntity<>(quizz, OK);
     }

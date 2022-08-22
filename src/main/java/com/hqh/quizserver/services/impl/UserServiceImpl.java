@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -143,7 +142,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         user.setCreatedBy("Self-registered user");
         user.setUpdatedAt(new Date());
         user.setUpdatedBy("None");
-        userRepository.updateUserStatistics();
+        // userRepository.updateUserStatistics();
         userRepository.save(user);
 
         return user;
@@ -242,11 +241,11 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         }
         String password = generatePassword();
         user.setPassword(encodePassword(password));
-        log.info(RESET_PASSWORD + password);
+        log.info("Reset password: {}", password);
         userRepository.save(user);
         String name = user.getFirstName();
         emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_RESET);
-        log.info(EMAIL_SENT + email);
+        log.info("An email with a new password was sent to: {}", email);
     }
 
     private Role getRoleEnumName(String role) {
@@ -461,6 +460,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         User user = userRepository.findUserByUsername(username);
 
         return UserDTO.builder()
+                .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .username(user.getUsername())

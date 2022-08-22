@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -81,6 +82,10 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setType(type);
         question.setMark(mark);
         question.setMilestones(1);
+        question.setCreatedAt(new Date());
+        question.setUpdatedAt(new Date());
+        question.setCreatedBy("H");
+        question.setUpdatedBy("H");
         saveQuestionImage(question, questionImageUrl);
         questionRepository.save(question);
 

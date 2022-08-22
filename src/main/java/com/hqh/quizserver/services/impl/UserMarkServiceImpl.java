@@ -3,7 +3,6 @@ package com.hqh.quizserver.services.impl;
 import com.hqh.quizserver.dto.UserDTO;
 import com.hqh.quizserver.dto.UserMarkDTO;
 import com.hqh.quizserver.entities.TestQuizz;
-import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.entities.UserMark;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.mapper.UserMarkMapper;

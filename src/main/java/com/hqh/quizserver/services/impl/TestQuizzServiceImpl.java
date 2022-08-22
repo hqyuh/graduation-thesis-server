@@ -1,33 +1,34 @@
 package com.hqh.quizserver.services.impl;
 
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.dto.UserDTO;
+import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.Topic;
-import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
+import com.hqh.quizserver.mapper.QuestionMapper;
 import com.hqh.quizserver.mapper.TestQuizzMapper;
+import com.hqh.quizserver.repositories.QuestionRepository;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
 import com.hqh.quizserver.repositories.TopicRepository;
 import com.hqh.quizserver.services.TestQuizzHelperService;
 import com.hqh.quizserver.services.TestQuizzService;
 import com.hqh.quizserver.services.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static com.hqh.quizserver.constant.TestQuizzImplConstant.*;
 import static com.hqh.quizserver.utils.ConvertTimeUtils.convertTime;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -39,16 +40,19 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     private final TopicRepository topicRepository;
     private final TestQuizzMapper testQuizzMapper;
     private final UserService userService;
+    private final QuestionRepository questionRepo;
 
     @Autowired
     public TestQuizzServiceImpl(TestQuizzRepository quizzRepository,
                                 TopicRepository topicRepository,
                                 TestQuizzMapper testQuizzMapper,
-                                UserService userService) {
+                                UserService userService,
+                                QuestionRepository questionRepo) {
         this.quizzRepository = quizzRepository;
         this.topicRepository = topicRepository;
         this.testQuizzMapper = testQuizzMapper;
         this.userService = userService;
+        this.questionRepo = questionRepo;
     }
 
 
@@ -123,6 +127,10 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         quizz.setIsStart(convertTime(isStart));
         quizz.setIsEnd(convertTime(isEnd));
         quizz.setStatus(true);
+        quizz.setCreatedAt(new Date());
+        quizz.setUpdatedAt(new Date());
+        quizz.setCreatedBy(user.getUsername());
+        quizz.setUpdatedBy(user.getUsername());
         log.info("Code {} is for test name {}", code, testName);
         log.info("{} created a test with name {}", user.getUsername(), testName);
         quizzRepository.save(quizz);
@@ -173,16 +181,17 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     public TestQuizzDTO findTestQuizzByTestName(String testName) {
         TestQuizz testQuizz = quizzRepository.findTestQuizzByTestName(testName);
 
-        return TestQuizzDTO.builder()
-                .testName(testQuizz.getTestName())
-                .examTime(testQuizz.getExamTime())
-                .dateCreated(testQuizz.getDateCreated())
-                .isStart(testQuizz.getIsStart())
-                .isEnd(testQuizz.getIsEnd())
-                .activationCode(testQuizz.getActivationCode())
-                .questionDTOList(null)
-                .topicId(testQuizz.getTopic().getId())
-                .build();
+//        return TestQuizzDTO.builder()
+//                .testName(testQuizz.getTestName())
+//                .examTime(testQuizz.getExamTime())
+//                .dateCreated(testQuizz.getDateCreated())
+//                .isStart(testQuizz.getIsStart())
+//                .isEnd(testQuizz.getIsEnd())
+//                .activationCode(testQuizz.getActivationCode())
+//                .questionDTOList(questionRepo.randomQuestion(3L))
+//                .topicId(testQuizz.getTopic().getId())
+//                .build();
+        return null;
     }
 
     @Override
@@ -203,10 +212,44 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
      * @return Optional<TestQuizz>
      */
     @Override
-    public Optional<TestQuizz> findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException {
-        return Optional.ofNullable(quizzRepository
-                .findTestQuizzByActivationCode(code)
-                .orElseThrow(() -> new TestQuizzNotFoundException(NO_QUIZZ_TEST_FOUND_WITH_CODE + code)));
+    public TestQuizzDTO findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException {
+        TestQuizz testQuizz = quizzRepository.findTestQuizzByActivationCode(code);
+        List<Question> questionFromData = questionRepo.randomQuestion(testQuizz.getId());
+
+        List<QuestionDTO> questionDTOListTemp = questionMapToQuestionDTO(questionFromData);
+
+        return TestQuizzDTO.builder()
+                .testName(testQuizz.getTestName())
+                .examTime(testQuizz.getExamTime())
+                .dateCreated(testQuizz.getDateCreated())
+                .isStart(testQuizz.getIsStart())
+                .isEnd(testQuizz.getIsEnd())
+                .activationCode(testQuizz.getActivationCode())
+                .questionDTOList(questionDTOListTemp)
+                .build();
+    }
+
+    private List<QuestionDTO> questionMapToQuestionDTO(List<Question> questions) {
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        questions.forEach(srcQuestionDTO -> {
+            QuestionDTO targetQuestionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(srcQuestionDTO, targetQuestionDTO);
+            targetQuestionDTO.setId(srcQuestionDTO.getId());
+            targetQuestionDTO.setTopicQuestion(srcQuestionDTO.getTopicQuestion());
+            targetQuestionDTO.setQuestionImageUrl(srcQuestionDTO.getQuestionImageUrl());
+            targetQuestionDTO.setAnswerA(srcQuestionDTO.getAnswerA());
+            targetQuestionDTO.setAnswerB(srcQuestionDTO.getAnswerB());
+            targetQuestionDTO.setAnswerC(srcQuestionDTO.getAnswerC());
+            targetQuestionDTO.setAnswerD(srcQuestionDTO.getAnswerD());
+            targetQuestionDTO.setCorrectResult(srcQuestionDTO.getCorrectResult());
+            targetQuestionDTO.setCorrectEssay(srcQuestionDTO.getCorrectEssay());
+            targetQuestionDTO.setMark(srcQuestionDTO.getMark());
+            targetQuestionDTO.setMilestones(srcQuestionDTO.getMilestones());
+            targetQuestionDTO.setQuizzId(srcQuestionDTO.getTestQuizz().getId());
+
+            questionDTOList.add(targetQuestionDTO);
+        });
+        return questionDTOList;
     }
 
     @Override

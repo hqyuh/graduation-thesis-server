@@ -20,20 +20,24 @@ public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Transient
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", updatable = false, nullable = false)
     @CreatedDate
     private Date createdAt;
 
+    @Transient
     @Column(name = "created_by", updatable = false, nullable = false)
     @CreatedBy
     private String createdBy;
 
+    @Transient
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     @LastModifiedDate
     private Date updatedAt;
 
+    @Transient
     @Column(name = "updated_by", nullable = false)
     @LastModifiedBy
     private String updatedBy;

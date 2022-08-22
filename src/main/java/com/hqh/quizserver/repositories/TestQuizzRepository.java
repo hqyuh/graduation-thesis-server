@@ -16,7 +16,7 @@ public interface TestQuizzRepository extends JpaRepository<TestQuizz, Long> {
     @Query("SELECT u "
          + "FROM TestQuizz u "
          + "WHERE u.activationCode = :code")
-    Optional<TestQuizz> findTestQuizzByActivationCode(@Param("code") String code);
+    TestQuizz findTestQuizzByActivationCode(@Param("code") String code);
 
     @Query("SELECT u "
          + "FROM TestQuizz u "

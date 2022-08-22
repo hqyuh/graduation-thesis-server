@@ -75,15 +75,15 @@ class TestQuizzRepositoryTest {
         assertThat(testQuizz).isNotNull();
     }
 
-    @Test
-    public void testGetQuizzByCode() {
-        Optional<TestQuizz> testQuizz = quizzRepository
-                .findTestQuizzByActivationCode("446614");
-
-        System.out.println(testQuizz);
-
-        assertThat(testQuizz).isNotNull();
-    }
+//    @Test
+//    public void testGetQuizzByCode() {
+//        Optional<TestQuizz> testQuizz = quizzRepository
+//                .findTestQuizzByActivationCode("446614");
+//
+//        System.out.println(testQuizz);
+//
+//        assertThat(testQuizz).isNotNull();
+//    }
 
     @Test
     public void testUpdateQuizz() {

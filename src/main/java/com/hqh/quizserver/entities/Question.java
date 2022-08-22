@@ -53,9 +53,11 @@ public class Question extends BaseEntity {
     @JsonIgnore
     private int milestones;
 
+    @Transient
     @Column(name = "type", length = 9, nullable = false)
     private String type;
 
+    @Transient
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
             pattern = "dd-MM-yyyy hh:mm:ss", timezone = "Asia/Ho_Chi_Minh"

@@ -23,4 +23,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query(value = "SELECT COUNT(id) FROM question q", nativeQuery = true)
     Integer getTotalNumberOfRecords();
 
+    @Query(value = "SELECT q.id, q.topic_question, q.question_image_url, q.answer_a, q.answer_b, q.answer_c, q.answer_d, "
+            + "q.correct_result, q.correct_essay, q.mark, q.milestones, q.quizz_id FROM question q WHERE quizz_id = :quizzId ORDER BY random() LIMIT 3", nativeQuery = true)
+    List<Question> randomQuestion(@Param("quizzId") Long quizzId);
+
 }

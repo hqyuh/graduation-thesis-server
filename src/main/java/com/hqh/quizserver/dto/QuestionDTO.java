@@ -21,7 +21,9 @@ public class QuestionDTO implements Serializable {
     private String answerC;
     private String answerD;
     private String correctResult;
+    private String correctEssay;
     private float mark;
+    private int milestones;
     private Long quizzId;
 
 }

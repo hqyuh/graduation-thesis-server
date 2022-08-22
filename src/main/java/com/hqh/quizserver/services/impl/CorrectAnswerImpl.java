@@ -22,7 +22,7 @@ public class CorrectAnswerImpl implements CorrectAnswerService {
         return CorrectAnswerDTO
                 .builder()
                 .totalNumberOfCorrectAnswers(userAnswerRepository.totalNumberOfCorrectAnswersByQuizzId(id))
-                .totalNumberOfCorrectAnswers(userAnswerRepository.totalNumberOfCorrectAnswersByQuizzId(id))
+                .totalNumberOfAnswers(userAnswerRepository.totalNumberOfAnswersByQuizzId(id))
                 .totalMark(userAnswerRepository.totalMarkByQuizzId(id))
                 .build();
     }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -22,7 +23,7 @@ public class TestQuizzDTO implements Serializable {
     private Timestamp isStart;
     private Timestamp isEnd;
     private String activationCode;
-    private Set<QuestionDTO> questionDTOList;
+    private List<QuestionDTO> questionDTOList;
     private Long topicId;
 
 }
