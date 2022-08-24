@@ -20,6 +20,10 @@ public interface UserAnswerMapper {
     @Mapping(target = "question", source = "question")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "isSelected", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
     UserAnswer map(UserAnswerDto userAnswerDto, TestQuizz testQuizz, Question question, User user);
 
     @Mapping(target = "quizzId", expression = "java(userAnswer.getTestQuizz().getId())")
