@@ -24,6 +24,5 @@ public class TestQuizzDTO implements Serializable {
     private Timestamp isEnd;
     private String activationCode;
     private List<QuestionDTO> questionDTOList;
-    private Long topicId;
 
 }

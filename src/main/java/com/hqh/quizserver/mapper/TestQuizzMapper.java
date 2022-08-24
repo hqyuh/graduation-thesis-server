@@ -22,7 +22,6 @@ public interface TestQuizzMapper {
     @Mapping(target = "topic", source = "topic")
     TestQuizz map(TestQuizzDTO testQuizzDto, Topic topic);
 
-    @Mapping(target = "topicId", expression = "java(testQuizz.getTopic().getId())")
     TestQuizzDTO mapToDto(TestQuizz testQuizz);
 
 }

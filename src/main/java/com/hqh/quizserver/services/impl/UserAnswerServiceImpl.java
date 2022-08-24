@@ -49,7 +49,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         for (UserAnswerDTO userAnswerTemp : userAnswerDto) {
             TestQuizz quizzId = quizzRepository.findTestQuizzById(userAnswerTemp.getQuizzId());
             Question questionId = questionRepository.findQuestionById(userAnswerTemp.getQuestionId());
-            UserDTO userId = userService.getCurrentUser();
+            User userId = userService.getCurrentUser();
             UserAnswer userAnswer = userAnswerMapper
                     .map(userAnswerTemp, quizzId, questionId, userId);
             userAnswer.setIsSelected(userAnswerTemp.getIsSelected());

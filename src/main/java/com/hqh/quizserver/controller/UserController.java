@@ -187,12 +187,12 @@ public class UserController extends ExceptionHandling {
                 .body(file);
     }
 
-    @GetMapping("/my")
-    public ResponseEntity<UserDTO> currentUsername() {
-        return ResponseEntity
-                .status(OK)
-                .body(userService.getCurrentUser());
-    }
+//    @GetMapping("/my")
+//    public ResponseEntity<UserDTO> currentUsername() {
+//        return ResponseEntity
+//                .status(OK)
+//                .body(userService.getCurrentUser());
+//    }
 
     @GetMapping("/statistic")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

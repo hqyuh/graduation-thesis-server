@@ -18,12 +18,12 @@ public interface UserMarkMapper {
     @Mapping(target = "mark", ignore = true)
     @Mapping(target = "pointLock", ignore = true)
     @Mapping(target = "testQuizz", source = "testQuizz")
-    @Mapping(target = "user", source = "userDTO")
+    @Mapping(target = "user", source = "user")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    UserMark map(UserMarkDTO userMarkDto, TestQuizz testQuizz, UserDTO userDTO);
+    UserMark map(UserMarkDTO userMarkDto, TestQuizz testQuizz, User user);
 
     @Mapping(target = "quizzId", expression = "java(userMark.getTestQuizz().getId())")
     @Mapping(target = "username", expression = "java(userMark.getUser().getUsername())")

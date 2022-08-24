@@ -18,7 +18,7 @@ public interface TestQuizzService {
                           String isStart, String isEnd, Long topicId)
             throws TestQuizzExistException, TestQuizzNotFoundException;
 
-    TestQuizzDTO findTestQuizzByTestName(String testName);
+    TestQuizz findTestQuizzByTestName(String testName);
 
     List<TestQuizz> getAllQuizz();
 

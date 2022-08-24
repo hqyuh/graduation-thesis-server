@@ -6,10 +6,10 @@ import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.Topic;
 import com.hqh.quizserver.dto.TestQuizzDTO;
+import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
-import com.hqh.quizserver.mapper.QuestionMapper;
 import com.hqh.quizserver.mapper.TestQuizzMapper;
 import com.hqh.quizserver.repositories.QuestionRepository;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
@@ -18,6 +18,7 @@ import com.hqh.quizserver.services.TestQuizzHelperService;
 import com.hqh.quizserver.services.TestQuizzService;
 import com.hqh.quizserver.services.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +30,8 @@ import java.io.ByteArrayInputStream;
 import java.time.Instant;
 import java.util.*;
 
+import static com.hqh.quizserver.constant.TestQuizzImplConstant.NO_QUIZZ_FOUND_BY_NAME;
+import static com.hqh.quizserver.constant.TestQuizzImplConstant.QUIZZ_ALREADY_EXISTS;
 import static com.hqh.quizserver.utils.ConvertTimeUtils.convertTime;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -65,28 +68,27 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     private TestQuizz validateNewQuizzExists (String currentQuizz, String newQuizz)
             throws TestQuizzNotFoundException, TestQuizzExistException {
 
-//        TestQuizz testQuizz = findTestQuizzByTestName(newQuizz);
-//
-//        if(StringUtils.isNotBlank(currentQuizz)) {
-//            TestQuizz currentTest = findTestQuizzByTestName(currentQuizz);
-//
-//            if(currentTest == null) {
-//                log.error("No quiz found by name {}", currentQuizz);
-//                throw new TestQuizzNotFoundException(NO_QUIZZ_FOUND_BY_NAME + currentQuizz);
-//            }
-//            if(testQuizz != null && !currentTest.getId().equals(testQuizz.getId())) {
-//                log.error("Quizz already exists!");
-//                throw new TestQuizzExistException(QUIZZ_ALREADY_EXISTS);
-//            }
-//            return currentTest;
-//        } else {
-//            if(testQuizz != null) {
-//                log.error("Quizz already exists!");
-//                throw new TestQuizzExistException(QUIZZ_ALREADY_EXISTS);
-//            }
-//            return null;
-//        }
-        return null;
+        TestQuizz testQuizz = findTestQuizzByTestName(newQuizz);
+
+        if(StringUtils.isNotBlank(currentQuizz)) {
+            TestQuizz currentTest = findTestQuizzByTestName(currentQuizz);
+
+            if(currentTest == null) {
+                log.error("No quiz found by name {}", currentQuizz);
+                throw new TestQuizzNotFoundException(NO_QUIZZ_FOUND_BY_NAME + currentQuizz);
+            }
+            if(testQuizz != null && !currentTest.getId().equals(testQuizz.getId())) {
+                log.error("Quizz already exists!");
+                throw new TestQuizzExistException(QUIZZ_ALREADY_EXISTS);
+            }
+            return currentTest;
+        } else {
+            if(testQuizz != null) {
+                log.error("Quizz already exists!");
+                throw new TestQuizzExistException(QUIZZ_ALREADY_EXISTS);
+            }
+            return null;
+        }
     }
 
 
@@ -118,7 +120,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         TestQuizzDTO testQuizzDto = new TestQuizzDTO();
         Topic topic = topicRepository.findTopicById(topicId);
         TestQuizz quizz = testQuizzMapper.map(testQuizzDto, topic);
-        UserDTO user = userService.getCurrentUser();
+        User user = userService.getCurrentUser();
         quizz.setTestName(testName);
         String code = generateActivationCode();
         quizz.setActivationCode(code);
@@ -130,8 +132,9 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         quizz.setCreatedAt(new Date());
         quizz.setUpdatedAt(new Date());
         quizz.setCreatedBy(user.getUsername());
-        quizz.setUpdatedBy(user.getUsername());
+        quizz.setUpdatedBy(null);
         log.info("Code {} is for test name {}", code, testName);
+
         log.info("{} created a test with name {}", user.getUsername(), testName);
         quizzRepository.save(quizz);
 
@@ -178,20 +181,8 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
      * @return TestQuizz
      */
     @Override
-    public TestQuizzDTO findTestQuizzByTestName(String testName) {
-        TestQuizz testQuizz = quizzRepository.findTestQuizzByTestName(testName);
-
-//        return TestQuizzDTO.builder()
-//                .testName(testQuizz.getTestName())
-//                .examTime(testQuizz.getExamTime())
-//                .dateCreated(testQuizz.getDateCreated())
-//                .isStart(testQuizz.getIsStart())
-//                .isEnd(testQuizz.getIsEnd())
-//                .activationCode(testQuizz.getActivationCode())
-//                .questionDTOList(questionRepo.randomQuestion(3L))
-//                .topicId(testQuizz.getTopic().getId())
-//                .build();
-        return null;
+    public TestQuizz findTestQuizzByTestName(String testName) {
+        return quizzRepository.findTestQuizzByTestName(testName);
     }
 
     @Override
@@ -245,7 +236,6 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
             targetQuestionDTO.setCorrectEssay(srcQuestionDTO.getCorrectEssay());
             targetQuestionDTO.setMark(srcQuestionDTO.getMark());
             targetQuestionDTO.setMilestones(srcQuestionDTO.getMilestones());
-            targetQuestionDTO.setQuizzId(srcQuestionDTO.getTestQuizz().getId());
 
             questionDTOList.add(targetQuestionDTO);
         });

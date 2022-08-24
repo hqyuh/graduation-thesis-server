@@ -41,7 +41,7 @@ public class TestQuizzController extends ExceptionHandling {
         this.helperService = helperService;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
     public ResponseEntity<ApiResponse> addNewTestQuizz(@RequestBody TestQuizzRequest testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException {
@@ -103,13 +103,6 @@ public class TestQuizzController extends ExceptionHandling {
     @GetMapping("/find/{id}")
     public ResponseEntity<TestQuizz> getQuizzById(@PathVariable("id") Long id) {
         TestQuizz quizz = testQuizzService.findTestQuizzById(id);
-
-        return new ResponseEntity<>(quizz, OK);
-    }
-
-    @GetMapping("/find")
-    public ResponseEntity<TestQuizzDTO> getQuizzByName(@RequestParam("name") String name) {
-        TestQuizzDTO quizz = testQuizzService.findTestQuizzByTestName(name);
 
         return new ResponseEntity<>(quizz, OK);
     }

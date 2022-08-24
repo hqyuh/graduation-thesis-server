@@ -1,6 +1,5 @@
 package com.hqh.quizserver.services.impl;
 
-import com.hqh.quizserver.dto.UserDTO;
 import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.entities.UserPrincipal;
 import com.hqh.quizserver.entities.UserStatistics;
@@ -455,22 +454,23 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     }
 
     @Override
-    public UserDTO getCurrentUser() {
+    public User getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findUserByUsername(username);
-
-        return UserDTO.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .dateOfBirth(user.getDateOfBirth())
-                .profileImageUrl(user.getProfileImageUrl())
-                .roles(user.getRoles())
-                .joinDate(null)
-                .build();
+        return userRepository.findUserByUsername(username);
+//        User user = userRepository.findUserByUsername(username);
+//
+//        return UserDTO.builder()
+//                .id(user.getId())
+//                .firstName(user.getFirstName())
+//                .lastName(user.getLastName())
+//                .username(user.getUsername())
+//                .email(user.getEmail())
+//                .phoneNumber(user.getPhoneNumber())
+//                .dateOfBirth(user.getDateOfBirth())
+//                .profileImageUrl(user.getProfileImageUrl())
+//                .roles(user.getRoles())
+//                .joinDate(null)
+//                .build();
     }
 
     @Override
