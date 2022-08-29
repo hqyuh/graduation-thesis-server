@@ -7,6 +7,7 @@ import com.hqh.quizserver.entities.UserStatistics;
 import com.hqh.quizserver.enumeration.Role;
 import com.hqh.quizserver.exceptions.domain.user.*;
 import com.hqh.quizserver.helper.user.CSVHelper;
+import com.hqh.quizserver.mapper.UserMapper;
 import com.hqh.quizserver.repositories.UserRepository;
 import com.hqh.quizserver.services.UserHelperService;
 import com.hqh.quizserver.services.EmailService2;
@@ -16,7 +17,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,10 +35,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hqh.quizserver.constant.EmailConstant.*;
 import static com.hqh.quizserver.constant.FileConstant.*;
@@ -58,19 +58,20 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final LoginAttemptService loginAttemptService;
     private final EmailService2 emailService2;
+    private final UserMapper userMapper;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder bCryptPasswordEncoder,
                            LoginAttemptService loginAttemptService,
-                           EmailService2 emailService2) {
+                           EmailService2 emailService2,
+                           UserMapper userMapper) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
         this.emailService2 = emailService2;
+        this.userMapper = userMapper;
     }
-
-    private String logged = null;
 
     /**
      * This function will check the user is in the database,
@@ -91,7 +92,6 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
             userRepository.save(user);
             UserPrincipal userPrincipal = new UserPrincipal(user);
 
-            logged = userPrincipal.getUsername();
             log.info("Returning found user by email: {}", email);
 
             return userPrincipal;
@@ -215,28 +215,11 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
 
     @Override
     public List<UserDTO> getUsers() {
-        List<User> users = userRepository.findAll();
-
-        return userMapToUserDTO(users);
-    }
-
-    private List<UserDTO> userMapToUserDTO(List<User> users) {
-        List<UserDTO> userDTOList = new ArrayList<>();
-        users.forEach(srcUserDTO -> {
-            UserDTO targetUserDTO = new UserDTO();
-            BeanUtils.copyProperties(srcUserDTO, targetUserDTO);
-            targetUserDTO.setId(srcUserDTO.getId());
-            targetUserDTO.setFirstName(srcUserDTO.getFirstName());
-            targetUserDTO.setLastName(srcUserDTO.getLastName());
-            targetUserDTO.setUsername(srcUserDTO.getUsername());
-            targetUserDTO.setEmail(srcUserDTO.getEmail());
-            targetUserDTO.setPhoneNumber(srcUserDTO.getPhoneNumber());
-            targetUserDTO.setDateOfBirth(srcUserDTO.getDateOfBirth());
-
-            userDTOList.add(targetUserDTO);
-        });
-
-        return userDTOList;
+        return userRepository
+                .findAll()
+                .stream()
+                .map(userMapper::userMapToUserDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -393,17 +376,10 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
      * @throws NotAnImageFileException
      */
     @Override
-    public User updateUser(String currentUsername,
-                           String newFirstName,
-                           String newLastName,
-                           String newUsername,
-                           String newEmail,
-                           String role,
-                           boolean isNonLocked,
-                           boolean isActive,
-                           MultipartFile profileImage)
-            throws UserNotFoundException, EmailExistException, UsernameExistException,
-            IOException, NotAnImageFileException {
+    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername,
+                           String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage)
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+
         User currentUser = validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
         if (currentUser != null) {
             currentUser.setFirstName(newFirstName);
@@ -414,10 +390,14 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
             currentUser.setNotLocked(isNonLocked);
             currentUser.setRoles(getRoleEnumName(role).name());
             currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
+            currentUser.setCreatedAt(new Date());
+            currentUser.setUpdatedAt(new Date());
+            currentUser.setCreatedBy(getCurrentUser().getUsername());
+            currentUser.setUpdatedBy(getCurrentUser().getUsername());
             userRepository.save(currentUser);
             saveProfileImage(currentUser, profileImage);
+            log.info("Update user successfully");
         }
-
         return currentUser;
     }
 
@@ -427,10 +407,8 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     }
 
     @Override
-    public User updateProfileImage(String username,
-                                   MultipartFile profileImage)
-            throws UserNotFoundException, EmailExistException, UsernameExistException,
-            IOException, NotAnImageFileException {
+    public User updateProfileImage(String username, MultipartFile profileImage)
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
         User user = validateNewUsernameAndEmail(username, null, null);
         saveProfileImage(user, profileImage);
         return user;
@@ -441,35 +419,32 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         return userRepository.findUserById(id);
     }
 
-    /***
-     * check if the old password is correct
+
+    /**
+     * It takes a user and an old password, and returns true if the old password matches the user's password
      *
-     * @param user
-     * @param oldPassword
-     * @return <code>true</code>  if the password is correct
-     *         <code>false</code> otherwise.
+     * @param user The user object that you want to check the password for.
+     * @param oldPassword The password that the user entered in the form
+     * @return A boolean value.
      */
-    public boolean checkIfValidOldPassword(User user,
-                                           String oldPassword) {
+    public boolean checkIfValidOldPassword(User user, String oldPassword) {
         return bCryptPasswordEncoder.matches(oldPassword, user.getPassword());
     }
 
-    /***
-     *
-     * @param email
-     * @param oldPassword
-     * @param newPassword
-     * @throws PasswordException
+    /**
+     * @param email The email address of the user who wants to change their password.
+     * @param oldPassword The password that the user entered in the form.
+     * @param newPassword The new password that the user wants to change to.
      */
-    public void changePassword(String email,
-                               String oldPassword,
-                               String newPassword) throws PasswordException {
+    public void changePassword(String email, String oldPassword, String newPassword) throws PasswordException {
         User user = userRepository.findUserByEmail(email);
 
         if(!checkIfValidOldPassword(user, oldPassword)) {
+            log.error("Current password is incorrect.");
             throw new PasswordException(CURRENT_PASSWORD_IS_INCORRECT);
         }
         user.setPassword(encodePassword(newPassword));
+        log.info("Change password successfully.");
     }
 
     @Override
@@ -494,7 +469,6 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     public UserStatistics userStatistics() {
         UserStatistics userStatistics = new UserStatistics();
         userStatistics.setNumberOfUsersInUse(userRepository.userStatistics());
-
         return userStatistics;
     }
 }
