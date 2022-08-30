@@ -1,6 +1,6 @@
 package com.hqh.quizserver.services;
 
-import com.hqh.quizserver.dto.QuestionDto;
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +27,6 @@ public interface QuestionService {
 
     void deleteQuestion(Long id);
 
-    List<QuestionDto> getAllQuestion(int currentPage);
+    List<QuestionDTO> getAllQuestion(int currentPage);
 
 }

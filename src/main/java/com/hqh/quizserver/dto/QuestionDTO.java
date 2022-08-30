@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDto implements Serializable {
+public class QuestionDTO implements Serializable {
 
     private Long id;
     private String topicQuestion;

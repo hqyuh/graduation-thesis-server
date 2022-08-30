@@ -1,7 +1,7 @@
 package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.entities.HttpResponse;
-import com.hqh.quizserver.dto.QuestionDto;
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.services.QuestionHelperService;
@@ -89,7 +89,7 @@ public class QuestionController {
     }
 
     @GetMapping("/list/{pageNum}")
-    public ResponseEntity<List<QuestionDto>> getAllQuestion(@PathVariable("pageNum") Integer pageNum) {
+    public ResponseEntity<List<QuestionDTO>> getAllQuestion(@PathVariable("pageNum") Integer pageNum) {
         return ResponseEntity
                 .status(OK)
                 .body(questionService.getAllQuestion(pageNum));

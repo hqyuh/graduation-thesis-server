@@ -1,8 +1,8 @@
 package com.hqh.quizserver.services.impl;
 
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
-import com.hqh.quizserver.dto.QuestionDto;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.mapper.QuestionMapper;
@@ -73,7 +73,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
                                float mark,
                                Long quizzId)
             throws IOException, NotAnImageFileException {
-        QuestionDto questionDto = new QuestionDto();
+        QuestionDTO questionDto = new QuestionDTO();
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
         Question question = questionMapper.map(questionDto, quizz);
         question.setTopicQuestion(topicQuestion);
@@ -120,7 +120,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
     }
 
     @Override
-    public List<QuestionDto> getAllQuestion(int currentPage) {
+    public List<QuestionDTO> getAllQuestion(int currentPage) {
         // int totalNumberOfRecords = questionRepository.getTotalNumberOfRecords();
         // int totalPage = totalNumberOfRecords / NUMBER_OF_QUESTIONS;
         int START = (currentPage - 1) * NUMBER_OF_QUESTIONS;

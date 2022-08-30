@@ -176,4 +176,9 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
     }
 
+    @ExceptionHandler(TestQuizzCreateTimeException.class)
+    public ResponseEntity<HttpResponse> timeCreateQuizzException(TestQuizzCreateTimeException exception) {
+        return createHttpResponse(BAD_REQUEST, ERROR, exception.getMessage());
+    }
+
 }

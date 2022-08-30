@@ -1,8 +1,8 @@
 package com.hqh.quizserver.mapper;
 
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
-import com.hqh.quizserver.dto.QuestionDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -22,9 +22,9 @@ public interface QuestionMapper {
     @Mapping(target = "correctResult", ignore = true)
     @Mapping(target = "mark", ignore = true)
     @Mapping(target = "testQuizz", source = "testQuizz")
-    Question map(QuestionDto questionDto, TestQuizz testQuizz);
+    Question map(QuestionDTO questionDto, TestQuizz testQuizz);
 
     @Mapping(target = "quizzId", expression = "java(question.getTestQuizz().getId())")
-    QuestionDto mapToDto(Question question);
+    QuestionDTO mapToDto(Question question);
 
 }
