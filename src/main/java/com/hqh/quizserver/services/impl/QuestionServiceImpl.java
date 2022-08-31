@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -61,18 +62,9 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
      * @throws NotAnImageFileException
      */
     @Override
-    public void createQuestion(String topicQuestion,
-                               MultipartFile questionImageUrl,
-                               String answerA,
-                               String answerB,
-                               String answerC,
-                               String answerD,
-                               String correctResult,
-                               String correctEssay,
-                               String type,
-                               float mark,
-                               Long quizzId)
-            throws IOException, NotAnImageFileException {
+    public void createQuestion(String topicQuestion, MultipartFile questionImageUrl, String answerA, String answerB,
+                               String answerC, String answerD, String correctResult, String correctEssay, String type,
+                               float mark, Long quizzId) throws IOException, NotAnImageFileException {
         QuestionDTO questionDto = new QuestionDTO();
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
         Question question = questionMapper.map(questionDto, quizz);
@@ -83,10 +75,14 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setAnswerD(answerD);
         question.setDateCreated(Instant.now());
         question.setCorrectResult(correctResult);
-        question.setCorrectEssay(correctEssay);
+        question.setCorrectEssay(correctEssay.isBlank() ? null : correctEssay);
         question.setType(type);
         question.setMark(mark);
         question.setMilestones(1);
+        question.setCreatedAt(new Date());
+        question.setUpdatedAt(new Date());
+        question.setCreatedBy("hoqhuy");
+        question.setUpdatedBy("hoqhuy");
         saveQuestionImage(question, questionImageUrl);
         questionRepository.save(question);
     }

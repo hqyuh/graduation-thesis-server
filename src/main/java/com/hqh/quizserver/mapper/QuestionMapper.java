@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
 
@@ -21,10 +23,14 @@ public interface QuestionMapper {
     @Mapping(target = "answerD", ignore = true)
     @Mapping(target = "correctResult", ignore = true)
     @Mapping(target = "mark", ignore = true)
+    @Mapping(target = "milestones", ignore = true)
     @Mapping(target = "testQuizz", source = "testQuizz")
+
     Question map(QuestionDTO questionDto, TestQuizz testQuizz);
 
     @Mapping(target = "quizzId", expression = "java(question.getTestQuizz().getId())")
     QuestionDTO mapToDto(Question question);
+
+    List<QuestionDTO> questionMapToQuestionDTO(List<Question> questions);
 
 }

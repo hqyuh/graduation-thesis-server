@@ -1,6 +1,8 @@
 package com.hqh.quizserver.services.impl;
 
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.dto.TestQuizzDTO;
+import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.Topic;
 import com.hqh.quizserver.entities.User;
@@ -8,7 +10,9 @@ import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
+import com.hqh.quizserver.mapper.QuestionMapper;
 import com.hqh.quizserver.mapper.TestQuizzMapper;
+import com.hqh.quizserver.repositories.QuestionRepository;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
 import com.hqh.quizserver.repositories.TopicRepository;
 import com.hqh.quizserver.services.TestQuizzHelperService;
@@ -41,16 +45,22 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     private final TopicRepository topicRepository;
     private final TestQuizzMapper testQuizzMapper;
     private final UserService userService;
+    private final QuestionRepository questionRepository;
+    private final QuestionMapper questionMapper;
 
     @Autowired
     public TestQuizzServiceImpl(TestQuizzRepository quizzRepository,
                                 TopicRepository topicRepository,
                                 TestQuizzMapper testQuizzMapper,
-                                UserService userService) {
+                                UserService userService,
+                                QuestionRepository questionRepository,
+                                QuestionMapper questionMapper) {
         this.quizzRepository = quizzRepository;
         this.topicRepository = topicRepository;
         this.testQuizzMapper = testQuizzMapper;
         this.userService = userService;
+        this.questionRepository = questionRepository;
+        this.questionMapper = questionMapper;
     }
 
     private String logged = null;
@@ -206,10 +216,25 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     }
 
     @Override
-    public Optional<TestQuizz> findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException {
-        return Optional.ofNullable(quizzRepository
-                .findTestQuizzByActivationCode(code)
-                .orElseThrow(() -> new TestQuizzNotFoundException(NO_QUIZZ_TEST_FOUND_WITH_CODE + code)));
+    public TestQuizzDTO findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException {
+        Optional<TestQuizz> testQuizz = quizzRepository.findTestQuizzByActivationCode(code);
+        if (testQuizz.isEmpty()) {
+            throw new TestQuizzNotFoundException(NO_QUIZZ_TEST_FOUND_WITH_CODE + code);
+        }
+        List<Question> questionList = questionRepository.randomQuestion(testQuizz.get().getId(), 5);
+
+        List<QuestionDTO> questionDTOList = questionMapper.questionMapToQuestionDTO(questionList);
+
+        return TestQuizzDTO.builder()
+                .id(testQuizz.get().getId())
+                .testName(testQuizz.get().getTestName())
+                .examTime(testQuizz.get().getExamTime())
+                .dateCreated(testQuizz.get().getDateCreated())
+                .isStart(testQuizz.get().getIsStart())
+                .isEnd(testQuizz.get().getIsEnd())
+                .activationCode(testQuizz.get().getActivationCode())
+                .questionDTOList(questionDTOList)
+                .build();
     }
 
     @Override

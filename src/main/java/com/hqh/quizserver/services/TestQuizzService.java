@@ -1,12 +1,12 @@
 package com.hqh.quizserver.services;
 
+import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface TestQuizzService {
@@ -24,7 +24,7 @@ public interface TestQuizzService {
 
     void deleteQuizz(Long id);
 
-    Optional<TestQuizz> findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException;
+    TestQuizzDTO findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException;
 
     List<TestQuizz> findAllTestQuizzByTopicId(Long id);
 

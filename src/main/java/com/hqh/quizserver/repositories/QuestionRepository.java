@@ -11,22 +11,21 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    @Query("SELECT u "
-         + "FROM Question u "
-         + "WHERE u.testQuizz.id = :id")
+    @Query("SELECT u FROM Question u WHERE u.testQuizz.id = :id")
     List<Question> findAllByQuizzId(@Param("id") Long id);
 
     Question findQuestionById(Long id);
 
     @Query(nativeQuery = true,
-           value = "SELECT * "
-                 + "FROM question q LIMIT :page, :size")
+           value = "SELECT * FROM question q LIMIT :page, :size")
     List<Question> questionsPagination(@Param("page") Integer page,
                                        @Param("size") Integer size);
 
     @Query(nativeQuery = true,
-           value = "SELECT COUNT(id) "
-                 + "FROM question q")
+           value = "SELECT COUNT(id) FROM question q")
     Integer getTotalNumberOfRecords();
+
+    @Query(value = "SELECT q.* FROM question q WHERE quizz_id = :quizzId ORDER BY random() LIMIT :amount", nativeQuery = true)
+    List<Question> randomQuestion(@Param("quizzId") Long quizzId, @Param("amount") Integer amount);
 
 }
