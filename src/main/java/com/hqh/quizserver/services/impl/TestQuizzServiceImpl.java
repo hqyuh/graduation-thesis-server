@@ -2,6 +2,7 @@ package com.hqh.quizserver.services.impl;
 
 import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.dto.TestQuizzDTO;
+import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.Topic;
@@ -12,6 +13,7 @@ import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.mapper.QuestionMapper;
 import com.hqh.quizserver.mapper.TestQuizzMapper;
+import com.hqh.quizserver.mapper.TestQuizzMapperImpl;
 import com.hqh.quizserver.repositories.QuestionRepository;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
 import com.hqh.quizserver.repositories.TopicRepository;
@@ -32,6 +34,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.hqh.quizserver.constant.TestQuizzImplConstant.*;
 import static com.hqh.quizserver.utils.ConvertTimeUtils.convertTime;
@@ -174,6 +177,17 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     }
 
 
+    /**
+     * Update quizz
+     *
+     * @param currTestName The name of the test that is currently being edited
+     * @param newTestName The name of the test
+     * @param examTime the time to take the test
+     * @param isStart The time the test starts
+     * @param isEnd End time of the test
+     * @param topicId the id of the topic
+     * @return The currentQuizz is being returned.
+     */
     @Override
     public TestQuizz updateQuizz(String currTestName, String newTestName, Integer examTime, String isStart,
                                  String isEnd, Long topicId)
@@ -206,8 +220,11 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     }
 
     @Override
-    public List<TestQuizz> getAllQuizz() {
-        return quizzRepository.findAll();
+    public List<TestQuizzResponseDTO> getAllQuizz() {
+        log.info("Get all quizz ::");
+        List<TestQuizz> testQuizzList = quizzRepository.findAll();
+
+        return testQuizzMapper.listQuizzToQuizzResponseDTO(testQuizzList);
     }
 
     @Override
@@ -216,13 +233,14 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     }
 
     @Override
-    public TestQuizzDTO findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException {
+    public TestQuizzDTO findTestQuizzByActivationCode(String code, Integer amount) throws TestQuizzNotFoundException {
         Optional<TestQuizz> testQuizz = quizzRepository.findTestQuizzByActivationCode(code);
+
         if (testQuizz.isEmpty()) {
             log.error("No quizz found with code {}", code);
             throw new TestQuizzNotFoundException(NO_QUIZZ_TEST_FOUND_WITH_CODE + code);
         }
-        List<Question> questionList = questionRepository.randomQuestion(testQuizz.get().getId(), 5);
+        List<Question> questionList = questionRepository.randomQuestion(testQuizz.get().getId(), amount);
         List<QuestionDTO> questionDTOList = questionMapper.questionMapToQuestionDTO(questionList);
 
         return TestQuizzDTO.builder()
@@ -238,8 +256,11 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     }
 
     @Override
-    public List<TestQuizz> findAllTestQuizzByTopicId(Long id) {
-        return quizzRepository.findTestQuizzByTopicId(id);
+    public List<TestQuizzResponseDTO> findAllTestQuizzByTopicId(Long id) {
+        log.info("Get all quizz by topic ID :: {}", id);
+        List<TestQuizz> testQuizzList = quizzRepository.findTestQuizzByTopicId(id);
+
+        return testQuizzMapper.listQuizzToQuizzResponseDTO(testQuizzList);
     }
 
     @Override
@@ -250,6 +271,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     @Override
     public ByteArrayInputStream loadExcel(long id) {
         TestQuizz quizz = quizzRepository.findTestQuizzById(id);
+        log.info("Export quizz with name: {}", quizz.getTestName());
 
         return ExcelHelper.quizzesToExcel(quizz);
     }

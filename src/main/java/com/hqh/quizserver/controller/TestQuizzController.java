@@ -1,6 +1,7 @@
 package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.dto.TestQuizzDTO;
+import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.entities.HttpResponse;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
@@ -71,8 +72,8 @@ public class TestQuizzController extends ExceptionHandling {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<TestQuizz>> getAllQuizz() {
-        List<TestQuizz> quizzes = testQuizzService.getAllQuizz();
+    public ResponseEntity<List<TestQuizzResponseDTO>> getAllQuizz() {
+        List<TestQuizzResponseDTO> quizzes = testQuizzService.getAllQuizz();
 
         return new ResponseEntity<>(quizzes, OK);
     }
@@ -85,26 +86,20 @@ public class TestQuizzController extends ExceptionHandling {
         return response(OK, SUCCESS, DELETED_QUIZZ_TEST_SUCCESSFULLY);
     }
 
-    @GetMapping("/code/{code}")
-    public ResponseEntity<TestQuizzDTO> getTestQuizzByCode(@PathVariable("code") String code)
+    @GetMapping("/activated")
+    public ResponseEntity<TestQuizzDTO> getTestQuizzByCode(@RequestParam String code,
+                                                           @RequestParam Integer amount)
             throws TestQuizzNotFoundException {
-        TestQuizzDTO testQuizzDTO = testQuizzService.findTestQuizzByActivationCode(code);
+        TestQuizzDTO testQuizzDTO = testQuizzService.findTestQuizzByActivationCode(code, amount);
 
         return new ResponseEntity<>(testQuizzDTO, OK);
     }
 
     @GetMapping("/list-topic/{id}")
-    public ResponseEntity<List<TestQuizz>> getAllQuizzByTopicId(@PathVariable("id") Long id) {
-        List<TestQuizz> quizzes = testQuizzService.findAllTestQuizzByTopicId(id);
+    public ResponseEntity<List<TestQuizzResponseDTO>> getAllQuizzByTopicId(@PathVariable("id") Long id) {
+        List<TestQuizzResponseDTO> quizzes = testQuizzService.findAllTestQuizzByTopicId(id);
 
         return new ResponseEntity<>(quizzes, OK);
-    }
-
-    @GetMapping("/find/{id}")
-    public ResponseEntity<TestQuizz> getQuizzById(@PathVariable("id") Long id) {
-        TestQuizz quizz = testQuizzService.findTestQuizzById(id);
-
-        return new ResponseEntity<>(quizz, OK);
     }
 
     @GetMapping("/export/excel/{id}")

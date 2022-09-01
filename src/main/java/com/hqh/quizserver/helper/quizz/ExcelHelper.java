@@ -3,10 +3,7 @@ package com.hqh.quizserver.helper.quizz;
 import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.UserMark;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,24 +22,27 @@ public class ExcelHelper {
 
     public static final String SHEET_QUIZZES = "Quizzes";
 
-    /***
-     * export file excel quiz
-     *
-     * @param quizz
-     * @return
-     */
     public static ByteArrayInputStream quizzesToExcel(TestQuizz quizz) {
 
         try(XSSFWorkbook workbook = new XSSFWorkbook();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-            XSSFSheet sheet = workbook.createSheet(SHEET_QUIZZES);
+            XSSFSheet sheet = workbook.createSheet(quizz.getTestName().toUpperCase());
             XSSFRow headerRow = sheet.createRow(0);
 
+            // set font
+            XSSFFont font = workbook.createFont();
+            font.setBold(true);
+            font.setFontHeightInPoints((short) 12);
+            font.setColor(IndexedColors.BLACK.index);
+
+            XSSFCellStyle style = workbook.createCellStyle();
+            style.setFont(font);
 
             for (int i = 0; i < HEADER_QUIZZ.length; i++) {
-                Cell cell = headerRow.createCell(i);
+                XSSFCell cell = headerRow.createCell(i);
                 cell.setCellValue(HEADER_QUIZZ[i]);
+                cell.setCellStyle(style);
             }
 
             int rowIdx = 1;
@@ -56,9 +56,10 @@ public class ExcelHelper {
                 row.createCell(5).setCellValue(question.getAnswerC());
                 row.createCell(6).setCellValue(question.getAnswerD());
                 row.createCell(7).setCellValue(question.getCorrectResult());
-                row.createCell(8).setCellValue(question.getMark());
+                row.createCell(8).setCellValue(question.getCorrectEssay());
+                row.createCell(9).setCellValue(question.getMark());
+                row.createCell(10).setCellValue(question.getType());
             }
-
             workbook.write(outputStream);
 
             return new ByteArrayInputStream(outputStream.toByteArray());

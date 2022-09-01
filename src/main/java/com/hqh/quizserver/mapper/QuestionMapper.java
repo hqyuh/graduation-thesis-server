@@ -25,7 +25,6 @@ public interface QuestionMapper {
     @Mapping(target = "mark", ignore = true)
     @Mapping(target = "milestones", ignore = true)
     @Mapping(target = "testQuizz", source = "testQuizz")
-
     Question map(QuestionDTO questionDto, TestQuizz testQuizz);
 
     @Mapping(target = "quizzId", expression = "java(question.getTestQuizz().getId())")
