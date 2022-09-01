@@ -1,4 +1,4 @@
-package com.hqh.quizserver.request;
+package com.hqh.quizserver.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TestQuizzRequest {
+public class TestQuizzRequestDTO {
     private String currentTestName;
     private String testName;
     private String examTime;

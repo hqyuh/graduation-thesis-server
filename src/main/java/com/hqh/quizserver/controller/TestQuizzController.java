@@ -7,7 +7,7 @@ import com.hqh.quizserver.exceptions.ExceptionHandling;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
-import com.hqh.quizserver.request.TestQuizzRequest;
+import com.hqh.quizserver.dto.TestQuizzRequestDTO;
 import com.hqh.quizserver.services.TestQuizzHelperService;
 import com.hqh.quizserver.services.TestQuizzService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.hqh.quizserver.constant.FileConstant.*;
 import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
@@ -44,7 +43,7 @@ public class TestQuizzController extends ExceptionHandling {
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestBody TestQuizzRequest testQuizz)
+    public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
         testQuizzService.createQuizz(
                 testQuizz.getTestName(),
@@ -58,7 +57,7 @@ public class TestQuizzController extends ExceptionHandling {
 
     @PatchMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> updateTestQuizz(@RequestBody TestQuizzRequest testQuizz)
+    public ResponseEntity<HttpResponse> updateTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
         testQuizzService.updateQuizz(
                 testQuizz.getCurrentTestName(),

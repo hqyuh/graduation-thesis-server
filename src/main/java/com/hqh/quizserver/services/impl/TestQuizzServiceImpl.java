@@ -219,10 +219,10 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     public TestQuizzDTO findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException {
         Optional<TestQuizz> testQuizz = quizzRepository.findTestQuizzByActivationCode(code);
         if (testQuizz.isEmpty()) {
+            log.error("No quizz found with code {}", code);
             throw new TestQuizzNotFoundException(NO_QUIZZ_TEST_FOUND_WITH_CODE + code);
         }
         List<Question> questionList = questionRepository.randomQuestion(testQuizz.get().getId(), 5);
-
         List<QuestionDTO> questionDTOList = questionMapper.questionMapToQuestionDTO(questionList);
 
         return TestQuizzDTO.builder()
