@@ -13,7 +13,6 @@ import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.mapper.QuestionMapper;
 import com.hqh.quizserver.mapper.TestQuizzMapper;
-import com.hqh.quizserver.mapper.TestQuizzMapperImpl;
 import com.hqh.quizserver.repositories.QuestionRepository;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
 import com.hqh.quizserver.repositories.TopicRepository;
@@ -34,7 +33,6 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.hqh.quizserver.constant.TestQuizzImplConstant.*;
 import static com.hqh.quizserver.utils.ConvertTimeUtils.convertTime;
@@ -232,6 +230,13 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         quizzRepository.deleteById(id);
     }
 
+    /**
+     * It returns a TestQuizzDTO object with a list of QuestionDTO objects.
+     *
+     * @param code the activation code of the test
+     * @param amount the number of questions you want to get
+     * @return A list of questions
+     */
     @Override
     public TestQuizzDTO findTestQuizzByActivationCode(String code, Integer amount) throws TestQuizzNotFoundException {
         Optional<TestQuizz> testQuizz = quizzRepository.findTestQuizzByActivationCode(code);
@@ -279,6 +284,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     @Override
     @Transactional
     public void lockQuizz(Long id, boolean isStatus) {
+        log.info("Lock quizz");
         quizzRepository.quizzLock(id, isStatus);
     }
 }

@@ -25,4 +25,5 @@ public class TestQuizzResponseDTO {
     )
     private Instant dateCreated;
     private String activationCode;
+    private String createdBy;
 }

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class ExcelHelper {
 
             return new ByteArrayInputStream(outputStream.toByteArray());
         } catch (IOException exception) {
-            throw new RuntimeException(FAIL_TO_IMPORT_DATA_TO_EXCEL_FILE + exception.getMessage());
+            throw new RuntimeException("Fail to import data to Excel file: " + exception.getMessage());
         }
 
     }
@@ -73,16 +74,28 @@ public class ExcelHelper {
         return TYPE.equals(multipartFile.getContentType());
     }
 
-    /***
+    /**
+     * Checks if the value of a given {@link XSSFCell} is empty.
      *
-     * @param inputStream
-     * @param quizzId
-     * @return questions
+     * @param cell
+     *            The {@link XSSFCell}.
+     * @return {@code true} if the {@link XSSFCell} is empty. {@code false}
+     *         otherwise.
      */
-    public static List<Question> importFromExcel(InputStream inputStream, TestQuizz quizzId) {
+    public static boolean isCheckEmpty(XSSFCell cell) {
+        if (cell == null) { // use row.getCell(x, Row.CREATE_NULL_AS_BLANK) to avoid null cells
+            return true;
+        }
+        if (cell.getCellType() == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static List<Question> importFromExcel(InputStream inputStream, TestQuizz testQuizz, String username) {
         try {
             Workbook workbook = new XSSFWorkbook(inputStream);
-            Sheet sheet = workbook.getSheet(SHEET_QUIZZES);
+            Sheet sheet = workbook.getSheet(workbook.getSheetName(0));
             Iterator<Row> rows = sheet.iterator();
             List<Question> questions = new ArrayList<>();
 
@@ -94,51 +107,58 @@ public class ExcelHelper {
                 Iterator<Cell> cellsInRow = currentRow.iterator();
                 Question question = new Question();
                 int cellIdx = 0;
+
                 while (cellsInRow.hasNext()) {
                     Cell currentCell = cellsInRow.next();
-                    switch (cellIdx) {
-                        case 0:
-                            question.setTopicQuestion(currentCell.getStringCellValue());
-                            break;
-                        case 1:
-                            question.setAnswerA(currentCell.getStringCellValue());
-                            break;
-                        case 2:
-                            question.setAnswerB(currentCell.getStringCellValue());
-                            break;
-                        case 3:
-                            question.setAnswerC(currentCell.getStringCellValue());
-                            break;
-                        case 4:
-                            question.setAnswerD(currentCell.getStringCellValue());
-                            break;
-                        case 5:
-                            question.setCorrectResult(currentCell.getStringCellValue());
-                            break;
-                        case 6:
-                            question.setMark((float) currentCell.getNumericCellValue());
-                            break;
-                        case 7:
-                            question.setType(currentCell.getStringCellValue());
-                            break;
-                        case 8:
-                            question.setCorrectEssay(currentCell.getStringCellValue());
-                            break;
-                        default:
-                            break;
+                    if (!isCheckEmpty((XSSFCell) currentCell)) {
+                        switch (cellIdx) {
+                            case 0:
+                                question.setTopicQuestion(currentCell.getStringCellValue());
+                                break;
+                            case 1:
+                                question.setAnswerA(currentCell.getStringCellValue());
+                                break;
+                            case 2:
+                                question.setAnswerB(currentCell.getStringCellValue());
+                                break;
+                            case 3:
+                                question.setAnswerC(currentCell.getStringCellValue());
+                                break;
+                            case 4:
+                                question.setAnswerD(currentCell.getStringCellValue());
+                                break;
+                            case 5:
+                                question.setCorrectResult(currentCell.getStringCellValue().isBlank() ? null : currentCell.getStringCellValue());
+                                break;
+                            case 6:
+                                question.setCorrectEssay(currentCell.getStringCellValue().isBlank() ? null : currentCell.getStringCellValue());
+                                break;
+                            case 7:
+                                question.setMark(Float.parseFloat(String.valueOf(currentCell.getNumericCellValue())));
+                                break;
+                            case 8:
+                                question.setType(currentCell.getStringCellValue());
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     cellIdx++;
                 }
-                question.setTestQuizz(quizzId);
+                question.setTestQuizz(testQuizz);
                 question.setMilestones(1);
                 question.setDateCreated(Instant.now());
+                question.setCreatedAt(new Date());
+                question.setCreatedBy(username);
+                question.setUpdatedAt(new Date());
+                question.setUpdatedBy(username);
                 questions.add(question);
             }
             workbook.close();
 
             return questions;
         } catch (Exception exception) {
-            throw new RuntimeException(FAIL_TO_PARSE_EXCEL_FILE + exception.getMessage());
+            throw new RuntimeException("Fail to parse Excel file: " + exception.getMessage());
         }
     }
 

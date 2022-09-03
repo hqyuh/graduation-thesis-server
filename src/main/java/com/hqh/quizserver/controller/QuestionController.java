@@ -35,7 +35,7 @@ public class QuestionController {
         this.helperService = helperService;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<HttpResponse> createQuestion(@RequestParam("topicQuestion") String topicQuestion,
                                                        @RequestParam(value = "questionImageUrl", required = false)
                                                                MultipartFile questionImageUrl,
