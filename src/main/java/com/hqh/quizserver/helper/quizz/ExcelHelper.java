@@ -21,7 +21,15 @@ import static com.hqh.quizserver.constant.FileConstant.*;
 
 public class ExcelHelper {
 
-    public static final String SHEET_QUIZZES = "Quizzes";
+    public static final int COLUMN_INDEX_QUESTION = 0;
+    public static final int COLUMN_INDEX_ANSWER_A = 1;
+    public static final int COLUMN_INDEX_ANSWER_B = 2;
+    public static final int COLUMN_INDEX_ANSWER_C = 3;
+    public static final int COLUMN_INDEX_ANSWER_D = 4;
+    public static final int COLUMN_INDEX_CORRECT_RESULT = 5;
+    public static final int COLUMN_INDEX_CORRECT_ESSAY = 6;
+    public static final int COLUMN_INDEX_MARK = 7;
+    public static final int COLUMN_INDEX_TYPE = 8;
 
     public static ByteArrayInputStream quizzesToExcel(TestQuizz quizz) {
 
@@ -82,14 +90,40 @@ public class ExcelHelper {
      * @return {@code true} if the {@link XSSFCell} is empty. {@code false}
      *         otherwise.
      */
-    public static boolean isCheckEmpty(XSSFCell cell) {
+    public static boolean isCellEmpty(final XSSFCell cell) {
         if (cell == null) { // use row.getCell(x, Row.CREATE_NULL_AS_BLANK) to avoid null cells
             return true;
         }
-        if (cell.getCellType() == null) {
+        if (cell.getCellType() == CellType.BLANK || cell.getStringCellValue().isEmpty()) {
             return true;
         }
-        return false;
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return true;
+        }
+        return cell.getCellType() == CellType.STRING && cell.getStringCellValue().trim().isEmpty();
+    }
+
+    private static Object getCellValue(XSSFCell cell) {
+        CellType cellType = cell.getCellType();
+        Object cellValue = null;
+
+        switch (cellType) {
+            case BOOLEAN:
+                cellValue = cell.getBooleanCellValue();
+                break;
+            case NUMERIC:
+                cellValue = cell.getNumericCellValue();
+                break;
+            case STRING:
+                cellValue = cell.getStringCellValue().isBlank() ? null : cell.getStringCellValue(); // temp
+                break;
+            case _NONE:
+            case BLANK:
+            case ERROR:
+            default:
+                break;
+        }
+        return cellValue;
     }
 
     public static List<Question> importFromExcel(InputStream inputStream, TestQuizz testQuizz, String username) {
@@ -109,39 +143,40 @@ public class ExcelHelper {
                 int cellIdx = 0;
 
                 while (cellsInRow.hasNext()) {
-                    Cell currentCell = cellsInRow.next();
-                    if (!isCheckEmpty((XSSFCell) currentCell)) {
-                        switch (cellIdx) {
-                            case 0:
-                                question.setTopicQuestion(currentCell.getStringCellValue());
-                                break;
-                            case 1:
-                                question.setAnswerA(currentCell.getStringCellValue());
-                                break;
-                            case 2:
-                                question.setAnswerB(currentCell.getStringCellValue());
-                                break;
-                            case 3:
-                                question.setAnswerC(currentCell.getStringCellValue());
-                                break;
-                            case 4:
-                                question.setAnswerD(currentCell.getStringCellValue());
-                                break;
-                            case 5:
-                                question.setCorrectResult(currentCell.getStringCellValue().isBlank() ? null : currentCell.getStringCellValue());
-                                break;
-                            case 6:
-                                question.setCorrectEssay(currentCell.getStringCellValue().isBlank() ? null : currentCell.getStringCellValue());
-                                break;
-                            case 7:
-                                question.setMark(Float.parseFloat(String.valueOf(currentCell.getNumericCellValue())));
-                                break;
-                            case 8:
-                                question.setType(currentCell.getStringCellValue());
-                                break;
-                            default:
-                                break;
-                        }
+                    XSSFCell currentCell = (XSSFCell) cellsInRow.next();
+                    if (currentCell.getCellType() == null)
+                        break;
+
+                    switch (cellIdx) {
+                        case COLUMN_INDEX_QUESTION:
+                            question.setTopicQuestion((String) getCellValue(currentCell));
+                            break;
+                        case COLUMN_INDEX_ANSWER_A:
+                            question.setAnswerA((String) getCellValue(currentCell));
+                            break;
+                        case COLUMN_INDEX_ANSWER_B:
+                            question.setAnswerB((String) getCellValue(currentCell));
+                            break;
+                        case COLUMN_INDEX_ANSWER_C:
+                            question.setAnswerC((String) getCellValue(currentCell));
+                            break;
+                        case COLUMN_INDEX_ANSWER_D:
+                            question.setAnswerD((String) getCellValue(currentCell));
+                            break;
+                        case COLUMN_INDEX_CORRECT_RESULT:
+                            question.setCorrectResult((String) getCellValue(currentCell));
+                            break;
+                        case COLUMN_INDEX_CORRECT_ESSAY:
+                            question.setCorrectEssay((String) getCellValue(currentCell));
+                            break;
+                        case COLUMN_INDEX_MARK:
+                            question.setMark((Double) getCellValue(currentCell));
+                            break;
+                        case COLUMN_INDEX_TYPE:
+                            question.setType((String) getCellValue(currentCell));
+                            break;
+                        default:
+                            break;
                     }
                     cellIdx++;
                 }

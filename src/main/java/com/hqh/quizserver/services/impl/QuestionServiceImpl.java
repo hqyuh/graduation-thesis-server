@@ -72,7 +72,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
     @Override
     public void createQuestion(String topicQuestion, MultipartFile questionImageUrl, String answerA, String answerB,
                                String answerC, String answerD, String correctResult, String correctEssay, String type,
-                               float mark, Long quizzId) throws IOException, NotAnImageFileException {
+                               double mark, Long quizzId) throws IOException, NotAnImageFileException {
 
         log.info("Get user create");
 
@@ -151,7 +151,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
      */
     @Override
     public void updateQuestion(Long id, String topicQuestion, String answerA, String answerB, String answerC, String answerD,
-                               String correctResult, String correctEssay, String type, float mark, Long quizzId,
+                               String correctResult, String correctEssay, String type, double mark, Long quizzId,
                                MultipartFile questionImageUrl) throws IOException, NotAnImageFileException {
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
         Question question = questionRepository.findQuestionById(id);

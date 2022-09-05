@@ -47,7 +47,7 @@ public class Question extends BaseEntity {
     private String correctEssay;
 
     @Column(name = "mark", nullable = false)
-    private float mark;
+    private double mark;
 
     @Column(name = "milestones", nullable = false)
     @JsonIgnore

@@ -53,7 +53,7 @@ public class QuestionController {
                 topicQuestion, questionImageUrl,
                 answerA, answerB, answerC, answerD,
                 correctResult, correctEssay, type,
-                Float.parseFloat(mark), Long.parseLong(quizzId)
+                Double.parseDouble(mark), Long.parseLong(quizzId)
         );
 
         return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
@@ -81,7 +81,7 @@ public class QuestionController {
                 answerA, answerB,
                 answerC, answerD,
                 correctResult, correctEssay, type,
-                Float.parseFloat(mark), Long.parseLong(quizzId),
+                Double.parseDouble(mark), Long.parseLong(quizzId),
                 questionImageUrl
         );
 

@@ -14,14 +14,14 @@ public interface QuestionService {
                         String answerA, String answerB,
                         String answerC, String answerD,
                         String correctResult, String correctEssay,
-                        String type, float mark, Long quizzId)
+                        String type, double mark, Long quizzId)
             throws IOException, NotAnImageFileException;
 
     void updateQuestion(Long id, String topicQuestion,
                         String answerA, String answerB,
                         String answerC, String answerD,
                         String correctResult, String correctEssay,
-                        String type, float mark, Long quizzId,
+                        String type, double mark, Long quizzId,
                         MultipartFile questionImageUrl)
             throws IOException, NotAnImageFileException;
 
