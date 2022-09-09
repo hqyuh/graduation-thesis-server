@@ -1,5 +1,6 @@
 package com.hqh.quizserver.utils;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,8 +22,7 @@ public class ConvertTimeUtils {
      */
     public static Timestamp convertTime(String time) {
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter DATE_FORMAT =
-                new DateTimeFormatterBuilder()
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
                         .appendPattern(DD_MM_YYYY_HH_MM_SS_SSS)
                         .parseDefaulting(HOUR_OF_DAY, now.getHour())
                         .parseDefaulting(MINUTE_OF_HOUR, now.getMinute())
@@ -30,7 +30,7 @@ public class ConvertTimeUtils {
                         .parseDefaulting(NANO_OF_SECOND, now.getNano())
                         .toFormatter()
                         .withZone(ZoneId.of(ZONE_ID));
-        LocalDateTime localDateTime = LocalDateTime.from(DATE_FORMAT.parse(time));
+        LocalDateTime localDateTime = LocalDateTime.from(dateTimeFormatter.parse(time));
 
         return Timestamp.valueOf(localDateTime);
     }

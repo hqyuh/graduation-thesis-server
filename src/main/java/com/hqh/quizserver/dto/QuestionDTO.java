@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDto implements Serializable {
+public class QuestionDTO implements Serializable {
 
     private Long id;
     private String topicQuestion;
@@ -18,7 +18,6 @@ public class QuestionDto implements Serializable {
     private String answerB;
     private String answerC;
     private String answerD;
-    private String correctResult;
     private float mark;
     private Long quizzId;
 

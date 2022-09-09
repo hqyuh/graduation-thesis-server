@@ -1,4 +1,4 @@
-package com.hqh.quizserver.request;
+package com.hqh.quizserver.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class QuestionRequest {
+public class QuestionRequestDTO {
     private Long id;
     private String topicQuestion;
     private String answerA;

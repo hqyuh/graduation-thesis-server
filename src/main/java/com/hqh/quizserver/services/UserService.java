@@ -1,5 +1,6 @@
 package com.hqh.quizserver.services;
 
+import com.hqh.quizserver.dto.UserDTO;
 import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.entities.UserStatistics;
 import com.hqh.quizserver.exceptions.domain.user.*;
@@ -14,7 +15,7 @@ public interface UserService {
     User register(String firstName, String lastName, String username, String email, String role, String password)
             throws UserNotFoundException, EmailExistException, UsernameExistException;
 
-    List<User> getUsers();
+    List<UserDTO> getUsers();
 
     User findUserByUsername(String username);
 

@@ -1,6 +1,6 @@
 package com.hqh.quizserver.services;
 
-import com.hqh.quizserver.dto.QuestionDto;
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,19 +14,19 @@ public interface QuestionService {
                         String answerA, String answerB,
                         String answerC, String answerD,
                         String correctResult, String correctEssay,
-                        String type, float mark, Long quizzId)
+                        String type, double mark, Long quizzId)
             throws IOException, NotAnImageFileException;
 
     void updateQuestion(Long id, String topicQuestion,
                         String answerA, String answerB,
                         String answerC, String answerD,
                         String correctResult, String correctEssay,
-                        String type, float mark, Long quizzId,
+                        String type, double mark, Long quizzId,
                         MultipartFile questionImageUrl)
             throws IOException, NotAnImageFileException;
 
     void deleteQuestion(Long id);
 
-    List<QuestionDto> getAllQuestion(int currentPage);
+    List<QuestionDTO> getAllQuestion(int currentPage);
 
 }

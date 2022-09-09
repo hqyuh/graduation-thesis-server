@@ -1,11 +1,13 @@
 package com.hqh.quizserver.services.impl;
 
+import com.hqh.quizserver.dto.UserDTO;
 import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.entities.UserPrincipal;
 import com.hqh.quizserver.entities.UserStatistics;
 import com.hqh.quizserver.enumeration.Role;
 import com.hqh.quizserver.exceptions.domain.user.*;
 import com.hqh.quizserver.helper.user.CSVHelper;
+import com.hqh.quizserver.mapper.UserMapper;
 import com.hqh.quizserver.repositories.UserRepository;
 import com.hqh.quizserver.services.UserHelperService;
 import com.hqh.quizserver.services.EmailService2;
@@ -36,6 +38,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hqh.quizserver.constant.EmailConstant.*;
 import static com.hqh.quizserver.constant.FileConstant.*;
@@ -50,21 +53,24 @@ import static org.springframework.http.MediaType.*;
 @Qualifier("userDetailsService")
 public class UserServiceImpl implements UserDetailsService, UserService, UserHelperService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final LoginAttemptService loginAttemptService;
     private final EmailService2 emailService2;
+    private final UserMapper userMapper;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder bCryptPasswordEncoder,
                            LoginAttemptService loginAttemptService,
-                           EmailService2 emailService2) {
+                           EmailService2 emailService2,
+                           UserMapper userMapper) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
         this.emailService2 = emailService2;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -76,7 +82,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         User user = userRepository.findUserByEmail(email);
 
         if(user == null) {
-            LOGGER.error(NO_USER_FOUND_BY_EMAIL + email);
+            log.error("No user found by email: {}", email);
             throw new UsernameNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
         } else {
             //
@@ -85,7 +91,8 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
             user.setLastLogin(new Date());
             userRepository.save(user);
             UserPrincipal userPrincipal = new UserPrincipal(user);
-            LOGGER.info(FOUND_USER_BY_EMAIL + email);
+
+            log.info("Returning found user by email: {}", email);
 
             return userPrincipal;
         }
@@ -95,7 +102,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
      * isNotLocked() -> function that checks if there is a lock
      * If the account is not locked, check the number of logins
      *
-     * @param user
+     * @param user object user
      */
     private void validateLoginAttempt(User user) {
         if(user.isNotLocked()) {
@@ -105,31 +112,27 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         }
     }
 
-    /***
+
+
+    /**
+     * <h2>It takes in a bunch of parameters, validates them, and then saves the user to the database</h2>
      *
-     * @param firstName
-     * @param lastName
-     * @param username
-     * @param email
-     * @param password
-     * @return
-     * @throws UserNotFoundException
-     * @throws EmailExistException
-     * @throws UsernameExistException
+     * @param firstName The first name of the user.
+     * @param lastName "Doe"
+     * @param username The username of the user.
+     * @param email The email address of the user.
+     * @param role The role of the user.
+     * @param password The password that the user will use to login.
+     * @return User
      */
     @Override
-    public User register(String firstName,
-                         String lastName,
-                         String username,
-                         String email,
-                         String role,
-                         String password)
+    public User register(String firstName, String lastName, String username, String email, String role, String password)
             throws UserNotFoundException, EmailExistException, UsernameExistException {
 
+        log.info("Begin validating email and username :::");
         validateNewUsernameAndEmail(EMPTY, username, email);
-
+        log.info("End validating email and username :::");
         User user = new User();
-
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setUsername(username);
@@ -141,7 +144,10 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         user.setRoles(getRoleEnumName(role).name());
         user.setAuthorities(getRoleEnumName(role).getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
-        userRepository.updateUserStatistics();
+        user.setCreatedAt(new Date());
+        user.setUpdatedAt(new Date());
+        user.setCreatedBy("Self-registered users");
+        user.setUpdatedBy(null);
         userRepository.save(user);
 
         return user;
@@ -158,16 +164,14 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
                                           .toUriString();
     }
 
-    /***
+
+    /**
+     * <h2>It checks if the new username and email are valid and if they are, it returns the current user</h2>
      *
-     * check if username or email exists
-     *
-     * @param currentUsername
-     * @param newUsername
-     * @param newEmail
-     * @throws UsernameExistException
-     * @throws EmailExistException
-     * @return
+     * @param currentUsername the username of the user who is currently logged in.
+     * @param newUsername the new username that the user wants to change to
+     * @param newEmail the new email address that the user wants to change to
+     * @return The current user is being returned.
      */
     private User validateNewUsernameAndEmail(String currentUsername,
                                              String newUsername,
@@ -182,22 +186,27 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
             User currentUser = findUserByUsername(currentUsername);
 
             if (currentUser == null) {
+                log.error("No user found by username {}", currentUsername);
                 throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME + currentUsername);
             }
             // if the user's new name is not null and exists in the database
             if (userByNewUsername != null && !currentUser.getId().equals(userByNewUsername.getId())) {
+                log.error("Username already exists");
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
             // if the user's email is not empty and exists in the database
             if (userByNewEmail != null && !currentUser.getId().equals(userByNewEmail.getId())) {
+                log.error("Email already exists");
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
             return currentUser;
         } else {
             if (userByNewUsername != null) {
+                log.error("Username already exists");
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
             if (userByNewEmail != null) {
+                log.error("Email already exists");
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
             return null;
@@ -205,8 +214,12 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     }
 
     @Override
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getUsers() {
+        return userRepository
+                .findAll()
+                .stream()
+                .map(userMapper::userMapToUserDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -237,11 +250,11 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         }
         String password = generatePassword();
         user.setPassword(encodePassword(password));
-        LOGGER.info(RESET_PASSWORD + password);
+        log.info("Reset password {}", password);
         userRepository.save(user);
         String name = user.getFirstName();
         emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_RESET);
-        LOGGER.info(EMAIL_SENT + email);
+        log.info("An email with a new password was sent to: {}", email);
     }
 
     private Role getRoleEnumName(String role) {
@@ -267,17 +280,16 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
      * @throws MessagingException
      */
     @Override
-    public User addNewUser(String firstName,
-                           String lastName,
-                           String username,
-                           String email,
-                           String role,
-                           boolean isNonLocked,
-                           boolean isActive,
-                           MultipartFile multipartFile)
+    public User addNewUser(String firstName, String lastName, String username, String email, String role,
+                           boolean isNonLocked, boolean isActive, MultipartFile multipartFile)
             throws UserNotFoundException, EmailExistException, UsernameExistException, IOException,
             NotAnImageFileException {
+
+        log.info("Begin validating email and username :::");
         validateNewUsernameAndEmail(EMPTY, username, email);
+        log.info("End validating email and username :::");
+
+        // new user
         User user = new User();
         String password = generatePassword();
         String encodedPassword = encodePassword(password);
@@ -292,11 +304,14 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         user.setRoles(getRoleEnumName(role).name());
         user.setAuthorities(getRoleEnumName(role).getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
+        user.setCreatedAt(new Date());
+        user.setUpdatedAt(new Date());
+        user.setCreatedBy(getCurrentUser().getUsername());
+        user.setUpdatedBy(getCurrentUser().getUsername());
         saveProfileImage(user, multipartFile);
-        System.out.println(password);
         // String name = user.getFirstName();
+        // log.info("Password has been sent to email: {}", email);
         // emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_NEW_USER);
-        userRepository.updateUserStatistics();
         userRepository.save(user);
 
         return user;
@@ -322,7 +337,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
             Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
             if(!Files.exists(userFolder)) {
                 Files.createDirectories(userFolder);
-                LOGGER.info(DIRECTORY_CREATED + userFolder);
+                log.info("Created directory for: {}", userFolder);
             }
 
             Files.deleteIfExists(Paths.get(userFolder + user.getUsername() + DOT + JPG_EXTENSION));
@@ -330,7 +345,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
             Files.copy(profileImage.getInputStream(), userFolder.resolve(user.getUsername() + DOT + JPG_EXTENSION), REPLACE_EXISTING);
             user.setProfileImageUrl(setProfileImageUrl(user.getUsername()));
             userRepository.save(user);
-            LOGGER.info(FILE_SAVED_IN_FILE_SYSTEM + profileImage.getOriginalFilename());
+            log.info("Saved file in file system by name: {}", profileImage.getOriginalFilename());
         }
 
     }
@@ -361,17 +376,10 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
      * @throws NotAnImageFileException
      */
     @Override
-    public User updateUser(String currentUsername,
-                           String newFirstName,
-                           String newLastName,
-                           String newUsername,
-                           String newEmail,
-                           String role,
-                           boolean isNonLocked,
-                           boolean isActive,
-                           MultipartFile profileImage)
-            throws UserNotFoundException, EmailExistException, UsernameExistException,
-            IOException, NotAnImageFileException {
+    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername,
+                           String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage)
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+
         User currentUser = validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
         if (currentUser != null) {
             currentUser.setFirstName(newFirstName);
@@ -382,10 +390,14 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
             currentUser.setNotLocked(isNonLocked);
             currentUser.setRoles(getRoleEnumName(role).name());
             currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
+            currentUser.setCreatedAt(new Date());
+            currentUser.setUpdatedAt(new Date());
+            currentUser.setCreatedBy(getCurrentUser().getUsername());
+            currentUser.setUpdatedBy(getCurrentUser().getUsername());
             userRepository.save(currentUser);
             saveProfileImage(currentUser, profileImage);
+            log.info("Update user successfully");
         }
-
         return currentUser;
     }
 
@@ -395,10 +407,8 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     }
 
     @Override
-    public User updateProfileImage(String username,
-                                   MultipartFile profileImage)
-            throws UserNotFoundException, EmailExistException, UsernameExistException,
-            IOException, NotAnImageFileException {
+    public User updateProfileImage(String username, MultipartFile profileImage)
+            throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
         User user = validateNewUsernameAndEmail(username, null, null);
         saveProfileImage(user, profileImage);
         return user;
@@ -409,35 +419,32 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         return userRepository.findUserById(id);
     }
 
-    /***
-     * check if the old password is correct
+
+    /**
+     * It takes a user and an old password, and returns true if the old password matches the user's password
      *
-     * @param user
-     * @param oldPassword
-     * @return <code>true</code>  if the password is correct
-     *         <code>false</code> otherwise.
+     * @param user The user object that you want to check the password for.
+     * @param oldPassword The password that the user entered in the form
+     * @return A boolean value.
      */
-    public boolean checkIfValidOldPassword(User user,
-                                           String oldPassword) {
+    public boolean checkIfValidOldPassword(User user, String oldPassword) {
         return bCryptPasswordEncoder.matches(oldPassword, user.getPassword());
     }
 
-    /***
-     *
-     * @param email
-     * @param oldPassword
-     * @param newPassword
-     * @throws PasswordException
+    /**
+     * @param email The email address of the user who wants to change their password.
+     * @param oldPassword The password that the user entered in the form.
+     * @param newPassword The new password that the user wants to change to.
      */
-    public void changePassword(String email,
-                               String oldPassword,
-                               String newPassword) throws PasswordException {
+    public void changePassword(String email, String oldPassword, String newPassword) throws PasswordException {
         User user = userRepository.findUserByEmail(email);
 
         if(!checkIfValidOldPassword(user, oldPassword)) {
+            log.error("Current password is incorrect.");
             throw new PasswordException(CURRENT_PASSWORD_IS_INCORRECT);
         }
         user.setPassword(encodePassword(newPassword));
+        log.info("Change password successfully.");
     }
 
     @Override
@@ -462,7 +469,6 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     public UserStatistics userStatistics() {
         UserStatistics userStatistics = new UserStatistics();
         userStatistics.setNumberOfUsersInUse(userRepository.userStatistics());
-
         return userStatistics;
     }
 }

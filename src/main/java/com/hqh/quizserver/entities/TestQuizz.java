@@ -3,6 +3,7 @@ package com.hqh.quizserver.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -16,7 +17,7 @@ import java.util.List;
 @Setter
 @Table(name = "test_quizz")
 @Entity
-public class TestQuizz {
+public class TestQuizz extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

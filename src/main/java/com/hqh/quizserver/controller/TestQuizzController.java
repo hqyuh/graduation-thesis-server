@@ -1,11 +1,14 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.TestQuizzDTO;
+import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.entities.HttpResponse;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
+import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
-import com.hqh.quizserver.request.TestQuizzRequest;
+import com.hqh.quizserver.dto.TestQuizzRequestDTO;
 import com.hqh.quizserver.services.TestQuizzHelperService;
 import com.hqh.quizserver.services.TestQuizzService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.hqh.quizserver.constant.FileConstant.*;
 import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
@@ -40,29 +42,38 @@ public class TestQuizzController extends ExceptionHandling {
         this.helperService = helperService;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestBody TestQuizzRequest testQuizz)
-            throws TestQuizzExistException, TestQuizzNotFoundException {
-        testQuizzService
-                .createQuizz(testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),
-                        testQuizz.getIsStart(), testQuizz.getIsEnd(), Long.parseLong(testQuizz.getTopicId()));
+    public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
+            throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
+        testQuizzService.createQuizz(
+                testQuizz.getTestName(),
+                Integer.parseInt(testQuizz.getExamTime()),
+                testQuizz.getIsStart(),
+                testQuizz.getIsEnd(),
+                Long.parseLong(testQuizz.getTopicId())
+        );
         return response(OK, SUCCESS, ADD_QUICK_TEST_SUCCESS);
 }
 
     @PatchMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> updateTestQuizz(@RequestBody TestQuizzRequest testQuizz)
-            throws TestQuizzExistException, TestQuizzNotFoundException {
-        TestQuizz updateQuizz = testQuizzService
-                .updateQuizz(testQuizz.getCurrentTestName(), testQuizz.getTestName(), Integer.parseInt(testQuizz.getExamTime()),
-                        testQuizz.getIsStart(), testQuizz.getIsEnd(), Long.parseLong(testQuizz.getTopicId()));
+    public ResponseEntity<HttpResponse> updateTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
+            throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
+        testQuizzService.updateQuizz(
+                testQuizz.getCurrentTestName(),
+                testQuizz.getTestName(),
+                Integer.parseInt(testQuizz.getExamTime()),
+                testQuizz.getIsStart(),
+                testQuizz.getIsEnd(),
+                Long.parseLong(testQuizz.getTopicId())
+        );
         return response(OK, SUCCESS, UPDATE_QUICK_TEST_SUCCESS);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<TestQuizz>> getAllQuizz() {
-        List<TestQuizz> quizzes = testQuizzService.getAllQuizz();
+    public ResponseEntity<List<TestQuizzResponseDTO>> getAllQuizz() {
+        List<TestQuizzResponseDTO> quizzes = testQuizzService.getAllQuizz();
 
         return new ResponseEntity<>(quizzes, OK);
     }
@@ -75,26 +86,20 @@ public class TestQuizzController extends ExceptionHandling {
         return response(OK, SUCCESS, DELETED_QUIZZ_TEST_SUCCESSFULLY);
     }
 
-    @GetMapping("/code/{code}")
-    public ResponseEntity<Object> getTestQuizzByCode(@PathVariable("code") String code)
+    @GetMapping("/activated")
+    public ResponseEntity<TestQuizzDTO> getTestQuizzByCode(@RequestParam String code,
+                                                           @RequestParam Integer amount)
             throws TestQuizzNotFoundException {
-        Optional<TestQuizz> quizz = testQuizzService.findTestQuizzByActivationCode(code);
+        TestQuizzDTO testQuizzDTO = testQuizzService.findTestQuizzByActivationCode(code, amount);
 
-        return new ResponseEntity<>(quizz, OK);
+        return new ResponseEntity<>(testQuizzDTO, OK);
     }
 
     @GetMapping("/list-topic/{id}")
-    public ResponseEntity<List<TestQuizz>> getAllQuizzByTopicId(@PathVariable("id") Long id) {
-        List<TestQuizz> quizzes = testQuizzService.findAllTestQuizzByTopicId(id);
+    public ResponseEntity<List<TestQuizzResponseDTO>> getAllQuizzByTopicId(@PathVariable("id") Long id) {
+        List<TestQuizzResponseDTO> quizzes = testQuizzService.findAllTestQuizzByTopicId(id);
 
         return new ResponseEntity<>(quizzes, OK);
-    }
-
-    @GetMapping("/find/{id}")
-    public ResponseEntity<TestQuizz> getQuizzById(@PathVariable("id") Long id) {
-        TestQuizz quizz = testQuizzService.findTestQuizzById(id);
-
-        return new ResponseEntity<>(quizz, OK);
     }
 
     @GetMapping("/export/excel/{id}")

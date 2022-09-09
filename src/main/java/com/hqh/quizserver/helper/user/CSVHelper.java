@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.hqh.quizserver.constant.FileConstant.*;
-import static com.hqh.quizserver.utils.ConvertTimeUtils.formatTimeDayOfBirth;
 
 public class CSVHelper {
 
@@ -25,7 +24,7 @@ public class CSVHelper {
                         user.getUsername(),
                         user.getEmail(),
                         user.getPhoneNumber(),
-                        formatTimeDayOfBirth(user.getDateOfBirth()),
+                        user.getDateOfBirth().toString(),
                         user.getJoinDate().toString(),
                         user.getRoles()
                 );
@@ -34,7 +33,7 @@ public class CSVHelper {
             csvPrinter.flush();
             return new ByteArrayInputStream(outputStream.toByteArray());
         } catch (IOException exception) {
-            throw new RuntimeException(FAIL_TO_IMPORT_DATA_TO_CSV_FILE + exception.getMessage());
+            throw new RuntimeException("Fail to import data to CSV file: " + exception.getMessage());
         }
     }
 

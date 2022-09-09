@@ -1,31 +1,33 @@
 package com.hqh.quizserver.services;
 
+import com.hqh.quizserver.dto.TestQuizzDTO;
+import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.entities.TestQuizz;
+import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface TestQuizzService {
 
     TestQuizz createQuizz(String testName, Integer examTime, String isStart, String isEnd, Long topicId)
-            throws TestQuizzExistException, TestQuizzNotFoundException;
+            throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException;
 
     TestQuizz updateQuizz(String currentTestName, String newTestName, Integer examTime,
                           String isStart, String isEnd, Long topicId)
-            throws TestQuizzExistException, TestQuizzNotFoundException;
+            throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException;
 
     TestQuizz findTestQuizzByTestName(String testName);
 
-    List<TestQuizz> getAllQuizz();
+    List<TestQuizzResponseDTO> getAllQuizz();
 
     void deleteQuizz(Long id);
 
-    Optional<TestQuizz> findTestQuizzByActivationCode(String code) throws TestQuizzNotFoundException;
+    TestQuizzDTO findTestQuizzByActivationCode(String code, Integer amount) throws TestQuizzNotFoundException;
 
-    List<TestQuizz> findAllTestQuizzByTopicId(Long id);
+    List<TestQuizzResponseDTO> findAllTestQuizzByTopicId(Long id);
 
     TestQuizz findTestQuizzById(Long id);
 

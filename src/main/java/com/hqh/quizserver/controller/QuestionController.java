@@ -1,7 +1,7 @@
 package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.entities.HttpResponse;
-import com.hqh.quizserver.dto.QuestionDto;
+import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.services.QuestionHelperService;
@@ -35,7 +35,7 @@ public class QuestionController {
         this.helperService = helperService;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<HttpResponse> createQuestion(@RequestParam("topicQuestion") String topicQuestion,
                                                        @RequestParam(value = "questionImageUrl", required = false)
                                                                MultipartFile questionImageUrl,
@@ -53,7 +53,7 @@ public class QuestionController {
                 topicQuestion, questionImageUrl,
                 answerA, answerB, answerC, answerD,
                 correctResult, correctEssay, type,
-                Float.parseFloat(mark), Long.parseLong(quizzId)
+                Double.parseDouble(mark), Long.parseLong(quizzId)
         );
 
         return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
@@ -81,7 +81,7 @@ public class QuestionController {
                 answerA, answerB,
                 answerC, answerD,
                 correctResult, correctEssay, type,
-                Float.parseFloat(mark), Long.parseLong(quizzId),
+                Double.parseDouble(mark), Long.parseLong(quizzId),
                 questionImageUrl
         );
 
@@ -89,7 +89,7 @@ public class QuestionController {
     }
 
     @GetMapping("/list/{pageNum}")
-    public ResponseEntity<List<QuestionDto>> getAllQuestion(@PathVariable("pageNum") Integer pageNum) {
+    public ResponseEntity<List<QuestionDTO>> getAllQuestion(@PathVariable("pageNum") Integer pageNum) {
         return ResponseEntity
                 .status(OK)
                 .body(questionService.getAllQuestion(pageNum));

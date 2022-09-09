@@ -1,11 +1,15 @@
 package com.hqh.quizserver.mapper;
 
+import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.Topic;
-import com.hqh.quizserver.dto.TestQuizzDto;
+import com.hqh.quizserver.dto.TestQuizzDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface TestQuizzMapper {
@@ -20,9 +24,8 @@ public interface TestQuizzMapper {
     @Mapping(target = "isEnd", ignore = true)
     @Mapping(target = "activationCode", ignore = true)
     @Mapping(target = "topic", source = "topic")
-    TestQuizz map(TestQuizzDto testQuizzDto, Topic topic);
+    TestQuizz map(TestQuizzDTO testQuizzDTO, Topic topic);
 
-    @Mapping(target = "topicId", expression = "java(testQuizz.getTopic().getId())")
-    TestQuizzDto mapToDto(TestQuizz testQuizz);
+    List<TestQuizzResponseDTO> listQuizzToQuizzResponseDTO(List<TestQuizz> testQuizz);
 
 }

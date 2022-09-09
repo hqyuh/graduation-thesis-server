@@ -1,5 +1,6 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.UserDTO;
 import com.hqh.quizserver.entities.*;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
 import com.hqh.quizserver.exceptions.domain.user.*;
@@ -109,10 +110,10 @@ public class UserController extends ExceptionHandling {
 
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> userDTOList = userService.getUsers();
 
-        return new ResponseEntity<>(users, OK);
+        return new ResponseEntity<>(userDTOList, OK);
     }
 
     @DeleteMapping("/delete/{id}")

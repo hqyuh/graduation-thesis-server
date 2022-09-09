@@ -13,7 +13,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "question")
-public class Question {
+public class Question extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +47,7 @@ public class Question {
     private String correctEssay;
 
     @Column(name = "mark", nullable = false)
-    private float mark;
+    private double mark;
 
     @Column(name = "milestones", nullable = false)
     @JsonIgnore
