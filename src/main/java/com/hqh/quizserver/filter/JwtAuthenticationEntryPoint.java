@@ -1,7 +1,7 @@
 package com.hqh.quizserver.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.ApiResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Component;
@@ -23,8 +23,8 @@ public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException exception) throws IOException {
-        HttpResponse httpResponse = new
-                HttpResponse(FORBIDDEN.value(), FORBIDDEN, ERROR.toUpperCase(),
+        ApiResponse httpResponse = new
+                ApiResponse(FORBIDDEN.value(), FORBIDDEN, ERROR.toUpperCase(),
                 FORBIDDEN.getReasonPhrase().toUpperCase(), FORBIDDEN_MESSAGE);
 
         response.setContentType(APPLICATION_JSON_VALUE);

@@ -1,7 +1,7 @@
 package com.hqh.quizserver.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.ApiResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -24,8 +24,8 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException exception) throws IOException, ServletException {
-        HttpResponse httpResponse = new
-                HttpResponse(UNAUTHORIZED.value(), UNAUTHORIZED, ERROR.toUpperCase(),
+        ApiResponse httpResponse = new
+                ApiResponse(UNAUTHORIZED.value(), UNAUTHORIZED, ERROR.toUpperCase(),
                 UNAUTHORIZED.getReasonPhrase().toUpperCase(), ACCESS_DENIED_MESSAGE);
 
         response.setContentType(APPLICATION_JSON_VALUE);

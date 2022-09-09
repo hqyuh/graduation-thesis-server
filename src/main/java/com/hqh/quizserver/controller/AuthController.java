@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.ApiResponse;
 import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.entities.UserPrincipal;
 import com.hqh.quizserver.exceptions.domain.user.EmailExistException;
@@ -44,7 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<HttpResponse> register(@Valid @RequestBody User user)
+    public ResponseEntity<ApiResponse> register(@Valid @RequestBody User user)
             throws UserNotFoundException, EmailExistException, UsernameExistException {
         userService.register(
                 user.getFirstName(),
@@ -58,7 +58,7 @@ public class AuthController {
     }
 
     @GetMapping("/resetPassword/{email}")
-    public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email)
+    public ResponseEntity<ApiResponse> resetPassword(@PathVariable("email") String email)
             throws EmailNotFoundException, MessagingException {
         userService.resetPassword(email);
         return response(OK, SUCCESS,EMAIL_SENT + email);

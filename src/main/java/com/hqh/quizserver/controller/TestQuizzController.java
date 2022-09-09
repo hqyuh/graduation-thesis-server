@@ -2,8 +2,7 @@ package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.dto.TestQuizzResponseDTO;
-import com.hqh.quizserver.entities.HttpResponse;
-import com.hqh.quizserver.entities.TestQuizz;
+import com.hqh.quizserver.entities.ApiResponse;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
@@ -44,7 +43,7 @@ public class TestQuizzController extends ExceptionHandling {
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> addNewTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
+    public ResponseEntity<ApiResponse> addNewTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
         testQuizzService.createQuizz(
                 testQuizz.getTestName(),
@@ -58,7 +57,7 @@ public class TestQuizzController extends ExceptionHandling {
 
     @PatchMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<HttpResponse> updateTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
+    public ResponseEntity<ApiResponse> updateTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
         testQuizzService.updateQuizz(
                 testQuizz.getCurrentTestName(),

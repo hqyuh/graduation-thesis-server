@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.HttpResponse;
+import com.hqh.quizserver.entities.ApiResponse;
 import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
@@ -36,18 +36,18 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<HttpResponse> createQuestion(@RequestParam("topicQuestion") String topicQuestion,
-                                                       @RequestParam(value = "questionImageUrl", required = false)
+    public ResponseEntity<ApiResponse> createQuestion(@RequestParam("topicQuestion") String topicQuestion,
+                                                      @RequestParam(value = "questionImageUrl", required = false)
                                                                MultipartFile questionImageUrl,
-                                                       @RequestParam("answerA") String answerA,
-                                                       @RequestParam("answerB") String answerB,
-                                                       @RequestParam("answerC") String answerC,
-                                                       @RequestParam("answerD") String answerD,
-                                                       @RequestParam("correctResult") String correctResult,
-                                                       @RequestParam("correctEssay") String correctEssay,
-                                                       @RequestParam("type") String type,
-                                                       @RequestParam("mark") String mark,
-                                                       @RequestParam("quizzId") String quizzId)
+                                                      @RequestParam("answerA") String answerA,
+                                                      @RequestParam("answerB") String answerB,
+                                                      @RequestParam("answerC") String answerC,
+                                                      @RequestParam("answerD") String answerD,
+                                                      @RequestParam("correctResult") String correctResult,
+                                                      @RequestParam("correctEssay") String correctEssay,
+                                                      @RequestParam("type") String type,
+                                                      @RequestParam("mark") String mark,
+                                                      @RequestParam("quizzId") String quizzId)
             throws IOException, NotAnImageFileException {
         questionService.createQuestion(
                 topicQuestion, questionImageUrl,
@@ -61,18 +61,18 @@ public class QuestionController {
 
 
     @PatchMapping("/update")
-    public ResponseEntity<HttpResponse> updateQuestion(@RequestParam("id") String id,
-                                                       @RequestParam("topicQuestion") String topicQuestion,
-                                                       @RequestParam("answerA") String answerA,
-                                                       @RequestParam("answerB") String answerB,
-                                                       @RequestParam("answerC") String answerC,
-                                                       @RequestParam("answerD") String answerD,
-                                                       @RequestParam("correctResult") String correctResult,
-                                                       @RequestParam("correctEssay") String correctEssay,
-                                                       @RequestParam("type") String type,
-                                                       @RequestParam("mark") String mark,
-                                                       @RequestParam("quizzId") String quizzId,
-                                                       @RequestParam(value = "questionImageUrl", required = false)
+    public ResponseEntity<ApiResponse> updateQuestion(@RequestParam("id") String id,
+                                                      @RequestParam("topicQuestion") String topicQuestion,
+                                                      @RequestParam("answerA") String answerA,
+                                                      @RequestParam("answerB") String answerB,
+                                                      @RequestParam("answerC") String answerC,
+                                                      @RequestParam("answerD") String answerD,
+                                                      @RequestParam("correctResult") String correctResult,
+                                                      @RequestParam("correctEssay") String correctEssay,
+                                                      @RequestParam("type") String type,
+                                                      @RequestParam("mark") String mark,
+                                                      @RequestParam("quizzId") String quizzId,
+                                                      @RequestParam(value = "questionImageUrl", required = false)
                                                                    MultipartFile questionImageUrl)
             throws IOException, NotAnImageFileException {
 
@@ -96,15 +96,15 @@ public class QuestionController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpResponse> deleteQuestion(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse> deleteQuestion(@PathVariable("id") Long id) {
         questionService.deleteQuestion(id);
 
         return response(OK, SUCCESS, QUESTION_DELETED_SUCCESSFULLY);
     }
 
     @PostMapping("/import/{id}")
-    public ResponseEntity<HttpResponse> importFileExcel(@RequestParam("file") MultipartFile multipartFile,
-                                                        @PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse> importFileExcel(@RequestParam("file") MultipartFile multipartFile,
+                                                       @PathVariable("id") Long id) {
         if(ExcelHelper.hasExcelFormat(multipartFile)) {
             try {
                 helperService.saveFile(multipartFile, id);
