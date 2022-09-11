@@ -28,4 +28,6 @@ public interface TestQuizzMapper {
 
     List<TestQuizzResponseDTO> listQuizzToQuizzResponseDTO(List<TestQuizz> testQuizz);
 
+    TestQuizzResponseDTO convertQuizzToQuizzResponseDTO(TestQuizz testQuizz);
+
 }

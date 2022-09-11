@@ -1,7 +1,7 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.TopicDTO;
 import com.hqh.quizserver.entities.ApiResponse;
-import com.hqh.quizserver.entities.Topic;
 import com.hqh.quizserver.exceptions.domain.topic.TopicExistException;
 import com.hqh.quizserver.exceptions.domain.topic.TopicNotFoundException;
 import com.hqh.quizserver.services.TopicService;
@@ -28,10 +28,10 @@ public class TopicController {
         this.topicService = topicService;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<ApiResponse> createTopic(@RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
-        Topic topic = topicService.createTopic(topicName);
+        topicService.createTopic(topicName);
         return response(CREATED, SUCCESS, ADD_TOPIC_SUCCESS);
     }
 
@@ -39,7 +39,7 @@ public class TopicController {
     public ResponseEntity<ApiResponse> createTopic(@RequestParam("currentTopicName") String currentTopicName,
                                                    @RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
-        Topic topic = topicService.updateTopic(currentTopicName, topicName);
+        topicService.updateTopic(currentTopicName, topicName);
         return response(OK, SUCCESS, UPDATE_TOPIC_SUCCESS);
     }
 
@@ -51,10 +51,17 @@ public class TopicController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Topic>> getAllTopic() {
-        List<Topic> topicList = topicService.getAllTopic();
+    public ResponseEntity<List<TopicDTO>> getAllTopic() {
+        List<TopicDTO> topicDTOList = topicService.getAllTopic();
 
-        return new ResponseEntity<>(topicList, OK);
+        return new ResponseEntity<>(topicDTOList, OK);
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<TopicDTO> getTopicByID(@PathVariable(name = "id") Long id) {
+        TopicDTO topicDTO = topicService.getTopicByID(id);
+
+        return new ResponseEntity<>(topicDTO, OK);
     }
 
 }
