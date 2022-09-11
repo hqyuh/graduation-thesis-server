@@ -1,21 +1,16 @@
 package com.hqh.quizserver.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.io.Serializable;
-
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserAnswerDto implements Serializable {
-
-    private Long id;
-    private Long quizzId;
+@Getter
+@Setter
+public class UserAnswerQuestionRequestDTO {
     private Long questionId;
-    private Long userId;
     private String isSelected;
     private String shortAnswer;
-
 }

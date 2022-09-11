@@ -1,13 +1,16 @@
 package com.hqh.quizserver.mapper;
 
+import com.hqh.quizserver.dto.UserAnswerQuestionRequestDTO;
 import com.hqh.quizserver.entities.Question;
 import com.hqh.quizserver.entities.TestQuizz;
 import com.hqh.quizserver.entities.User;
 import com.hqh.quizserver.entities.UserAnswer;
-import com.hqh.quizserver.dto.UserAnswerDto;
+import com.hqh.quizserver.dto.UserAnswerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.Optional;
 
 
 @Mapper(componentModel = "spring")
@@ -24,11 +27,11 @@ public interface UserAnswerMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    UserAnswer map(UserAnswerDto userAnswerDto, TestQuizz testQuizz, Question question, User user);
+    UserAnswer convertUserAnswerDTOToUserAnswerEntity(UserAnswerQuestionRequestDTO userAnswerQuestionRequestDTO, TestQuizz testQuizz, Question question, User user);
 
     @Mapping(target = "quizzId", expression = "java(userAnswer.getTestQuizz().getId())")
     @Mapping(target = "questionId", expression = "java(userAnswer.getQuestion().getId())")
     @Mapping(target = "userId", expression = "java(userAnswer.getUser().getId())")
-    UserAnswerDto mapToDto(UserAnswer userAnswer);
+    UserAnswerDTO mapToDto(UserAnswer userAnswer);
 
 }

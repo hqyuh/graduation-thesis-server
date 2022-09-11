@@ -1,18 +1,21 @@
 package com.hqh.quizserver.services.impl;
 
+import com.hqh.quizserver.dto.UserAnswerQuestionRequestDTO;
+import com.hqh.quizserver.dto.UserAnswerRequestDTO;
 import com.hqh.quizserver.entities.*;
 import com.hqh.quizserver.dto.ReviewAnswerDto;
-import com.hqh.quizserver.dto.UserAnswerDto;
 import com.hqh.quizserver.mapper.UserAnswerMapper;
 import com.hqh.quizserver.repositories.QuestionRepository;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
 import com.hqh.quizserver.repositories.UserAnswerRepository;
 import com.hqh.quizserver.services.UserAnswerService;
 import com.hqh.quizserver.services.UserService;
+import com.hqh.quizserver.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -38,23 +41,25 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         this.userService = userService;
     }
 
-    /***
-     *
-     * @param userAnswerDto
-     */
     @Override
-    public void saveAllUserAnswer(List<UserAnswerDto> userAnswerDto) {
-        List<UserAnswer> userAnswerList = new ArrayList<>();
-        for (UserAnswerDto userAnswerTemp : userAnswerDto) {
-            TestQuizz quizzId = quizzRepository.findTestQuizzById(userAnswerTemp.getQuizzId());
-            Question questionId = questionRepository.findQuestionById(userAnswerTemp.getQuestionId());
-            User userId = userService.getCurrentUser();
-            UserAnswer userAnswer = userAnswerMapper
-                    .map(userAnswerTemp, quizzId, questionId, userId);
-            userAnswer.setIsSelected(userAnswerTemp.getIsSelected());
-            userAnswer.setShortAnswer(userAnswerTemp.getShortAnswer());
-            userAnswerList.add(userAnswer);
+    public void saveAllUserAnswer(UserAnswerRequestDTO userAnswerRequestDTO) {
 
+        List<UserAnswer> userAnswerList = new ArrayList<>();
+        Long quizzId = userAnswerRequestDTO.getQuizzId();
+        TestQuizz testQuizz = quizzRepository.findTestQuizzById(quizzId);
+        User user = userService.getCurrentUser();
+
+        for (UserAnswerQuestionRequestDTO value : userAnswerRequestDTO.getListAnswer()) {
+            Question question = questionRepository.findQuestionById(value.getQuestionId());
+            UserAnswer userAnswer = userAnswerMapper.convertUserAnswerDTOToUserAnswerEntity(value, testQuizz, question, user);
+            userAnswer.setIsSelected(CommonUtils.isNull(value.getIsSelected()) ? null : value.getIsSelected());
+            userAnswer.setShortAnswer(CommonUtils.isNull(value.getShortAnswer()) ? null : value.getShortAnswer());
+            userAnswer.setCreatedAt(new Date());
+            userAnswer.setCreatedBy(user.getUsername());
+            userAnswer.setUpdatedAt(new Date());
+            userAnswer.setUpdatedBy(user.getUsername());
+
+            userAnswerList.add(userAnswer);
         }
         userAnswerRepository.saveAll(userAnswerList);
     }

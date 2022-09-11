@@ -28,4 +28,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query(value = "SELECT q.* FROM question q WHERE quizz_id = :quizzId ORDER BY random() LIMIT :amount", nativeQuery = true)
     List<Question> randomQuestion(@Param("quizzId") Long quizzId, @Param("amount") Integer amount);
 
+    List<Question> findAllByTestQuizzId(Long id);
+
 }
