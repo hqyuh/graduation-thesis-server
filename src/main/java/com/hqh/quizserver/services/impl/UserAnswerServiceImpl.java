@@ -3,7 +3,7 @@ package com.hqh.quizserver.services.impl;
 import com.hqh.quizserver.dto.UserAnswerQuestionRequestDTO;
 import com.hqh.quizserver.dto.UserAnswerRequestDTO;
 import com.hqh.quizserver.entities.*;
-import com.hqh.quizserver.dto.ReviewAnswerDto;
+import com.hqh.quizserver.dto.ReviewAnswerDTO;
 import com.hqh.quizserver.mapper.UserAnswerMapper;
 import com.hqh.quizserver.repositories.QuestionRepository;
 import com.hqh.quizserver.repositories.TestQuizzRepository;
@@ -65,7 +65,10 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     }
 
     @Override
-    public List<ReviewAnswerDto> reviewAnswerUser(Long quizzId, Long userId) {
+    public List<ReviewAnswerDTO> reviewAnswerUser(Long quizzId, Long userId) {
+
+        List<ReviewAnswerDTO> reviewAnswerDTOS = userAnswerRepository.reviewAnswerUser(quizzId, userId);
+
         return userAnswerRepository.reviewAnswerUser(quizzId, userId);
     }
 }

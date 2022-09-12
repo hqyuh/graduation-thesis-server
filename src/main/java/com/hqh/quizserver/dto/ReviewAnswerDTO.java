@@ -2,6 +2,7 @@ package com.hqh.quizserver.dto;
 
 import lombok.*;
 
+
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -9,16 +10,16 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class ReviewAnswerDto implements Serializable {
-
+public class ReviewAnswerDTO implements Serializable {
     private String topicQuestion;
     private String answerA;
     private String answerB;
     private String answerC;
     private String answerD;
-    private String correctResult;
+
     private String isSelected;
+    private String correctResult;
+
     private String shortAnswer;
     private String correctEssay;
-
 }

@@ -1,7 +1,7 @@
 package com.hqh.quizserver.repositories;
 
 import com.hqh.quizserver.entities.UserAnswer;
-import com.hqh.quizserver.dto.ReviewAnswerDto;
+import com.hqh.quizserver.dto.ReviewAnswerDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,17 +35,12 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
          + "AND u.testQuizz.id = :id")
     float totalMarkByQuizzId(@Param("id") Long id);
 
-    @Query("SELECT new com.hqh.quizserver.dto.ReviewAnswerDto("
-         + "q.topicQuestion, q.answerA, q.answerB, q.answerC, q.answerD, "
-         + "q.correctResult, u.isSelected, u.shortAnswer, q.correctEssay)"
-         + "FROM Question q "
-         + "INNER JOIN UserAnswer u "
-         + "ON q.id = u.question.id "
-         + "INNER JOIN TestQuizz t "
-         + "ON q.testQuizz.id = t.id "
-         + "AND t.id = :quizzId "
-         + "AND u.user.id = :userId")
-    List<ReviewAnswerDto> reviewAnswerUser(@Param("quizzId") Long quizzId,
-                                           @Param("userId") Long userId);
+    @Query("SELECT new com.hqh.quizserver.dto.ReviewAnswerDTO( q.topicQuestion, q.answerA, q.answerB, q.answerC, q.answerD, "
+         + "ua.isSelected, q.correctResult, ua.shortAnswer, q.correctEssay ) "
+         + "FROM TestQuizz tq "
+         + "INNER JOIN Question q ON q.testQuizz.id = tq.id "
+         + "INNER JOIN UserAnswer ua ON q.id = ua.question.id "
+         + "AND tq.id = :quizzId AND ua.user.id = :userId")
+    List<ReviewAnswerDTO> reviewAnswerUser(@Param("quizzId") Long quizzId, @Param("userId") Long userId);
 
 }
