@@ -1,6 +1,6 @@
 package com.hqh.quizserver.repositories;
 
-import com.hqh.quizserver.dto.ReviewAnswerDTO;
+import com.hqh.quizserver.dto.ReviewAnswerResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -24,8 +24,8 @@ class UserAnswerRepositoryTest {
     }
 
     @Test
-    public void testGetQuestionByQuizzId() {
-        List<ReviewAnswerDTO> reviewAnswerDtos = userAnswerRepository.reviewAnswerUser(4L, 11L);
-        reviewAnswerDtos.forEach(System.out::println);
+    void testGetQuestionByQuizzId() {
+        List<ReviewAnswerResponseDTO> reviewAnswerResponseDtos = userAnswerRepository.reviewAnswerUser(1L, 1L);
+        reviewAnswerResponseDtos.forEach(System.out::println);
     }
 }

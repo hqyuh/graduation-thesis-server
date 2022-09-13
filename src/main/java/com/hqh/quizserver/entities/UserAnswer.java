@@ -38,4 +38,7 @@ public class UserAnswer extends BaseEntity {
 
     @Column(name = "short_answer")
     private String shortAnswer;
+
+    @Column(name = "is_correct", columnDefinition = "boolean default false")
+    private boolean isCorrect;
 }
