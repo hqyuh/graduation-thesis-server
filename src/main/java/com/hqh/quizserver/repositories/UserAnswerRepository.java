@@ -1,7 +1,7 @@
 package com.hqh.quizserver.repositories;
 
 import com.hqh.quizserver.entities.UserAnswer;
-import com.hqh.quizserver.dto.ReviewAnswerResponseDTO;
+import com.hqh.quizserver.dto.IReviewAnswerResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,13 +35,22 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
          + "AND u.testQuizz.id = :id")
     float totalMarkByQuizzId(@Param("id") Long id);
 
-    @Query("SELECT new com.hqh.quizserver.dto.ReviewAnswerResponseDTO( q.topicQuestion, q.answerA, q.answerB, q.answerC, q.answerD, "
-         + "ua.isSelected, q.correctResult, ua.shortAnswer, q.correctEssay, ua.isCorrect ) "
+    @Query("SELECT "
+         + "q.topicQuestion AS topicQuestion, "
+         + "q.answerA AS answerA, "
+         + "q.answerB AS answerB, "
+         + "q.answerC AS answerC, "
+         + "q.answerD AS answerD, "
+         + "ua.isSelected AS isSelected, "
+         + "q.correctResult AS correctResult, "
+         + "ua.shortAnswer AS shortAnswer, "
+         + "q.correctEssay AS correctEssay, "
+         + "ua.isCorrect AS isCorrect "
          + "FROM TestQuizz tq "
          + "INNER JOIN Question q ON q.testQuizz.id = tq.id "
          + "INNER JOIN UserAnswer ua ON q.id = ua.question.id "
          + "AND tq.id = :quizzId AND ua.user.id = :userId")
-    List<ReviewAnswerResponseDTO> reviewAnswerUser(@Param("quizzId") Long quizzId, @Param("userId") Long userId);
+    List<IReviewAnswerResponse> reviewAnswerUser(@Param("quizzId") Long quizzId, @Param("userId") Long userId);
 
     UserAnswer getUserAnswerByQuestionIdAndUserId(Long questionId, Long userId);
 

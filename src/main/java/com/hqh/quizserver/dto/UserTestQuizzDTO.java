@@ -12,5 +12,5 @@ import java.util.List;
 public class UserTestQuizzDTO {
     private String username;
     private double mark;
-    private List<ReviewAnswerResponseDTO> reviewAnswerResponseDTOList;
+    private List<IReviewAnswerResponse> reviewAnswerResponseDTOList;
 }

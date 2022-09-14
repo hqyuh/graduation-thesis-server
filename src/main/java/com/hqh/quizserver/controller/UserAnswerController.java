@@ -3,14 +3,11 @@ package com.hqh.quizserver.controller;
 import com.hqh.quizserver.dto.UserAnswerRequestDTO;
 import com.hqh.quizserver.dto.UserTestQuizzDTO;
 import com.hqh.quizserver.entities.ApiResponse;
-import com.hqh.quizserver.dto.ReviewAnswerResponseDTO;
 import com.hqh.quizserver.services.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.util.List;
 
 import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
 import static com.hqh.quizserver.utils.ResponseUtils.response;

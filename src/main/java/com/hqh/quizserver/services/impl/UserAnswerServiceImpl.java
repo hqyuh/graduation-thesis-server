@@ -1,6 +1,6 @@
 package com.hqh.quizserver.services.impl;
 
-import com.hqh.quizserver.dto.ReviewAnswerResponseDTO;
+import com.hqh.quizserver.dto.IReviewAnswerResponse;
 import com.hqh.quizserver.dto.UserAnswerQuestionRequestDTO;
 import com.hqh.quizserver.dto.UserAnswerRequestDTO;
 import com.hqh.quizserver.dto.UserTestQuizzDTO;
@@ -69,20 +69,21 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         }
         userAnswerRepository.saveAll(userAnswerList);
 
+        // handle result
+        handleResult(quizzId, user.getId());
     }
 
     private void handleResult(Long quizzId, Long userId) {
         log.info("Handling the result ::");
         List<Question> questionList = questionRepository.findAllByQuizzId(quizzId);
         for (Question question : questionList) {
-            UserAnswer userAnswer = userAnswerRepository.getUserAnswerByQuestionIdAndUserId(question.getId(), userId);
-            if (userAnswer == null)
-                break;
-
-            String answerCorrect = userAnswer.getIsSelected();
-            if (question.getCorrectResult().equals(answerCorrect)) {
-                userAnswer.setCorrect(true);
-                userAnswerRepository.save(userAnswer);
+            UserAnswer userAnswered = userAnswerRepository.getUserAnswerByQuestionIdAndUserId(question.getId(), userId);
+            if (userAnswered != null) {
+                String answerCorrect = userAnswered.getIsSelected();
+                if (question.getCorrectResult().equals(answerCorrect)) {
+                    userAnswered.setCorrect(true);
+                    userAnswerRepository.save(userAnswered);
+                }
             }
         }
         log.info("End handle the result ::");
@@ -90,10 +91,9 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     public UserTestQuizzDTO reviewAnswerUser(Long quizzId, Long userId) {
-        handleResult(quizzId, userId);
 
         User user = userRepository.findUserById(userId);
-        List<ReviewAnswerResponseDTO> reviewAnswerUser = userAnswerRepository.reviewAnswerUser(quizzId, userId);
+        List<IReviewAnswerResponse> reviewAnswerUser = userAnswerRepository.reviewAnswerUser(quizzId, userId);
 
         return UserTestQuizzDTO
                 .builder()
