@@ -1,7 +1,8 @@
-package com.hqh.quizserver.entities;
+package com.hqh.quizserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hqh.quizserver.entity.base.BaseEntity;
 import com.hqh.quizserver.enumeration.AuthenticationType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

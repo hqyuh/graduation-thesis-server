@@ -1,6 +1,6 @@
 package com.hqh.quizserver.utils;
 
-import com.hqh.quizserver.entities.ApiResponse;
+import com.hqh.quizserver.entity.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

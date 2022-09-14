@@ -1,7 +1,7 @@
 package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.dto.TopicDTO;
-import com.hqh.quizserver.entities.ApiResponse;
+import com.hqh.quizserver.entity.ApiResponse;
 import com.hqh.quizserver.exceptions.domain.topic.TopicExistException;
 import com.hqh.quizserver.exceptions.domain.topic.TopicNotFoundException;
 import com.hqh.quizserver.services.TopicService;

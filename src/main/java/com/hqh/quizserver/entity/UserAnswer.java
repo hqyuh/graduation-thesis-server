@@ -1,6 +1,7 @@
-package com.hqh.quizserver.entities;
+package com.hqh.quizserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hqh.quizserver.entity.base.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;

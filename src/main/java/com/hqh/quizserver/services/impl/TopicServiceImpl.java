@@ -2,7 +2,7 @@ package com.hqh.quizserver.services.impl;
 
 import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.dto.TopicDTO;
-import com.hqh.quizserver.entities.Topic;
+import com.hqh.quizserver.entity.Topic;
 import com.hqh.quizserver.exceptions.domain.topic.TopicExistException;
 import com.hqh.quizserver.exceptions.domain.topic.TopicNotFoundException;
 import com.hqh.quizserver.mapper.TestQuizzMapper;

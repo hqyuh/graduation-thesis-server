@@ -1,6 +1,6 @@
 package com.hqh.quizserver.helper.user;
 
-import com.hqh.quizserver.entities.User;
+import com.hqh.quizserver.entity.User;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 

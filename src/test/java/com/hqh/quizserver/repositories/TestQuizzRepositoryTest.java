@@ -1,7 +1,7 @@
 package com.hqh.quizserver.repositories;
 
-import com.hqh.quizserver.entities.TestQuizz;
-import com.hqh.quizserver.entities.User;
+import com.hqh.quizserver.entity.TestQuizz;
+import com.hqh.quizserver.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

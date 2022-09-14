@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.ApiResponse;
+import com.hqh.quizserver.entity.ApiResponse;
 import com.hqh.quizserver.dto.UserMarkDto;
 import com.hqh.quizserver.services.UserMarkHelperService;
 import com.hqh.quizserver.services.UserMarkService;

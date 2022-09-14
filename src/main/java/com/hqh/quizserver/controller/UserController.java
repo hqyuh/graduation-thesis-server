@@ -1,7 +1,7 @@
 package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.dto.UserDTO;
-import com.hqh.quizserver.entities.*;
+import com.hqh.quizserver.entity.*;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
 import com.hqh.quizserver.exceptions.domain.user.*;
 import com.hqh.quizserver.services.UserHelperService;

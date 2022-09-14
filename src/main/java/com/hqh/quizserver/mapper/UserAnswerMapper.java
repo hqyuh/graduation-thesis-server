@@ -1,16 +1,14 @@
 package com.hqh.quizserver.mapper;
 
 import com.hqh.quizserver.dto.UserAnswerQuestionRequestDTO;
-import com.hqh.quizserver.entities.Question;
-import com.hqh.quizserver.entities.TestQuizz;
-import com.hqh.quizserver.entities.User;
-import com.hqh.quizserver.entities.UserAnswer;
+import com.hqh.quizserver.entity.Question;
+import com.hqh.quizserver.entity.TestQuizz;
+import com.hqh.quizserver.entity.User;
+import com.hqh.quizserver.entity.UserAnswer;
 import com.hqh.quizserver.dto.UserAnswerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import java.util.Optional;
 
 
 @Mapper(componentModel = "spring")

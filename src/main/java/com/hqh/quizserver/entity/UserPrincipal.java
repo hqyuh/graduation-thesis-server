@@ -1,4 +1,4 @@
-package com.hqh.quizserver.entities;
+package com.hqh.quizserver.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

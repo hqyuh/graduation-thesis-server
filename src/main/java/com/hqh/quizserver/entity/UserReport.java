@@ -1,6 +1,7 @@
-package com.hqh.quizserver.entities;
+package com.hqh.quizserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hqh.quizserver.entity.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "report_and_suggestions")
-public class UserReport extends BaseEntity{
+public class UserReport extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

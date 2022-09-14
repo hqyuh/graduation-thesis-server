@@ -1,9 +1,9 @@
-package com.hqh.quizserver.entities;
+package com.hqh.quizserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hqh.quizserver.entity.base.BaseEntity;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

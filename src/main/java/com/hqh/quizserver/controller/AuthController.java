@@ -1,8 +1,8 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.ApiResponse;
-import com.hqh.quizserver.entities.User;
-import com.hqh.quizserver.entities.UserPrincipal;
+import com.hqh.quizserver.entity.ApiResponse;
+import com.hqh.quizserver.entity.User;
+import com.hqh.quizserver.entity.UserPrincipal;
 import com.hqh.quizserver.exceptions.domain.user.EmailExistException;
 import com.hqh.quizserver.exceptions.domain.user.EmailNotFoundException;
 import com.hqh.quizserver.exceptions.domain.user.UserNotFoundException;

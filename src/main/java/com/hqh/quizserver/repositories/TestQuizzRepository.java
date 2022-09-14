@@ -1,7 +1,6 @@
 package com.hqh.quizserver.repositories;
 
-import com.hqh.quizserver.entities.Question;
-import com.hqh.quizserver.entities.TestQuizz;
+import com.hqh.quizserver.entity.TestQuizz;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

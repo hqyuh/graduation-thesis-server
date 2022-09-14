@@ -2,7 +2,7 @@ package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.dto.TestQuizzResponseDTO;
-import com.hqh.quizserver.entities.ApiResponse;
+import com.hqh.quizserver.entity.ApiResponse;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;

@@ -1,7 +1,7 @@
 package com.hqh.quizserver.exceptions;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.hqh.quizserver.entities.ApiResponse;
+import com.hqh.quizserver.entity.ApiResponse;
 import com.hqh.quizserver.exceptions.domain.quizz.*;
 import com.hqh.quizserver.exceptions.domain.topic.TopicExistException;
 import com.hqh.quizserver.exceptions.domain.topic.TopicNotFoundException;

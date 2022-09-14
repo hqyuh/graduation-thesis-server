@@ -1,6 +1,6 @@
 package com.hqh.quizserver.controller;
 
-import com.hqh.quizserver.entities.ApiResponse;
+import com.hqh.quizserver.entity.ApiResponse;
 import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;

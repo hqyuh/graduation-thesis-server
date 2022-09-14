@@ -1,6 +1,6 @@
 package com.hqh.quizserver.repositories;
 
-import com.hqh.quizserver.entities.UserAnswer;
+import com.hqh.quizserver.entity.UserAnswer;
 import com.hqh.quizserver.dto.IReviewAnswerResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

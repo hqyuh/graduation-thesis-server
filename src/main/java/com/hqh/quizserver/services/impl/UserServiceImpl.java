@@ -1,9 +1,9 @@
 package com.hqh.quizserver.services.impl;
 
 import com.hqh.quizserver.dto.UserDTO;
-import com.hqh.quizserver.entities.User;
-import com.hqh.quizserver.entities.UserPrincipal;
-import com.hqh.quizserver.entities.UserStatistics;
+import com.hqh.quizserver.entity.User;
+import com.hqh.quizserver.entity.UserPrincipal;
+import com.hqh.quizserver.entity.UserStatistics;
 import com.hqh.quizserver.enumeration.Role;
 import com.hqh.quizserver.exceptions.domain.user.*;
 import com.hqh.quizserver.helper.user.CSVHelper;

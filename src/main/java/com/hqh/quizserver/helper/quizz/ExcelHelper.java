@@ -1,8 +1,8 @@
 package com.hqh.quizserver.helper.quizz;
 
-import com.hqh.quizserver.entities.Question;
-import com.hqh.quizserver.entities.TestQuizz;
-import com.hqh.quizserver.entities.UserMark;
+import com.hqh.quizserver.entity.Question;
+import com.hqh.quizserver.entity.TestQuizz;
+import com.hqh.quizserver.entity.UserMark;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.web.multipart.MultipartFile;

@@ -4,7 +4,7 @@ import com.hqh.quizserver.dto.IReviewAnswerResponse;
 import com.hqh.quizserver.dto.UserAnswerQuestionRequestDTO;
 import com.hqh.quizserver.dto.UserAnswerRequestDTO;
 import com.hqh.quizserver.dto.UserTestQuizzDTO;
-import com.hqh.quizserver.entities.*;
+import com.hqh.quizserver.entity.*;
 import com.hqh.quizserver.mapper.UserAnswerMapper;
 import com.hqh.quizserver.repositories.*;
 import com.hqh.quizserver.services.UserAnswerService;

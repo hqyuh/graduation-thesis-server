@@ -1,7 +1,7 @@
 package com.hqh.quizserver.mapper;
 
 import com.hqh.quizserver.dto.UserDTO;
-import com.hqh.quizserver.entities.User;
+import com.hqh.quizserver.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

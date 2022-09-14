@@ -1,6 +1,6 @@
 package com.hqh.quizserver.repositories;
 
-import com.hqh.quizserver.entities.Topic;
+import com.hqh.quizserver.entity.Topic;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

@@ -1,7 +1,7 @@
 package com.hqh.quizserver.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hqh.quizserver.entities.ApiResponse;
+import com.hqh.quizserver.entity.ApiResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;

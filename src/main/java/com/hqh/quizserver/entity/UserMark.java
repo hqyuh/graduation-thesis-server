@@ -1,5 +1,6 @@
-package com.hqh.quizserver.entities;
+package com.hqh.quizserver.entity;
 
+import com.hqh.quizserver.entity.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "user_mark")
-public class UserMark extends BaseEntity{
+public class UserMark extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

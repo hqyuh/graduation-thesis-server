@@ -1,8 +1,8 @@
 package com.hqh.quizserver.services.impl;
 
 import com.hqh.quizserver.dto.QuestionDTO;
-import com.hqh.quizserver.entities.Question;
-import com.hqh.quizserver.entities.TestQuizz;
+import com.hqh.quizserver.entity.Question;
+import com.hqh.quizserver.entity.TestQuizz;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.mapper.QuestionMapper;
