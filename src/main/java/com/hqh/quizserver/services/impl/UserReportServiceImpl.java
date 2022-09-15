@@ -2,7 +2,7 @@ package com.hqh.quizserver.services.impl;
 
 import com.hqh.quizserver.dto.UserReportDto;
 import com.hqh.quizserver.mapper.UserReportMapper;
-import com.hqh.quizserver.repositories.UserReportRepository;
+import com.hqh.quizserver.repository.UserReportRepository;
 import com.hqh.quizserver.services.UserReportService;
 import com.hqh.quizserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

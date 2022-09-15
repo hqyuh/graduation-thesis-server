@@ -8,7 +8,7 @@ import com.hqh.quizserver.enumeration.Role;
 import com.hqh.quizserver.exceptions.domain.user.*;
 import com.hqh.quizserver.helper.user.CSVHelper;
 import com.hqh.quizserver.mapper.UserMapper;
-import com.hqh.quizserver.repositories.UserRepository;
+import com.hqh.quizserver.repository.UserRepository;
 import com.hqh.quizserver.services.UserHelperService;
 import com.hqh.quizserver.services.EmailService2;
 import com.hqh.quizserver.services.LoginAttemptService;

@@ -6,7 +6,7 @@ import com.hqh.quizserver.entity.Topic;
 import com.hqh.quizserver.exceptions.domain.topic.TopicExistException;
 import com.hqh.quizserver.exceptions.domain.topic.TopicNotFoundException;
 import com.hqh.quizserver.mapper.TestQuizzMapper;
-import com.hqh.quizserver.repositories.TopicRepository;
+import com.hqh.quizserver.repository.TopicRepository;
 import com.hqh.quizserver.services.TopicService;
 import com.hqh.quizserver.services.UserService;
 import org.apache.commons.lang3.StringUtils;

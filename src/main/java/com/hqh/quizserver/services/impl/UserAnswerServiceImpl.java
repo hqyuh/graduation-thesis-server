@@ -5,6 +5,7 @@ import com.hqh.quizserver.entity.*;
 import com.hqh.quizserver.mapper.UserAnswerMapper;
 import com.hqh.quizserver.mapper.UserMarkMapper;
 import com.hqh.quizserver.repositories.*;
+import com.hqh.quizserver.repository.*;
 import com.hqh.quizserver.services.UserAnswerService;
 import com.hqh.quizserver.services.UserService;
 import com.hqh.quizserver.utils.CommonUtils;

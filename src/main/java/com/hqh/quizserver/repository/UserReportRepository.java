@@ -1,4 +1,4 @@
-package com.hqh.quizserver.repositories;
+package com.hqh.quizserver.repository;
 
 import com.hqh.quizserver.entity.UserReport;
 import org.springframework.data.jpa.repository.JpaRepository;

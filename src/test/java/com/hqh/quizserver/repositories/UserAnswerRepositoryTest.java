@@ -1,6 +1,7 @@
 package com.hqh.quizserver.repositories;
 
 import com.hqh.quizserver.dto.IReviewAnswerResponse;
+import com.hqh.quizserver.repository.UserAnswerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
