@@ -8,6 +8,7 @@ import com.hqh.quizserver.dto.UserTestQuizzDTO;
 public interface UserAnswerService {
 
     void saveAllUserAnswer(UserAnswerRequestDTO userAnswerRequestDTO);
+
     UserTestQuizzDTO reviewAnswerUser(Long quizzId, Long userId);
 
 }

@@ -52,6 +52,10 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
          + "AND tq.id = :quizzId AND ua.user.id = :userId")
     List<IReviewAnswerResponse> reviewAnswerUser(@Param("quizzId") Long quizzId, @Param("userId") Long userId);
 
-    UserAnswer getUserAnswerByQuestionIdAndUserId(Long questionId, Long userId);
+    @Query("SELECT ua "
+         + "FROM UserAnswer ua "
+         + "WHERE ua.question.id = :questionId "
+         + "AND ua.user.id = :userId")
+    List<UserAnswer> getAllUserAnswerByQuestionIdAndUserId(Long questionId, Long userId);
 
 }

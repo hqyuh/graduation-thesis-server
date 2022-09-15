@@ -77,14 +77,14 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         log.info("Handling the result ::");
         List<Question> questionList = questionRepository.findAllByQuizzId(quizzId);
         for (Question question : questionList) {
-            UserAnswer userAnswered = userAnswerRepository.getUserAnswerByQuestionIdAndUserId(question.getId(), userId);
-            if (userAnswered != null) {
-                String answerCorrect = userAnswered.getIsSelected();
-                if (question.getCorrectResult().equals(answerCorrect)) {
+            List<UserAnswer> userAnsweredList = userAnswerRepository.getAllUserAnswerByQuestionIdAndUserId(question.getId(), userId);
+            for (UserAnswer userAnswered : userAnsweredList) {
+                if (!userAnswered.isUsed() && question.getCorrectResult().equals(userAnswered.getIsSelected())) {
                     userAnswered.setCorrect(true);
                     userAnswerRepository.save(userAnswered);
                 }
             }
+
         }
         log.info("End handle the result ::");
     }
@@ -95,8 +95,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         User user = userRepository.findUserById(userId);
         List<IReviewAnswerResponse> reviewAnswerUser = userAnswerRepository.reviewAnswerUser(quizzId, userId);
 
-        return UserTestQuizzDTO
-                .builder()
+        return UserTestQuizzDTO.builder()
                 .username(user.getUsername())
                 .mark(0)
                 .reviewAnswerResponseDTOList(reviewAnswerUser)

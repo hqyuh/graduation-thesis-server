@@ -42,4 +42,7 @@ public class UserAnswer extends BaseEntity {
 
     @Column(name = "is_correct", columnDefinition = "boolean default false")
     private boolean isCorrect;
+
+    @Column(name = "is_used", columnDefinition = "boolean default true")
+    private boolean isUsed;
 }
