@@ -101,6 +101,10 @@ public class User extends BaseEntity implements Serializable {
         this.id = id;
     }
 
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
+
     @Override
     public String toString() {
         return "User{" +

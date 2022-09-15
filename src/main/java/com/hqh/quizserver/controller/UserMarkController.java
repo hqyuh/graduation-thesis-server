@@ -1,7 +1,7 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.UserMarkDTO;
 import com.hqh.quizserver.entity.ApiResponse;
-import com.hqh.quizserver.dto.UserMarkDto;
 import com.hqh.quizserver.services.UserMarkHelperService;
 import com.hqh.quizserver.services.UserMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,29 +35,19 @@ public class UserMarkController {
         this.helperService = helperService;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<UserMarkDto> saveUserMark(@RequestBody UserMarkDto userMarkDto) {
-        userMarkService.saveUserMark(userMarkDto);
-
-        return new ResponseEntity<>(OK);
+    @GetMapping("/user")
+    public ResponseEntity<List<UserMarkDTO>> getAllMarkByUsername(@RequestParam("username") String username) {
+        return ResponseEntity.status(OK).body(userMarkService.getAllUserByUsername(username));
     }
 
-    @GetMapping("/user/{username}")
-    public ResponseEntity<List<UserMarkDto>> getAllMarkByUsername(@PathVariable("username") String username) {
-        return ResponseEntity.status(OK)
-                             .body(userMarkService.getAllUserByUsername(username));
+    @GetMapping("/quizz")
+    public ResponseEntity<List<UserMarkDTO>> getAllMarkByQuizzId(@RequestParam("quizzId") Long quizzId) {
+        return ResponseEntity.status(OK).body(userMarkService.getAllUserByQuizzId(quizzId));
     }
 
-    @GetMapping("/quizz/{id}")
-    public ResponseEntity<List<UserMarkDto>> getAllMarkByQuizzId(@PathVariable("id") Long id) {
-        return ResponseEntity.status(OK)
-                             .body(userMarkService.getAllUserByQuizzId(id));
-    }
-
-    @GetMapping("/quizz/top/{id}")
-    public ResponseEntity<List<UserMarkDto>> getMarkTop3(@PathVariable("id") Long id) {
-        return ResponseEntity.status(OK)
-                             .body(userMarkService.getMarkTop3(id));
+    @GetMapping("/quizz/top")
+    public ResponseEntity<List<UserMarkDTO>> getMarkTop3(@RequestParam("quizzId") Long quizzId) {
+        return ResponseEntity.status(OK).body(userMarkService.getMarkTop3(quizzId));
     }
 
     @GetMapping("/export/excel/{id}")

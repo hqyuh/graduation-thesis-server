@@ -174,11 +174,6 @@ public class ExcelHelper {
         }
     }
 
-    /***
-     *
-     * @param userMarks
-     * @return
-     */
     public static ByteArrayInputStream userMarkToExcel(List<UserMark> userMarks) {
         try(XSSFWorkbook workbook = new XSSFWorkbook();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -191,11 +186,11 @@ public class ExcelHelper {
                 cell.setCellValue(HEADER_MARK[i]);
             }
 
+            String fullName = userMarks.get(0).getUser().getFullName();
             int rowIdx = 1;
             for (UserMark mark : userMarks) {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(1).setCellValue(mark.getId());
-                String fullName = mark.getUser().getFirstName() + " " + mark.getUser().getLastName();
                 row.createCell(2).setCellValue(fullName);
                 row.createCell(3).setCellValue(mark.getUser().getUsername());
                 row.createCell(4).setCellValue(mark.getMark());
@@ -207,7 +202,7 @@ public class ExcelHelper {
 
             return new ByteArrayInputStream(outputStream.toByteArray());
         } catch (IOException exception) {
-            throw new RuntimeException(FAIL_TO_IMPORT_DATA_TO_EXCEL_FILE + exception.getMessage());
+            throw new RuntimeException("Fail to import data to Excel file: " + exception.getMessage());
         }
     }
 

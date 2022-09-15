@@ -12,7 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserMarkDto {
+public class UserMarkDTO {
 
     private Long id;
     private float mark;
@@ -24,8 +24,5 @@ public class UserMarkDto {
     private Instant completedDate;
     private String quizzName;
     private String username;
-    private boolean pointLock;
-    private Long userId;
-    private Long quizzId;
 
 }

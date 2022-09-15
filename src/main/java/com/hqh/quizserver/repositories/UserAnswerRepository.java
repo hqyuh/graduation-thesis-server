@@ -32,8 +32,9 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
          + "FROM Question q "
          + "INNER JOIN UserAnswer u "
          + "ON q.id = u.question.id "
-         + "AND u.testQuizz.id = :id")
-    float totalMarkByQuizzId(@Param("id") Long id);
+         + "AND u.testQuizz.id = :quizzId "
+         + "AND u.user.id = :userId ")
+    float totalMarkByQuizzId(@Param("quizzId") Long quizzId, @Param("userId") Long userId);
 
     @Query("SELECT "
          + "q.topicQuestion AS topicQuestion, "

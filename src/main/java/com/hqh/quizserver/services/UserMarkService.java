@@ -1,18 +1,16 @@
 package com.hqh.quizserver.services;
 
-import com.hqh.quizserver.dto.UserMarkDto;
+import com.hqh.quizserver.dto.UserMarkDTO;
 
 import java.util.List;
 
 public interface UserMarkService {
 
-    void saveUserMark(UserMarkDto userMarkDto);
+    List<UserMarkDTO> getAllUserByUsername(String username);
 
-    List<UserMarkDto> getAllUserByUsername(String username);
+    List<UserMarkDTO> getAllUserByQuizzId(Long quizzId);
 
-    List<UserMarkDto> getAllUserByQuizzId(Long quizzId);
-
-    List<UserMarkDto> getMarkTop3(Long quizzId);
+    List<UserMarkDTO> getMarkTop3(Long quizzId);
 
     void pointLock(Long userId, boolean isLock);
 

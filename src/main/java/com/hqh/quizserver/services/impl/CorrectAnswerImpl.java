@@ -28,7 +28,7 @@ public class CorrectAnswerImpl implements CorrectAnswerService {
         CorrectAnswerDto correctAnswer = new CorrectAnswerDto();
         correctAnswer.setTotalNumberOfAnswers(userAnswerRepository.totalNumberOfAnswersByQuizzId(id));
         correctAnswer.setTotalNumberOfCorrectAnswers(userAnswerRepository.totalNumberOfCorrectAnswersByQuizzId(id));
-        correctAnswer.setTotalMark(userAnswerRepository.totalMarkByQuizzId(id));
+        // correctAnswer.setTotalMark(userAnswerRepository.totalMarkByQuizzId(id));
 
         return correctAnswer;
 
