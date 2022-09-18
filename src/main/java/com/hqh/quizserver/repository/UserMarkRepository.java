@@ -25,4 +25,6 @@ public interface UserMarkRepository extends JpaRepository<UserMark, Long> {
     @Query("UPDATE UserMark u SET u.pointLock = ?2 WHERE u.user.id = ?1")
     void markLock(Long userId, boolean isLock);
 
+    UserMark findByUserId(@Param("userId") Long userId);
+
 }

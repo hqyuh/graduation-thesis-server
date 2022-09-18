@@ -4,7 +4,6 @@ import com.hqh.quizserver.dto.*;
 import com.hqh.quizserver.entity.*;
 import com.hqh.quizserver.mapper.UserAnswerMapper;
 import com.hqh.quizserver.mapper.UserMarkMapper;
-import com.hqh.quizserver.repositories.*;
 import com.hqh.quizserver.repository.*;
 import com.hqh.quizserver.services.UserAnswerService;
 import com.hqh.quizserver.services.UserService;
@@ -87,7 +86,8 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         Long quizzId = testQuizz.getId();
         UserMarkDTO userMarkDTO = new UserMarkDTO();
         UserMark userMark = userMarkMapper.convertDTOToUserMark(userMarkDTO, testQuizz, user);
-        userMark.setMark(userAnswerRepository.totalMarkByQuizzId(quizzId, user.getId()));
+        float mark = userAnswerRepository.totalMarkByQuizzId(quizzId, user.getId());
+        userMark.setMark(mark);
         userMark.setCompletedDate(Instant.now());
         userMark.setPointLock(false);
         userMark.setCreatedAt(new Date());
@@ -103,13 +103,15 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         List<Question> questionList = questionRepository.findAllByQuizzId(quizzId);
         for (Question question : questionList) {
             List<UserAnswer> userAnsweredList = userAnswerRepository.getAllUserAnswerByQuestionIdAndUserId(question.getId(), userId);
-            for (UserAnswer userAnswered : userAnsweredList) {
-                if (!userAnswered.isUsed() && question.getCorrectResult().equals(userAnswered.getIsSelected())) {
-                    userAnswered.setCorrect(true);
-                    userAnswerRepository.save(userAnswered);
-                }
-            }
-
+            userAnsweredList
+                    .stream()
+                    .filter(userAnswered -> !userAnswered.isUsed()
+                            && question.getCorrectResult().equals(userAnswered.getIsSelected()))
+                    .forEach(userAnswered -> {
+                        userAnswered.setCorrect(true);
+                        userAnswerRepository.save(userAnswered);
+                    }
+            );
         }
         log.info("End handle the result ::");
     }
@@ -118,11 +120,15 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     public UserTestQuizzDTO reviewAnswerUser(Long quizzId, Long userId) {
 
         User user = userRepository.findUserById(userId);
+        String username = user.getUsername();
         List<IReviewAnswerResponse> reviewAnswerUser = userAnswerRepository.reviewAnswerUser(quizzId, userId);
+        UserMark userMark = userMarkRepository.findByUserId(userId);
+        float mark = userMark.getMark();
 
-        return UserTestQuizzDTO.builder()
-                .username(user.getUsername())
-                .mark(0)
+        return UserTestQuizzDTO
+                .builder()
+                .username(username)
+                .mark(mark)
                 .reviewAnswerResponseDTOList(reviewAnswerUser)
                 .build();
     }
