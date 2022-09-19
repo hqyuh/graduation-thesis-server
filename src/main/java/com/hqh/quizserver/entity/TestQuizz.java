@@ -50,7 +50,7 @@ public class TestQuizz extends BaseEntity {
     @Column(name = "is_status")
     private boolean isStatus;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(
             name = "user_quizz",
@@ -59,13 +59,22 @@ public class TestQuizz extends BaseEntity {
     )
     private List<User> users = new ArrayList<>();
 
-    @OneToMany(mappedBy = "testQuizz")
+    @OneToMany(mappedBy = "testQuizz", fetch = FetchType.LAZY)
     private List<Question> questions;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id")
     @JsonIgnore
     private Topic topic;
+
+    @Column(name = "score")
+    private float score;
+
+    @Column(name = "level", length = 30)
+    private String level;
+
+    @Column(name = "type", length = 30)
+    private String type;
 
     public void addUser(User user) {
         this.users.add(user);

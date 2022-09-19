@@ -5,6 +5,7 @@ import com.hqh.quizserver.entity.base.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,17 +20,17 @@ public class UserAnswer extends BaseEntity {
     @Column(nullable = false, updatable = false)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "quizz_id")
     private TestQuizz testQuizz;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "question_id")
     private Question question;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;

@@ -89,7 +89,7 @@ public class User extends BaseEntity implements Serializable {
     private boolean isActive;
     private boolean isNotLocked;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<TestQuizz> quizzes;
 

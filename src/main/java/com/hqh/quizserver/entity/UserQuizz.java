@@ -9,12 +9,12 @@ public class UserQuizz {
     @EmbeddedId
     private UserQuizzKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("quizzId")
     @JoinColumn(name = "quizz_id")
     private TestQuizz testQuizz;

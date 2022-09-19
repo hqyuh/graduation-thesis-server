@@ -25,7 +25,7 @@ public class Topic extends BaseEntity {
     @Column(name = "topic_name", length = 45)
     private String topicName;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<TestQuizz> testQuizz;
 

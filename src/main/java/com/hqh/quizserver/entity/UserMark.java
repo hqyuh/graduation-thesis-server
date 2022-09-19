@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @AllArgsConstructor
@@ -31,12 +32,21 @@ public class UserMark extends BaseEntity {
     @Column(name = "point_lock")
     private boolean pointLock;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quizz_id")
     private TestQuizz testQuizz;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "status", length = 20)
+    private String status;
+
+    @Column(name = "started_at")
+    private Timestamp startedAt;
+
+    @Column(name = "finished_at")
+    private Timestamp finishedAt;
 
 }

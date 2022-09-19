@@ -28,7 +28,7 @@ public class UserReport extends BaseEntity {
     @Column(nullable = false)
     private String comment;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;

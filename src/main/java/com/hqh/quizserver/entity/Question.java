@@ -64,10 +64,13 @@ public class Question extends BaseEntity {
     @Column(name = "date_created")
     private Instant dateCreated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quizz_id")
     @JsonIgnore
     private TestQuizz testQuizz;
+
+    @Column(name = "level", length = 30)
+    private String level;
 
     public Question(String topicQuestion,
                     String questionImageUrl,
