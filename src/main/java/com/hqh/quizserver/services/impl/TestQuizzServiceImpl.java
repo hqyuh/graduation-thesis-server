@@ -3,10 +3,7 @@ package com.hqh.quizserver.services.impl;
 import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.dto.TestQuizzResponseDTO;
-import com.hqh.quizserver.entity.Question;
-import com.hqh.quizserver.entity.TestQuizz;
-import com.hqh.quizserver.entity.Topic;
-import com.hqh.quizserver.entity.User;
+import com.hqh.quizserver.entity.*;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
@@ -16,9 +13,11 @@ import com.hqh.quizserver.mapper.TestQuizzMapper;
 import com.hqh.quizserver.repository.QuestionRepository;
 import com.hqh.quizserver.repository.TestQuizzRepository;
 import com.hqh.quizserver.repository.TopicRepository;
+import com.hqh.quizserver.repository.UserMarkRepository;
 import com.hqh.quizserver.services.TestQuizzHelperService;
 import com.hqh.quizserver.services.TestQuizzService;
 import com.hqh.quizserver.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -39,15 +38,16 @@ import static com.hqh.quizserver.utils.ConvertTimeUtils.convertTime;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service
+@Slf4j
 public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final TestQuizzRepository quizzRepository;
     private final TopicRepository topicRepository;
     private final TestQuizzMapper testQuizzMapper;
     private final UserService userService;
     private final QuestionRepository questionRepository;
     private final QuestionMapper questionMapper;
+    private final UserMarkRepository userMarkRepository;
 
     @Autowired
     public TestQuizzServiceImpl(TestQuizzRepository quizzRepository,
@@ -55,13 +55,15 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
                                 TestQuizzMapper testQuizzMapper,
                                 UserService userService,
                                 QuestionRepository questionRepository,
-                                QuestionMapper questionMapper) {
+                                QuestionMapper questionMapper,
+                                UserMarkRepository userMarkRepository) {
         this.quizzRepository = quizzRepository;
         this.topicRepository = topicRepository;
         this.testQuizzMapper = testQuizzMapper;
         this.userService = userService;
         this.questionRepository = questionRepository;
         this.questionMapper = questionMapper;
+        this.userMarkRepository = userMarkRepository;
     }
 
     private String logged = null;
@@ -240,6 +242,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     @Override
     public TestQuizzDTO findTestQuizzByActivationCode(String code, Integer amount) throws TestQuizzNotFoundException {
         Optional<TestQuizz> testQuizz = quizzRepository.findTestQuizzByActivationCode(code);
+        User user = userService.getCurrentUser();
 
         if (testQuizz.isEmpty()) {
             log.error("No quizz found with code {}", code);
@@ -247,6 +250,16 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         }
         List<Question> questionList = questionRepository.randomQuestion(testQuizz.get().getId(), amount);
         List<QuestionDTO> questionDTOList = questionMapper.questionMapToQuestionDTO(questionList);
+
+        UserMark userMark = new UserMark();
+        userMark.setStartedAt(Instant.now());
+        userMark.setUser(user);
+        userMark.setCreatedAt(new Date());
+        userMark.setUpdatedAt(new Date());
+        userMark.setCreatedBy(user.getUsername());
+        userMark.setUpdatedBy(user.getUsername());
+        userMark.setStatus("INCOMPLETE");
+        userMarkRepository.save(userMark);
 
         return TestQuizzDTO.builder()
                 .id(testQuizz.get().getId())

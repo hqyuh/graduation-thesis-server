@@ -44,9 +44,12 @@ public class UserMark extends BaseEntity {
     private String status;
 
     @Column(name = "started_at")
-    private Timestamp startedAt;
+    private Instant startedAt;
 
     @Column(name = "finished_at")
-    private Timestamp finishedAt;
+    private Instant finishedAt;
+
+    @Column(name = "by_pass", length = 10)
+    private String byPass;
 
 }

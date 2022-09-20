@@ -27,4 +27,7 @@ public interface UserMarkRepository extends JpaRepository<UserMark, Long> {
 
     UserMark findByUserId(@Param("userId") Long userId);
 
+    UserMark findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
+
+    UserMark findByUserIdAndPointLockIsFalse(@Param("userId") Long userId);
 }

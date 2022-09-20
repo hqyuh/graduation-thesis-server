@@ -2,6 +2,7 @@ package com.hqh.quizserver.services.impl;
 
 import com.hqh.quizserver.dto.*;
 import com.hqh.quizserver.entity.*;
+import com.hqh.quizserver.enumeration.QuizStatus;
 import com.hqh.quizserver.mapper.UserAnswerMapper;
 import com.hqh.quizserver.mapper.UserMarkMapper;
 import com.hqh.quizserver.repository.*;
@@ -60,6 +61,10 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         TestQuizz testQuizz = quizzRepository.findTestQuizzById(quizzId);
         User user = userService.getCurrentUser();
 
+        UserMark userMark = userMarkRepository.findByUserIdAndPointLockIsFalse(user.getId());
+        userMark.setFinishedAt(Instant.now());
+        userMark.setPointLock(true);
+
         for (UserAnswerQuestionRequestDTO value : userAnswerRequestDTO.getListAnswer()) {
             Question question = questionRepository.findQuestionById(value.getQuestionId());
             UserAnswer userAnswer = userAnswerMapper.convertUserAnswerDTOToUserAnswerEntity(value, testQuizz, question, user);
@@ -73,33 +78,42 @@ public class UserAnswerServiceImpl implements UserAnswerService {
             userAnswerList.add(userAnswer);
         }
         userAnswerRepository.saveAll(userAnswerList);
+        userMarkRepository.save(userMark);
 
         // handle result
         this.handleResult(quizzId, user.getId());
 
         // handle score
-        this.handleScoreProcessing(testQuizz, user);
+        this.handleScoreProcessing(testQuizz, user, userMark.getId());
     }
 
-    private void handleScoreProcessing(TestQuizz testQuizz, User user) {
+    private void handleScoreProcessing(TestQuizz testQuizz, User user, Long tableId) {
+        log.info("------Handling the result ::------");
         String username = user.getUsername();
         Long quizzId = testQuizz.getId();
-        UserMarkDTO userMarkDTO = new UserMarkDTO();
-        UserMark userMark = userMarkMapper.convertDTOToUserMark(userMarkDTO, testQuizz, user);
+        Long userId = user.getId();
+        UserMark userMark = userMarkRepository.findByIdAndUserId(tableId, userId);
+        userMark.setTestQuizz(testQuizz);
+        userMark.setUser(user);
         float mark = userAnswerRepository.totalMarkByQuizzId(quizzId, user.getId());
+
+        String status = (mark > 5) ? "PASS" : "FAIL";
+
+        userMark.setByPass(status);
         userMark.setMark(mark);
         userMark.setCompletedDate(Instant.now());
-        userMark.setPointLock(false);
         userMark.setCreatedAt(new Date());
         userMark.setCreatedBy(username);
         userMark.setUpdatedAt(new Date());
         userMark.setUpdatedBy(username);
+        userMark.setStatus("COMPLETED");
 
         userMarkRepository.save(userMark);
+        log.info("------End handling the result ::------");
     }
 
     private void handleResult(Long quizzId, Long userId) {
-        log.info("Handling the result ::");
+        log.info("------Handling the result ::------");
         List<Question> questionList = questionRepository.findAllByQuizzId(quizzId);
         for (Question question : questionList) {
             List<UserAnswer> userAnsweredList = userAnswerRepository.getAllUserAnswerByQuestionIdAndUserId(question.getId(), userId);
@@ -113,7 +127,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                     }
             );
         }
-        log.info("End handle the result ::");
+        log.info("------End handle the result ::------");
     }
 
     @Override
