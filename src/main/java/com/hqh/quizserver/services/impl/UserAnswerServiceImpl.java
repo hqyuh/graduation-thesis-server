@@ -2,13 +2,12 @@ package com.hqh.quizserver.services.impl;
 
 import com.hqh.quizserver.dto.*;
 import com.hqh.quizserver.entity.*;
-import com.hqh.quizserver.enumeration.QuizStatus;
 import com.hqh.quizserver.mapper.UserAnswerMapper;
-import com.hqh.quizserver.mapper.UserMarkMapper;
 import com.hqh.quizserver.repository.*;
 import com.hqh.quizserver.services.UserAnswerService;
 import com.hqh.quizserver.services.UserService;
 import com.hqh.quizserver.utils.CommonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,9 @@ import java.util.List;
 
 
 @Service
+@Slf4j
 public class UserAnswerServiceImpl implements UserAnswerService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final UserAnswerMapper userAnswerMapper;
     private final TestQuizzRepository quizzRepository;
@@ -31,7 +30,6 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     private final UserAnswerRepository userAnswerRepository;
     private final UserService userService;
     private final UserRepository userRepository;
-    private final UserMarkMapper userMarkMapper;
     private final UserMarkRepository userMarkRepository;
 
     @Autowired
@@ -41,7 +39,6 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                                  UserAnswerRepository userAnswerRepository,
                                  UserService userService,
                                  UserRepository userRepository,
-                                 UserMarkMapper userMarkMapper,
                                  UserMarkRepository userMarkRepository) {
         this.userAnswerMapper = userAnswerMapper;
         this.quizzRepository = quizzRepository;
@@ -49,7 +46,6 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         this.userAnswerRepository = userAnswerRepository;
         this.userService = userService;
         this.userRepository = userRepository;
-        this.userMarkMapper = userMarkMapper;
         this.userMarkRepository = userMarkRepository;
     }
 
@@ -114,7 +110,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     private void handleResult(Long quizzId, Long userId) {
         log.info("------Handling the result ::------");
-        List<Question> questionList = questionRepository.findAllByQuizzId(quizzId);
+        List<Question> questionList = questionRepository.getAllByTestQuizzIdOrderById(quizzId);
         for (Question question : questionList) {
             List<UserAnswer> userAnsweredList = userAnswerRepository.getAllUserAnswerByQuestionIdAndUserId(question.getId(), userId);
             userAnsweredList

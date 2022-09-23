@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
@@ -30,6 +31,6 @@ public interface QuestionMapper {
     @Mapping(target = "quizzId", expression = "java(question.getTestQuizz().getId())")
     QuestionDTO mapToDto(Question question);
 
-    List<QuestionDTO> questionMapToQuestionDTO(List<Question> questions);
+    Set<QuestionDTO> questionMapToQuestionDTO(Set<Question> questions);
 
 }

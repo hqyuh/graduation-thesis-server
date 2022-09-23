@@ -43,30 +43,17 @@ public class TestQuizzController extends ExceptionHandling {
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<ApiResponse> addNewTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
+    public ResponseEntity<ApiResponse> addNewTestQuizz(@RequestBody TestQuizzRequestDTO request)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
-        testQuizzService.createQuizz(
-                testQuizz.getTestName(),
-                Integer.parseInt(testQuizz.getExamTime()),
-                testQuizz.getIsStart(),
-                testQuizz.getIsEnd(),
-                Long.parseLong(testQuizz.getTopicId())
-        );
+        testQuizzService.createQuizz(request);
         return response(OK, SUCCESS, ADD_QUICK_TEST_SUCCESS);
 }
 
     @PatchMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_TEACHER')")
-    public ResponseEntity<ApiResponse> updateTestQuizz(@RequestBody TestQuizzRequestDTO testQuizz)
+    public ResponseEntity<ApiResponse> updateTestQuizz(@RequestBody TestQuizzRequestDTO request)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
-        testQuizzService.updateQuizz(
-                testQuizz.getCurrentTestName(),
-                testQuizz.getTestName(),
-                Integer.parseInt(testQuizz.getExamTime()),
-                testQuizz.getIsStart(),
-                testQuizz.getIsEnd(),
-                Long.parseLong(testQuizz.getTopicId())
-        );
+        testQuizzService.updateQuizz(request);
         return response(OK, SUCCESS, UPDATE_QUICK_TEST_SUCCESS);
     }
 

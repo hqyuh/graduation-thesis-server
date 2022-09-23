@@ -31,7 +31,7 @@ class QuestionRepositoryTest {
     }
 
     @Test
-    public void testCreateQuestion() {
+    void testCreateQuestion() {
         TestQuizz quizzID = entityManager.find(TestQuizz.class, 4L);
         Question question = new Question(
                 "How can you achieve runtime polymorphism in Java?",
@@ -47,18 +47,18 @@ class QuestionRepositoryTest {
         );
 
         Question savedQuestion = questionRepository.save(question);
-        assertThat(savedQuestion.getId()).isGreaterThan(0);
+        assertThat(savedQuestion.getId()).isPositive();
 
     }
 
     @Test
-    public void testDeleteQuestion() {
+    void testDeleteQuestion() {
         Long questionID = 4L;
         questionRepository.deleteById(questionID);
     }
 
     @Test
-    public void testUpdateQuestion() {
+    void testUpdateQuestion() {
         Question question = questionRepository.findById(3L).get();
 
         question.setMark(5);
@@ -68,7 +68,7 @@ class QuestionRepositoryTest {
     }
 
     @Test
-    public void testGetQuestionById() {
+    void testGetQuestionById() {
         Question question = questionRepository.findById(3L).get();
 
         System.out.println(question);
@@ -77,21 +77,16 @@ class QuestionRepositoryTest {
     }
 
     @Test
-    public void testGetQuestionByQuizzId() {
-        List<Question> question = questionRepository.findAllByQuizzId(4L);
+    void testGetQuestionByQuizzId() {
+        List<Question> question = questionRepository.getAllByTestQuizzIdOrderById(1L);
         question.forEach(System.out::println);
     }
 
     @Test
-    public void testQuestionsPagination() {
+    void testQuestionsPagination() {
         List<Question> questions = questionRepository.questionsPagination(1,  2);
         questions.forEach(System.out::println);
     }
 
-    @Test
-    public void testCountQuestions() {
-        int sum = questionRepository.getTotalNumberOfRecords();
-        System.out.println(sum);
-    }
 
 }

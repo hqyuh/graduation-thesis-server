@@ -1,6 +1,7 @@
 package com.hqh.quizserver.services;
 
 import com.hqh.quizserver.dto.TestQuizzDTO;
+import com.hqh.quizserver.dto.TestQuizzRequestDTO;
 import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.entity.TestQuizz;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
@@ -12,11 +13,9 @@ import java.util.List;
 
 public interface TestQuizzService {
 
-    TestQuizz createQuizz(String testName, Integer examTime, String isStart, String isEnd, Long topicId)
-            throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException;
+    TestQuizz createQuizz(TestQuizzRequestDTO request) throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException;
 
-    TestQuizz updateQuizz(String currentTestName, String newTestName, Integer examTime,
-                          String isStart, String isEnd, Long topicId)
+    TestQuizz updateQuizz(TestQuizzRequestDTO request)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException;
 
     TestQuizz findTestQuizzByTestName(String testName);

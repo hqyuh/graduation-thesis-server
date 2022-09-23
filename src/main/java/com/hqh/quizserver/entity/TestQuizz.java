@@ -70,8 +70,8 @@ public class TestQuizz extends BaseEntity {
     @Column(name = "score")
     private float score;
 
-    @Column(name = "level", length = 30)
-    private String level;
+    @Column(name = "level")
+    private Integer level;
 
     @Column(name = "type", length = 30)
     private String type;

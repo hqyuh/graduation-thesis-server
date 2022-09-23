@@ -2,8 +2,10 @@ package com.hqh.quizserver.services.impl;
 
 import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.dto.TestQuizzDTO;
+import com.hqh.quizserver.dto.TestQuizzRequestDTO;
 import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.entity.*;
+import com.hqh.quizserver.enumeration.LevelEnum;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
@@ -20,8 +22,6 @@ import com.hqh.quizserver.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +29,7 @@ import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.hqh.quizserver.constant.TestQuizzImplConstant.*;
 import static com.hqh.quizserver.utils.ConvertTimeUtils.convertTime;
@@ -112,19 +110,25 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     }
 
 
+
     /**
-     * Create a new quiz
+     * Create a new test
      *
-     * @param testName The name of the test
-     * @param examTime The time for the test
-     * @param isStart The time the test starts
-     * @param isEnd The time when the test ends.
-     * @param topicId The id of the topic that the quiz belongs to.
-     * @return A new TestQuizz object
+     * @param request the request object that contains the parameters of the request
+     * @return A TestQuizz object
      */
     @Override
-    public TestQuizz createQuizz(String testName, Integer examTime, String isStart, String isEnd, Long topicId)
+    public TestQuizz createQuizz(TestQuizzRequestDTO request)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
+
+        String testName = request.getTestName();
+        Timestamp startQuiz = convertTime(request.getIsStart());
+        Timestamp endQuiz = convertTime(request.getIsEnd());
+        Integer examTime = request.getExamTime();
+        String level = request.getLevel();
+        String type = request.getType();
+        Long topicId = request.getTopicId();
+        LevelEnum levelEnum = LevelEnum.getLevel(level);
 
         log.info("Create quizz");
         validateNewQuizzExists(EMPTY, testName);
@@ -133,10 +137,10 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         TestQuizz quizz = testQuizzMapper.map(testQuizzDTO, topic);
         User user = userService.getCurrentUser();
 
-        boolean isCheckCreate = isCheckCreateTime(isStart, isEnd);
+        boolean isCheckCreate = isCheckCreateTime(startQuiz, endQuiz);
         if (!isCheckCreate) {
-            quizz.setIsStart(convertTime(isStart));
-            quizz.setIsEnd(convertTime(isEnd));
+            quizz.setIsStart(startQuiz);
+            quizz.setIsEnd(endQuiz);
             quizz.setTestName(testName);
             String code = generateActivationCode();
             quizz.setActivationCode(code);
@@ -147,6 +151,8 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
             quizz.setUpdatedAt(new Date());
             quizz.setCreatedBy(logged);
             quizz.setUpdatedBy(logged);
+            quizz.setLevel(levelEnum.getNumericValue());
+            quizz.setType(type);
             log.info("Code {} is for test name {}", code, testName);
             quizz.addUser(user);
             log.info("{} created quizz", user.getUsername());
@@ -158,14 +164,12 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     /**
      * This function is used to check if the start time and end time of the test is valid
      *
-     * @param isStart The start time of the test
-     * @param isEnd The end time of the test
+     * @param startTime The start time of the test
+     * @param endTime The end time of the test
      * @return A boolean value.
      */
-    private boolean isCheckCreateTime(String isStart, String isEnd) throws TestQuizzCreateTimeException {
+    private boolean isCheckCreateTime(Timestamp startTime, Timestamp endTime) throws TestQuizzCreateTimeException {
         Timestamp currTime = new Timestamp(new Date().getTime());
-        Timestamp startTime = convertTime(isStart);
-        Timestamp endTime = convertTime(isEnd);
         if (startTime.after(endTime)) {
             log.error("Start time cannot be greater than end time!");
             throw new TestQuizzCreateTimeException("Start time cannot be greater than end time!");
@@ -176,39 +180,45 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         return false;
     }
 
-
     /**
      * Update quizz
      *
-     * @param currTestName The name of the test that is currently being edited
-     * @param newTestName The name of the test
-     * @param examTime the time to take the test
-     * @param isStart The time the test starts
-     * @param isEnd End time of the test
-     * @param topicId the id of the topic
+     * @param request The request object that contains the data to be updated.
      * @return The currentQuizz is being returned.
      */
     @Override
-    public TestQuizz updateQuizz(String currTestName, String newTestName, Integer examTime, String isStart,
-                                 String isEnd, Long topicId)
+    public TestQuizz updateQuizz(TestQuizzRequestDTO request)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
+
+        String currentTestName = request.getCurrentTestName();
+        String newTestName = request.getTestName();
+        Timestamp startQuiz = convertTime(request.getIsStart());
+        Timestamp endQuiz = convertTime(request.getIsEnd());
+        Integer examTime = request.getExamTime();
+        String level = request.getLevel();
+        String type = request.getType();
+        Long topicId = request.getTopicId();
+        LevelEnum levelEnum = LevelEnum.getLevel(level);
 
         log.info("Update quizz");
         Topic topic = topicRepository.findTopicById(topicId);
-        TestQuizz currentQuizz = validateNewQuizzExists(currTestName, newTestName);
+        TestQuizz currentQuizz = validateNewQuizzExists(currentTestName, newTestName);
 
-        boolean isCheckCreate = isCheckCreateTime(isStart, isEnd);
+        boolean isCheckCreate = isCheckCreateTime(startQuiz, endQuiz);
 
         if (!isCheckCreate && currentQuizz != null) {
             currentQuizz.setTestName(newTestName);
             currentQuizz.setExamTime(examTime);
             currentQuizz.setActivationCode(currentQuizz.getActivationCode());
-            currentQuizz.setIsStart(convertTime(isStart));
-            currentQuizz.setIsEnd(convertTime(isEnd));currentQuizz.setTopic(topic);
+            currentQuizz.setIsStart(startQuiz);
+            currentQuizz.setIsEnd(endQuiz);
+            currentQuizz.setTopic(topic);
             currentQuizz.setCreatedAt(new Date());
             currentQuizz.setUpdatedAt(new Date());
             currentQuizz.setCreatedBy(logged);
             currentQuizz.setUpdatedBy(logged);
+            currentQuizz.setLevel(levelEnum.getNumericValue());
+            currentQuizz.setType(type);
             quizzRepository.save(currentQuizz);
         }
         return currentQuizz;
@@ -236,7 +246,6 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
      * It returns a TestQuizzDTO object with a list of QuestionDTO objects.
      *
      * @param code the activation code of the test
-     * @param amount the number of questions you want to get
      * @return A list of questions
      */
     @Override
@@ -248,8 +257,12 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
             log.error("No quizz found with code {}", code);
             throw new TestQuizzNotFoundException(NO_QUIZZ_TEST_FOUND_WITH_CODE + code);
         }
-        List<Question> questionList = questionRepository.randomQuestion(testQuizz.get().getId(), amount);
-        List<QuestionDTO> questionDTOList = questionMapper.questionMapToQuestionDTO(questionList);
+        Set<Question> questionList = questionRepository.randomQuestion(testQuizz.get().getId(), amount);
+        Set<QuestionDTO> questionDTOList = questionMapper.questionMapToQuestionDTO(questionList);
+        Integer size = questionDTOList.size();
+
+        Map<String, Integer> totalElements = new HashMap<>();
+        totalElements.put("totalElements", size);
 
         UserMark userMark = new UserMark();
         userMark.setStartedAt(Instant.now());
@@ -270,6 +283,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
                 .isEnd(testQuizz.get().getIsEnd())
                 .activationCode(testQuizz.get().getActivationCode())
                 .questionDTOList(questionDTOList)
+                .paging(totalElements)
                 .build();
     }
 

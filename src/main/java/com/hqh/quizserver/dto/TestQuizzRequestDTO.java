@@ -12,8 +12,10 @@ import lombok.Setter;
 public class TestQuizzRequestDTO {
     private String currentTestName;
     private String testName;
-    private String examTime;
+    private Integer examTime;
     private String isStart;
     private String isEnd;
-    private String topicId;
+    private Long topicId;
+    private String level;
+    private String type;
 }
