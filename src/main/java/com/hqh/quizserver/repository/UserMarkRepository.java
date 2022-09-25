@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -17,8 +18,7 @@ public interface UserMarkRepository extends JpaRepository<UserMark, Long> {
 
     List<UserMark> findByTestQuizzId(Long id);
 
-    @Query(value = "SELECT * FROM user_mark um WHERE um.quizz_id = :quizzId ORDER BY um.mark DESC LIMIT 3",
-           nativeQuery = true)
+    @Query(value = "SELECT * FROM user_mark um WHERE um.quizz_id = :quizzId ORDER BY um.mark DESC LIMIT 3", nativeQuery = true)
     List<UserMark> getMarkTop3(@Param("quizzId") Long quizzId);
 
     @Modifying
@@ -30,4 +30,8 @@ public interface UserMarkRepository extends JpaRepository<UserMark, Long> {
     UserMark findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
 
     UserMark findByUserIdAndPointLockIsFalse(@Param("userId") Long userId);
+
+    @Query("SELECT um FROM UserMark um WHERE um.createdAt BETWEEN :starDate AND :endDate")
+    List<UserMark> findAllUserMark(Date starDate, Date endDate);
+
 }

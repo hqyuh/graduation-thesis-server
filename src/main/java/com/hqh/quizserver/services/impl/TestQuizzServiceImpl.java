@@ -275,6 +275,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         userMark.setCreatedBy(user.getUsername());
         userMark.setUpdatedBy(user.getUsername());
         userMark.setStatus("INCOMPLETE");
+        userMark.setTestQuizz(testQuizz.get());
         userMarkRepository.save(userMark);
 
         return TestQuizzDTO.builder()
