@@ -285,6 +285,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
                 .isStart(testQuizz.get().getIsStart())
                 .isEnd(testQuizz.get().getIsEnd())
                 .activationCode(testQuizz.get().getActivationCode())
+                .level(testQuizz.get().getLevel())
                 .questionDTOList(questionDTOList)
                 .paging(totalElements)
                 .build();

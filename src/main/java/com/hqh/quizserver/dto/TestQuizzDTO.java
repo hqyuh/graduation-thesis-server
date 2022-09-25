@@ -29,6 +29,7 @@ public class TestQuizzDTO implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Timestamp isEnd;
     private String activationCode;
+    private Integer level;
     private Set<QuestionDTO> questionDTOList;
     private Map<String, Integer> paging;
 

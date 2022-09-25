@@ -24,6 +24,7 @@ public interface QuestionMapper {
     @Mapping(target = "answerD", ignore = true)
     @Mapping(target = "correctResult", ignore = true)
     @Mapping(target = "mark", ignore = true)
+    @Mapping(target = "level", ignore = true)
     @Mapping(target = "milestones", ignore = true)
     @Mapping(target = "testQuizz", source = "testQuizz")
     Question map(QuestionDTO questionDto, TestQuizz testQuizz);

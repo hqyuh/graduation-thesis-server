@@ -19,6 +19,7 @@ public class QuestionDTO implements Serializable {
     private String answerC;
     private String answerD;
     private float mark;
+    private Integer level;
     private Long quizzId;
 
 }
