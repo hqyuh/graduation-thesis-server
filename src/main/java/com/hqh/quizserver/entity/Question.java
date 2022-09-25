@@ -69,8 +69,8 @@ public class Question extends BaseEntity {
     @JsonIgnore
     private TestQuizz testQuizz;
 
-    @Column(name = "level", length = 30)
-    private String level;
+    @Column(name = "level")
+    private Integer level;
 
     public Question(String topicQuestion,
                     String questionImageUrl,

@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
         user.setCreatedBy("Self-registered users");
-        user.setUpdatedBy(null);
+        user.setUpdatedBy("None");
         userRepository.save(user);
 
         return user;

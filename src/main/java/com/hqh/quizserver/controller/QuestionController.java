@@ -47,13 +47,14 @@ public class QuestionController {
                                                       @RequestParam("correctEssay") String correctEssay,
                                                       @RequestParam("type") String type,
                                                       @RequestParam("mark") String mark,
-                                                      @RequestParam("quizzId") String quizzId)
+                                                      @RequestParam("quizzId") String quizzId,
+                                                      @RequestParam("level") String level)
             throws IOException, NotAnImageFileException {
         questionService.createQuestion(
                 topicQuestion, questionImageUrl,
                 answerA, answerB, answerC, answerD,
                 correctResult, correctEssay, type,
-                Double.parseDouble(mark), Long.parseLong(quizzId)
+                Double.parseDouble(mark), Long.parseLong(quizzId), level
         );
 
         return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
@@ -73,7 +74,8 @@ public class QuestionController {
                                                       @RequestParam("mark") String mark,
                                                       @RequestParam("quizzId") String quizzId,
                                                       @RequestParam(value = "questionImageUrl", required = false)
-                                                                   MultipartFile questionImageUrl)
+                                                                   MultipartFile questionImageUrl,
+                                                      @RequestParam("level") String level)
             throws IOException, NotAnImageFileException {
 
         questionService.updateQuestion(
@@ -82,7 +84,7 @@ public class QuestionController {
                 answerC, answerD,
                 correctResult, correctEssay, type,
                 Double.parseDouble(mark), Long.parseLong(quizzId),
-                questionImageUrl
+                questionImageUrl, level
         );
 
         return response(OK, SUCCESS, QUESTION_UPDATE_SUCCESSFUL);

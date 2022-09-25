@@ -14,7 +14,7 @@ public interface QuestionService {
                         String answerA, String answerB,
                         String answerC, String answerD,
                         String correctResult, String correctEssay,
-                        String type, double mark, Long quizzId)
+                        String type, double mark, Long quizzId, String level)
             throws IOException, NotAnImageFileException;
 
     void updateQuestion(Long id, String topicQuestion,
@@ -22,7 +22,7 @@ public interface QuestionService {
                         String answerC, String answerD,
                         String correctResult, String correctEssay,
                         String type, double mark, Long quizzId,
-                        MultipartFile questionImageUrl)
+                        MultipartFile questionImageUrl, String level)
             throws IOException, NotAnImageFileException;
 
     void deleteQuestion(Long id);

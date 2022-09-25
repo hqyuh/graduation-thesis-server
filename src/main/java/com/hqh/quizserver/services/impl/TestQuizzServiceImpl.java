@@ -5,7 +5,7 @@ import com.hqh.quizserver.dto.TestQuizzDTO;
 import com.hqh.quizserver.dto.TestQuizzRequestDTO;
 import com.hqh.quizserver.dto.TestQuizzResponseDTO;
 import com.hqh.quizserver.entity.*;
-import com.hqh.quizserver.enumeration.LevelEnum;
+import com.hqh.quizserver.enumeration.LevelQuizEnum;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzCreateTimeException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzExistException;
 import com.hqh.quizserver.exceptions.domain.quizz.TestQuizzNotFoundException;
@@ -19,6 +19,7 @@ import com.hqh.quizserver.repository.UserMarkRepository;
 import com.hqh.quizserver.services.TestQuizzHelperService;
 import com.hqh.quizserver.services.TestQuizzService;
 import com.hqh.quizserver.services.UserService;
+import com.hqh.quizserver.utils.ConvertTimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -121,14 +122,14 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
     public TestQuizz createQuizz(TestQuizzRequestDTO request)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
 
-        String testName = request.getTestName();
-        Timestamp startQuiz = convertTime(request.getIsStart());
-        Timestamp endQuiz = convertTime(request.getIsEnd());
-        Integer examTime = request.getExamTime();
-        String level = request.getLevel();
-        String type = request.getType();
+        String testName = request.getTestName().trim();
+        Timestamp startQuiz = convertTime(request.getIsStart().trim());
+        Timestamp endQuiz = convertTime(request.getIsEnd().trim());
+        String examTime = request.getExamTime().trim();
+        String level = request.getLevel().trim();
+        String type = request.getType().trim();
         Long topicId = request.getTopicId();
-        LevelEnum levelEnum = LevelEnum.getLevel(level);
+        LevelQuizEnum levelQuizEnum = LevelQuizEnum.getLevel(level);
 
         log.info("Create quizz");
         validateNewQuizzExists(EMPTY, testName);
@@ -145,13 +146,14 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
             String code = generateActivationCode();
             quizz.setActivationCode(code);
             quizz.setDateCreated(Instant.now());
-            quizz.setExamTime(examTime);
+            Long convertTime = ConvertTimeUtils.parsePeriod(examTime);
+            quizz.setExamTime(Math.toIntExact(convertTime));
             quizz.setStatus(true);
             quizz.setCreatedAt(new Date());
             quizz.setUpdatedAt(new Date());
             quizz.setCreatedBy(logged);
             quizz.setUpdatedBy(logged);
-            quizz.setLevel(levelEnum.getNumericValue());
+            quizz.setLevel(levelQuizEnum.getNumericValue());
             quizz.setType(type);
             log.info("Code {} is for test name {}", code, testName);
             quizz.addUser(user);
@@ -194,11 +196,11 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
         String newTestName = request.getTestName();
         Timestamp startQuiz = convertTime(request.getIsStart());
         Timestamp endQuiz = convertTime(request.getIsEnd());
-        Integer examTime = request.getExamTime();
+        String examTime = request.getExamTime();
         String level = request.getLevel();
         String type = request.getType();
         Long topicId = request.getTopicId();
-        LevelEnum levelEnum = LevelEnum.getLevel(level);
+        LevelQuizEnum levelQuizEnum = LevelQuizEnum.getLevel(level);
 
         log.info("Update quizz");
         Topic topic = topicRepository.findTopicById(topicId);
@@ -208,7 +210,8 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
 
         if (!isCheckCreate && currentQuizz != null) {
             currentQuizz.setTestName(newTestName);
-            currentQuizz.setExamTime(examTime);
+            Long convertTime = ConvertTimeUtils.parsePeriod(examTime);
+            currentQuizz.setExamTime(Math.toIntExact(convertTime));
             currentQuizz.setActivationCode(currentQuizz.getActivationCode());
             currentQuizz.setIsStart(startQuiz);
             currentQuizz.setIsEnd(endQuiz);
@@ -217,7 +220,7 @@ public class TestQuizzServiceImpl implements TestQuizzService, TestQuizzHelperSe
             currentQuizz.setUpdatedAt(new Date());
             currentQuizz.setCreatedBy(logged);
             currentQuizz.setUpdatedBy(logged);
-            currentQuizz.setLevel(levelEnum.getNumericValue());
+            currentQuizz.setLevel(levelQuizEnum.getNumericValue());
             currentQuizz.setType(type);
             quizzRepository.save(currentQuizz);
         }

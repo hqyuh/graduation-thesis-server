@@ -3,6 +3,7 @@ package com.hqh.quizserver.services.impl;
 import com.hqh.quizserver.dto.QuestionDTO;
 import com.hqh.quizserver.entity.Question;
 import com.hqh.quizserver.entity.TestQuizz;
+import com.hqh.quizserver.enumeration.LevelQuestionEnum;
 import com.hqh.quizserver.exceptions.domain.user.NotAnImageFileException;
 import com.hqh.quizserver.helper.quizz.ExcelHelper;
 import com.hqh.quizserver.mapper.QuestionMapper;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -72,9 +74,10 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
     @Override
     public void createQuestion(String topicQuestion, MultipartFile questionImageUrl, String answerA, String answerB,
                                String answerC, String answerD, String correctResult, String correctEssay, String type,
-                               double mark, Long quizzId) throws IOException, NotAnImageFileException {
+                               double mark, Long quizzId, String level) throws IOException, NotAnImageFileException {
 
         log.info("Get user create");
+        LevelQuestionEnum levelQuestionEnum = LevelQuestionEnum.getLevel(level);
 
         log.info("Create question");
         QuestionDTO questionDTO = new QuestionDTO();
@@ -91,6 +94,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setType(type);
         question.setMark(mark);
         question.setMilestones(1);
+        question.setLevel(levelQuestionEnum.getNumericValue());
         question.setCreatedAt(new Date());
         question.setUpdatedAt(new Date());
         question.setCreatedBy(userService.getCurrentUser().getUsername());
@@ -152,9 +156,12 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
     @Override
     public void updateQuestion(Long id, String topicQuestion, String answerA, String answerB, String answerC, String answerD,
                                String correctResult, String correctEssay, String type, double mark, Long quizzId,
-                               MultipartFile questionImageUrl) throws IOException, NotAnImageFileException {
+                               MultipartFile questionImageUrl, String level) throws IOException, NotAnImageFileException {
+
         TestQuizz quizz = quizzRepository.findTestQuizzById(quizzId);
         Question question = questionRepository.findQuestionById(id);
+        LevelQuestionEnum levelQuestionEnum = LevelQuestionEnum.getLevel(level);
+
         question.setTopicQuestion(topicQuestion);
         question.setAnswerA(answerA);
         question.setAnswerB(answerB);
@@ -164,6 +171,7 @@ public class QuestionServiceImpl implements QuestionService, QuestionHelperServi
         question.setCorrectEssay(correctEssay.isBlank() ? null : correctEssay);
         question.setType(type);
         question.setMark(mark);
+        question.setLevel(levelQuestionEnum.getNumericValue());
         question.setCreatedAt(new Date());
         question.setUpdatedAt(new Date());
         question.setCreatedBy(userService.getCurrentUser().getUsername());

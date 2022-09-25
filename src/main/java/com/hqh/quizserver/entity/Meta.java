@@ -1,5 +1,6 @@
 package com.hqh.quizserver.entity;
 
+import com.hqh.quizserver.entity.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "meta")
-public class Meta {
+public class Meta extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

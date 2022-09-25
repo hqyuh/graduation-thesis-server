@@ -12,7 +12,7 @@ import lombok.Setter;
 public class TestQuizzRequestDTO {
     private String currentTestName;
     private String testName;
-    private Integer examTime;
+    private String examTime;
     private String isStart;
     private String isEnd;
     private Long topicId;

@@ -1,6 +1,7 @@
 package com.hqh.quizserver.entity;
 
 import com.hqh.quizserver.entity.base.BaseEntity;
+import com.hqh.quizserver.utils.ConvertTimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
