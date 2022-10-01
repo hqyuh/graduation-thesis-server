@@ -1,5 +1,6 @@
 package com.hqh.quizserver.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,9 +14,8 @@ import java.nio.file.StandardCopyOption;
 
 import static com.hqh.quizserver.constant.FileConstant.*;
 
+@Slf4j
 public class FileUpLoadUtils {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(FileUpLoadUtils.class);
 
     public static void saveFile(String uploadDir,
                                 String fileName,
@@ -26,7 +26,7 @@ public class FileUpLoadUtils {
         if(!Files.exists(uploadPath)) {
             // create file
             Files.createDirectories(uploadPath);
-            LOGGER.info(DIRECTORY_CREATED + uploadPath);
+            log.info("Created directory for: {}", uploadPath);
         }
 
         // get input stream from multipartFile
@@ -71,7 +71,7 @@ public class FileUpLoadUtils {
         try {
             Files.delete(Paths.get(dir));
         } catch (IOException e) {
-            LOGGER.error(COULD_NOT_REMOVE_DIRECTORY + dir);
+            log.error("Could not remove directory: " + dir);
         }
     }
 

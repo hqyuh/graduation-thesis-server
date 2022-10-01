@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.hqh.quizserver.constant.FileConstant.*;
-import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
+import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_SUCCESS;
 import static com.hqh.quizserver.constant.TestQuizzImplConstant.*;
 import static com.hqh.quizserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.OK;
@@ -46,7 +46,7 @@ public class TestQuizzController extends ExceptionHandling {
     public ResponseEntity<ApiResponse> addNewTestQuizz(@RequestBody TestQuizzRequestDTO request)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
         testQuizzService.createQuizz(request);
-        return response(OK, SUCCESS, ADD_QUICK_TEST_SUCCESS);
+        return response(OK, MESSAGE_SUCCESS, ADD_QUICK_TEST_SUCCESS);
 }
 
     @PatchMapping("/update")
@@ -54,7 +54,7 @@ public class TestQuizzController extends ExceptionHandling {
     public ResponseEntity<ApiResponse> updateTestQuizz(@RequestBody TestQuizzRequestDTO request)
             throws TestQuizzExistException, TestQuizzNotFoundException, TestQuizzCreateTimeException {
         testQuizzService.updateQuizz(request);
-        return response(OK, SUCCESS, UPDATE_QUICK_TEST_SUCCESS);
+        return response(OK, MESSAGE_SUCCESS, UPDATE_QUICK_TEST_SUCCESS);
     }
 
     @GetMapping("/list")
@@ -69,7 +69,7 @@ public class TestQuizzController extends ExceptionHandling {
     public ResponseEntity<?> deleteTestQuizz(@PathVariable("id") Long id) {
         testQuizzService.deleteQuizz(id);
 
-        return response(OK, SUCCESS, DELETED_QUIZZ_TEST_SUCCESSFULLY);
+        return response(OK, MESSAGE_SUCCESS, DELETED_QUIZZ_TEST_SUCCESSFULLY);
     }
 
     @GetMapping("/activated")
@@ -104,7 +104,7 @@ public class TestQuizzController extends ExceptionHandling {
         testQuizzService.lockQuizz(id, Boolean.parseBoolean(isStatus));
         String message = Boolean.parseBoolean(isStatus) ? "LOCK OK" : "UNLOCK OK";
 
-        return response(OK, SUCCESS, message);
+        return response(OK, MESSAGE_SUCCESS, message);
     }
 
 }

@@ -121,7 +121,7 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
 
-        return response(OK, SUCCESS, USER_DELETED_SUCCESSFULLY);
+        return response(OK, MESSAGE_SUCCESS, USER_DELETED_SUCCESSFULLY);
     }
 
     @PostMapping("/update-profile-image")
@@ -162,7 +162,7 @@ public class UserController extends ExceptionHandling {
                 password.getOldPassword(),
                 password.getNewPassword()
         );
-        return response(OK, SUCCESS, CHANGE_PASSWORD_SUCCESSFULLY);
+        return response(OK, MESSAGE_SUCCESS, CHANGE_PASSWORD_SUCCESSFULLY);
     }
 
     @GetMapping("/{id}/locked/{status}")
@@ -172,7 +172,7 @@ public class UserController extends ExceptionHandling {
         userService.accountLock(id, Boolean.parseBoolean(status));
         String message = Boolean.parseBoolean(status) ? ACCOUNT_UNLOCK_SUCCESSFUL : ACCOUNT_LOCK_SUCCESSFUL;
 
-        return response(OK, SUCCESS, message);
+        return response(OK, MESSAGE_SUCCESS, message);
     }
 
     @GetMapping("/export/csv")

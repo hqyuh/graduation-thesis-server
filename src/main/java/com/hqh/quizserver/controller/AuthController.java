@@ -21,7 +21,7 @@ import javax.validation.Valid;
 
 import static com.hqh.quizserver.constant.DomainConstant.SIGN_UP_SUCCESS;
 import static com.hqh.quizserver.constant.EmailConstant.EMAIL_SENT;
-import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
+import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_SUCCESS;
 import static com.hqh.quizserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static com.hqh.quizserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.OK;
@@ -54,14 +54,14 @@ public class AuthController {
                 user.getRoles(),
                 user.getPassword()
         );
-        return response(OK, SUCCESS, SIGN_UP_SUCCESS);
+        return response(OK, MESSAGE_SUCCESS, SIGN_UP_SUCCESS);
     }
 
     @GetMapping("/resetPassword/{email}")
     public ResponseEntity<ApiResponse> resetPassword(@PathVariable("email") String email)
             throws EmailNotFoundException, MessagingException {
         userService.resetPassword(email);
-        return response(OK, SUCCESS,EMAIL_SENT + email);
+        return response(OK, MESSAGE_SUCCESS,EMAIL_SENT + email);
     }
 
     @PostMapping("/login")

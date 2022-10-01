@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static com.hqh.quizserver.constant.MessageTypeConstant.ERROR;
+import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_ERROR;
 import static com.hqh.quizserver.constant.SecurityConstant.FORBIDDEN_MESSAGE;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -24,7 +24,7 @@ public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException exception) throws IOException {
         ApiResponse httpResponse = new
-                ApiResponse(FORBIDDEN.value(), FORBIDDEN, ERROR.toUpperCase(),
+                ApiResponse(FORBIDDEN.value(), FORBIDDEN, MESSAGE_ERROR.toUpperCase(),
                 FORBIDDEN.getReasonPhrase().toUpperCase(), FORBIDDEN_MESSAGE);
 
         response.setContentType(APPLICATION_JSON_VALUE);

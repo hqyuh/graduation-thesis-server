@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.hqh.quizserver.constant.FileConstant.*;
 import static com.hqh.quizserver.constant.FileConstant.APPLICATION_EXCEL;
-import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
+import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_SUCCESS;
 import static com.hqh.quizserver.constant.UserMarkImplConstant.SUCCESSFUL_LOCKED_POINTS;
 import static com.hqh.quizserver.constant.UserMarkImplConstant.UNLOCK_SUCCESS_POINTS;
 import static com.hqh.quizserver.utils.ResponseUtils.response;
@@ -66,7 +66,7 @@ public class UserMarkController {
         boolean isStatus = Boolean.parseBoolean(isLock);
         userMarkService.pointLock(id, isStatus);
         String message = isStatus ? SUCCESSFUL_LOCKED_POINTS : UNLOCK_SUCCESS_POINTS;
-        return response(OK, SUCCESS, message);
+        return response(OK, MESSAGE_SUCCESS, message);
     }
 
 }

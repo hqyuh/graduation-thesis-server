@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.hqh.quizserver.constant.FileConstant.*;
-import static com.hqh.quizserver.constant.MessageTypeConstant.ERROR;
-import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
+import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_ERROR;
+import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_SUCCESS;
 import static com.hqh.quizserver.constant.QuestionImplConstant.*;
 import static com.hqh.quizserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.*;
@@ -57,7 +57,7 @@ public class QuestionController {
                 Double.parseDouble(mark), Long.parseLong(quizzId), level
         );
 
-        return response(CREATED, SUCCESS, ADD_SUCCESS_QUESTION);
+        return response(CREATED, MESSAGE_SUCCESS, ADD_SUCCESS_QUESTION);
     }
 
 
@@ -87,7 +87,7 @@ public class QuestionController {
                 questionImageUrl, level
         );
 
-        return response(OK, SUCCESS, QUESTION_UPDATE_SUCCESSFUL);
+        return response(OK, MESSAGE_SUCCESS, QUESTION_UPDATE_SUCCESSFUL);
     }
 
     @GetMapping("/list/{pageNum}")
@@ -101,7 +101,7 @@ public class QuestionController {
     public ResponseEntity<ApiResponse> deleteQuestion(@PathVariable("id") Long id) {
         questionService.deleteQuestion(id);
 
-        return response(OK, SUCCESS, QUESTION_DELETED_SUCCESSFULLY);
+        return response(OK, MESSAGE_SUCCESS, QUESTION_DELETED_SUCCESSFULLY);
     }
 
     @PostMapping("/import/{id}")
@@ -110,14 +110,14 @@ public class QuestionController {
         if(ExcelHelper.hasExcelFormat(multipartFile)) {
             try {
                 helperService.saveFile(multipartFile, id);
-                return response(OK, SUCCESS,
+                return response(OK, MESSAGE_SUCCESS,
                         UPLOADED_THE_FILE_SUCCESSFULLY + multipartFile.getOriginalFilename());
             } catch (Exception exception) {
-                return response(BAD_REQUEST, ERROR,
+                return response(BAD_REQUEST, MESSAGE_ERROR,
                         COULD_NOT_UPLOAD_THE_FILE + multipartFile.getOriginalFilename() + EXCLAMATION_MARK);
             }
         }
-        return response(BAD_REQUEST, ERROR, PLEASE_UPLOAD_AN_EXCEL_FILE);
+        return response(BAD_REQUEST, MESSAGE_ERROR, PLEASE_UPLOAD_AN_EXCEL_FILE);
     }
 
 }

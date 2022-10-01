@@ -1,5 +1,6 @@
 package com.hqh.quizserver.schedule;
 
+import com.hqh.quizserver.constant.Constant;
 import com.hqh.quizserver.entity.UserMark;
 import com.hqh.quizserver.enumeration.QuizStatus;
 import com.hqh.quizserver.repository.UserMarkRepository;
@@ -45,8 +46,8 @@ public class ScheduledTasks {
                 e.setCompletedDate(Instant.now());
                 e.setUpdatedAt(new Date());
                 e.setStatus(String.valueOf(QuizStatus.COMPLETED));
-                e.setUpdatedBy("SYSTEM");
-                e.setByPass("FAIL");
+                e.setUpdatedBy(Constant.SYSTEM);
+                e.setByPass(Constant.STATUS_FAIL);
 
                 userMarkRepository.save(e);
             });

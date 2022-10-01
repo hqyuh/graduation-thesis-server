@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
+import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_SUCCESS;
 import static com.hqh.quizserver.constant.TopicImplConstant.*;
 import static com.hqh.quizserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -32,7 +32,7 @@ public class TopicController {
     public ResponseEntity<ApiResponse> createTopic(@RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
         topicService.createTopic(topicName);
-        return response(CREATED, SUCCESS, ADD_TOPIC_SUCCESS);
+        return response(CREATED, MESSAGE_SUCCESS, ADD_TOPIC_SUCCESS);
     }
 
     @PatchMapping("/update")
@@ -40,14 +40,14 @@ public class TopicController {
                                                    @RequestParam("topicName") String topicName)
             throws TopicNotFoundException, TopicExistException {
         topicService.updateTopic(currentTopicName, topicName);
-        return response(OK, SUCCESS, UPDATE_TOPIC_SUCCESS);
+        return response(OK, MESSAGE_SUCCESS, UPDATE_TOPIC_SUCCESS);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteTopic(@PathVariable("id") Long id) {
         topicService.deleteTopic(id);
 
-        return response(OK, SUCCESS, DELETED_TOPIC_SUCCESSFULLY);
+        return response(OK, MESSAGE_SUCCESS, DELETED_TOPIC_SUCCESSFULLY);
     }
 
     @GetMapping("/list")

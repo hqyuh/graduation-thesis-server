@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import static com.hqh.quizserver.constant.MessageTypeConstant.SUCCESS;
+import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_SUCCESS;
 import static com.hqh.quizserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -28,7 +28,7 @@ public class UserAnswerController {
     @PostMapping("/save-answer")
     public ResponseEntity<ApiResponse> saveAllUserAnswer(@RequestBody(required = false) UserAnswerRequestDTO userAnswerRequestDTO) {
         userAnswerService.saveAllUserAnswer(userAnswerRequestDTO);
-        return response(OK, SUCCESS, SUCCESSFUL_TEST_SUBMISSION);
+        return response(OK, MESSAGE_SUCCESS, SUCCESSFUL_TEST_SUBMISSION);
     }
 
     @GetMapping("/review-answer/quizz")
