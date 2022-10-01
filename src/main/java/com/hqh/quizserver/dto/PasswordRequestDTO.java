@@ -1,4 +1,4 @@
-package com.hqh.quizserver.entity;
+package com.hqh.quizserver.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Password {
+public class PasswordRequestDTO {
 
     private String email;
     private String oldPassword;

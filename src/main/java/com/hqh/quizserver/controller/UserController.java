@@ -1,5 +1,6 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.PasswordRequestDTO;
 import com.hqh.quizserver.dto.UserDTO;
 import com.hqh.quizserver.entity.*;
 import com.hqh.quizserver.exceptions.ExceptionHandling;
@@ -155,12 +156,12 @@ public class UserController extends ExceptionHandling {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<ApiResponse> changePassword(@RequestBody Password password)
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody PasswordRequestDTO passwordRequestDTO)
             throws PasswordException {
         userService.changePassword(
-                password.getEmail(),
-                password.getOldPassword(),
-                password.getNewPassword()
+                passwordRequestDTO.getEmail(),
+                passwordRequestDTO.getOldPassword(),
+                passwordRequestDTO.getNewPassword()
         );
         return response(OK, MESSAGE_SUCCESS, CHANGE_PASSWORD_SUCCESSFULLY);
     }

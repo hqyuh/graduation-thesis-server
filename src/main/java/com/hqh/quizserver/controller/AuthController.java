@@ -1,5 +1,7 @@
 package com.hqh.quizserver.controller;
 
+import com.hqh.quizserver.dto.UserLoginRequestDTO;
+import com.hqh.quizserver.dto.UserRegisterRequestDTO;
 import com.hqh.quizserver.entity.ApiResponse;
 import com.hqh.quizserver.entity.User;
 import com.hqh.quizserver.entity.UserPrincipal;
@@ -44,15 +46,15 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@Valid @RequestBody User user)
+    public ResponseEntity<ApiResponse> register(@Valid @RequestBody UserRegisterRequestDTO userRegisterRequestDTO)
             throws UserNotFoundException, EmailExistException, UsernameExistException {
         userService.register(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRoles(),
-                user.getPassword()
+                userRegisterRequestDTO.getFirstName(),
+                userRegisterRequestDTO.getLastName(),
+                userRegisterRequestDTO.getUsername(),
+                userRegisterRequestDTO.getEmail(),
+                userRegisterRequestDTO.getRoles(),
+                userRegisterRequestDTO.getPassword()
         );
         return response(OK, MESSAGE_SUCCESS, SIGN_UP_SUCCESS);
     }
@@ -65,11 +67,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
+    public ResponseEntity<User> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO) {
 
         // authenticate -> get username and password for authentication
-        authenticate(user.getEmail(), user.getPassword());
-        User loginUser = userService.findUserByEmail(user.getEmail());
+        authenticate(userLoginRequestDTO.getEmail(), userLoginRequestDTO.getPassword());
+        User loginUser = userService.findUserByEmail(userLoginRequestDTO.getEmail());
         // provide user for UserPrincipal
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
