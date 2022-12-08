@@ -70,11 +70,10 @@ public class SecurityConfiguration {
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and()
-                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
         http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
