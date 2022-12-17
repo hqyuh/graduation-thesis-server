@@ -1,21 +1,19 @@
 package com.hqh.quizserver.controller;
 
 import com.hqh.quizserver.dto.UserLoginRequestDTO;
+import com.hqh.quizserver.dto.UserLoginResponseDTO;
 import com.hqh.quizserver.dto.UserRegisterRequestDTO;
 import com.hqh.quizserver.entity.ApiResponse;
-import com.hqh.quizserver.entity.User;
-import com.hqh.quizserver.entity.UserPrincipal;
 import com.hqh.quizserver.exceptions.domain.user.EmailExistException;
 import com.hqh.quizserver.exceptions.domain.user.EmailNotFoundException;
 import com.hqh.quizserver.exceptions.domain.user.UserNotFoundException;
 import com.hqh.quizserver.exceptions.domain.user.UsernameExistException;
+import com.hqh.quizserver.services.AuthService;
 import com.hqh.quizserver.services.UserService;
 import com.hqh.quizserver.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -24,7 +22,6 @@ import javax.validation.Valid;
 import static com.hqh.quizserver.constant.DomainConstant.SIGN_UP_SUCCESS;
 import static com.hqh.quizserver.constant.EmailConstant.EMAIL_SENT;
 import static com.hqh.quizserver.constant.MessageTypeConstant.MESSAGE_SUCCESS;
-import static com.hqh.quizserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static com.hqh.quizserver.utils.ResponseUtils.response;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -33,16 +30,13 @@ import static org.springframework.http.HttpStatus.OK;
 public class AuthController {
 
     private final UserService userService;
-    private final JWTTokenProvider jwtTokenProvider;
-    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
 
     @Autowired
     public AuthController(UserService userService,
-                          JWTTokenProvider jwtTokenProvider,
-                          AuthenticationManager authenticationManager) {
+                          AuthService authService) {
         this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.authenticationManager = authenticationManager;
+        this.authService = authService;
     }
 
     @PostMapping("/register")
@@ -67,27 +61,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO) {
-
-        // authenticate -> get username and password for authentication
-        authenticate(userLoginRequestDTO.getEmail(), userLoginRequestDTO.getPassword());
-        User loginUser = userService.findUserByEmail(userLoginRequestDTO.getEmail());
-        // provide user for UserPrincipal
-        UserPrincipal userPrincipal = new UserPrincipal(loginUser);
-        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-
-        return new ResponseEntity<>(loginUser, jwtHeader, OK);
-    }
-
-    private HttpHeaders getJwtHeader(UserPrincipal userPrincipal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(userPrincipal));
-        return headers;
-    }
-
-    private void authenticate(String email, String password) {
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(email, password));
+    public ResponseEntity<UserLoginResponseDTO> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO) {
+        return ResponseEntity.status(OK).body(authService.login(userLoginRequestDTO));
     }
 
 }
