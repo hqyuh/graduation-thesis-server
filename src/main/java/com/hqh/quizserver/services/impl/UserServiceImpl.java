@@ -128,17 +128,38 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
     @Override
     public User register(String firstName, String lastName, String username, String email, String role, String password)
             throws UserNotFoundException, EmailExistException, UsernameExistException {
+        User user = new User();
+        setUserInformation(user, firstName, lastName, username, email, role);
+        String encodedPassword = encodePassword(password);
+        user.setPassword(encodedPassword);
+        user.setCreatedBy("Self-registered users");
+        user.setUpdatedBy("None");
+        userRepository.save(user);
 
+        return user;
+    }
+
+    /**
+     * It validates the new username and email, sets the user's first name, last name, username, email, join date, active
+     * status, locked status, role, authorities, profile image url, created at, and updated at
+     *
+     * @param user The user object that will be updated.
+     * @param firstName The first name of the user.
+     * @param lastName The last name of the user.
+     * @param username The username of the user.
+     * @param email The email address of the user.
+     * @param role The role of the user.
+     */
+    public void setUserInformation(User user, String firstName, String lastName, String username, String email, String role)
+            throws UserNotFoundException, EmailExistException, UsernameExistException {
         log.info("Begin validating email and username :::");
         validateNewUsernameAndEmail(EMPTY, username, email);
         log.info("End validating email and username :::");
-        User user = new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setUsername(username);
         user.setEmail(email);
         user.setJoinDate(new Date());
-        user.setPassword(encodePassword(password));
         user.setActive(true);
         user.setNotLocked(true);
         user.setRoles(getRoleEnumName(role).name());
@@ -146,11 +167,6 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
-        user.setCreatedBy("Self-registered users");
-        user.setUpdatedBy("None");
-        userRepository.save(user);
-
-        return user;
     }
 
     private String encodePassword(String password) {
@@ -261,69 +277,44 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
         return Role.valueOf(role.toUpperCase());
     }
 
-    /***
+
+    /**
+     * It adds a new user to the database.
      *
-     * @param firstName
-     * @param lastName
-     * @param username
-     * @param email
-     * @param role
-     * @param isNonLocked
-     * @param isActive
-     * @param multipartFile
-     * @return new user
-     * @throws UserNotFoundException
-     * @throws EmailExistException
-     * @throws UsernameExistException
-     * @throws IOException
-     * @throws NotAnImageFileException
-     * @throws MessagingException
+     * @param firstName The first name of the user
+     * @param lastName last name of the user
+     * @param username The username of the user to be created.
+     * @param email the email address of the user
+     * @param role the role of the user
+     * @param isNonLocked true if the user is not locked, false otherwise.
+     * @param isActive true or false
+     * @param multipartFile The image file that the user uploads.
+     * @return User
      */
     @Override
     public User addNewUser(String firstName, String lastName, String username, String email, String role,
                            boolean isNonLocked, boolean isActive, MultipartFile multipartFile)
             throws UserNotFoundException, EmailExistException, UsernameExistException, IOException,
             NotAnImageFileException {
-
-        log.info("Begin validating email and username :::");
-        validateNewUsernameAndEmail(EMPTY, username, email);
-        log.info("End validating email and username :::");
-
         // new user
         User user = new User();
+        setUserInformation(user, firstName, lastName, username, email, role);
         String password = generatePassword();
         String encodedPassword = encodePassword(password);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setJoinDate(new Date());
         user.setPassword(encodedPassword);
-        user.setActive(isActive);
-        user.setNotLocked(isNonLocked);
-        user.setRoles(getRoleEnumName(role).name());
-        user.setAuthorities(getRoleEnumName(role).getAuthorities());
-        user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
-        user.setCreatedAt(new Date());
-        user.setUpdatedAt(new Date());
         user.setCreatedBy(getCurrentUser().getUsername());
         user.setUpdatedBy(getCurrentUser().getUsername());
         saveProfileImage(user, multipartFile);
-        // String name = user.getFirstName();
-        // log.info("Password has been sent to email: {}", email);
-        // emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_NEW_USER);
+        /*
+        String name = user.getFirstName();
+        log.info("Password has been sent to email: {}", email);
+        emailService2.sendNewPasswordEmail(name, password, email, EMAIL_SUBJECT_NEW_USER);
+        */
         userRepository.save(user);
 
         return user;
     }
 
-    /***
-     *
-     * @param user
-     * @param profileImage
-     * @throws IOException
-     * @throws NotAnImageFileException
-     */
     private void saveProfileImage(User user, MultipartFile profileImage)
             throws IOException, NotAnImageFileException {
 
@@ -357,23 +348,20 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
                 .toUriString();
     }
 
-    /***
+
+    /**
+     * It updates the user information.
      *
-     * @param currentUsername
-     * @param newFirstName
-     * @param newLastName
-     * @param newUsername
-     * @param newEmail
-     * @param role
-     * @param isNonLocked
-     * @param isActive
-     * @param profileImage
-     * @return
-     * @throws UserNotFoundException
-     * @throws EmailExistException
-     * @throws UsernameExistException
-     * @throws IOException
-     * @throws NotAnImageFileException
+     * @param currentUsername The username of the user that is currently logged in.
+     * @param newFirstName The new first name of the user.
+     * @param newLastName The new last name of the user.
+     * @param newUsername The new username that the user wants to change to.
+     * @param newEmail The new email address of the user.
+     * @param role The role of the user.
+     * @param isNonLocked If the user is locked or not.
+     * @param isActive This is a boolean value that determines whether the user is active or not.
+     * @param profileImage The image file that the user uploads.
+     * @return The currentUser is being returned.
      */
     @Override
     public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername,
@@ -382,16 +370,7 @@ public class UserServiceImpl implements UserDetailsService, UserService, UserHel
 
         User currentUser = validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
         if (currentUser != null) {
-            currentUser.setFirstName(newFirstName);
-            currentUser.setLastName(newLastName);
-            currentUser.setEmail(newEmail);
-            currentUser.setUsername(newUsername);
-            currentUser.setActive(isActive);
-            currentUser.setNotLocked(isNonLocked);
-            currentUser.setRoles(getRoleEnumName(role).name());
-            currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
-            currentUser.setCreatedAt(new Date());
-            currentUser.setUpdatedAt(new Date());
+            setUserInformation(currentUser, newFirstName, newLastName, newUsername, newEmail, role);
             currentUser.setCreatedBy(getCurrentUser().getUsername());
             currentUser.setUpdatedBy(getCurrentUser().getUsername());
             userRepository.save(currentUser);
